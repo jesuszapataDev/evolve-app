@@ -110,6 +110,7 @@ class AuthModel
             // Valores por defecto
             $status = 1; // activo
             $rol = "user"; // por defecto
+            $timezone = "America/Los_Angeles"; // por defecto
 
             // Insertar usuario
             $stmt = $this->db->prepare("INSERT INTO {$this->table} 
@@ -128,7 +129,7 @@ class AuthModel
                 $data['email'],
                 $data['password'],
                 $data['telephone'],
-                $data['timezone'],
+                $timezone,
                 $status,
                 $rol,
                 $createdAt,
