@@ -73,9 +73,7 @@ class UserModel
 
     public function getUserByTelephone(string $telephone): ?array
     {
-        // Normalizado simple (ya viene limpio del frontend)
         $normalized = $telephone;
-
         $sql = "
             SELECT * FROM {$this->table}
             WHERE REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(telephone,'(',''),')',''),'-',''),' ',''),'+',''),'.','') = ?
@@ -180,7 +178,6 @@ class UserModel
             $stmt->close();
 
             if ($ok) {
-                // limpiar resets por email de ese user
                 $stmt = $this->db->prepare("DELETE pr FROM password_resets pr JOIN {$this->table} u ON u.email = pr.email WHERE u.user_id = ?");
                 $stmt->bind_param("s", $userId);
                 $stmt->execute();
@@ -198,7 +195,6 @@ class UserModel
             $stmt->close();
             if (!$reset) return false;
 
-            // 10 minutos de validez
             $createdAt = new DateTime($reset['created_at']);
             if ((time() - $createdAt->getTimestamp()) > 600) {
                 $stmt = $this->db->prepare("DELETE FROM password_resets WHERE token = ?");
@@ -256,19 +252,6 @@ class UserModel
             }
             $chk->close();
 
-            // Altura según system_type
-            $system_type = strtoupper($data['system_type'] ?? 'US');
-            $rawHeight   = trim($data['height'] ?? '');
-            if ($system_type === 'EU') {
-                $cm           = (int)$rawHeight;
-                $totalInches  = (int)round($cm / 2.54);
-                $feet         = intdiv($totalInches, 12);
-                $inches       = $totalInches % 12;
-                $converted    = sprintf("%d'%02d\"", $feet, $inches);
-            } else {
-                $converted = $rawHeight;
-            }
-
             $uuid           = $this->generateUUIDv4();
             $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
 
@@ -279,28 +262,30 @@ class UserModel
             (new TimezoneManager($this->db))->applyTimezone();
             $createdAt = $env->getCurrentDatetime();
             $createdBy = $sessionUserId;
-            $timezone  = $data['timezone'] ?? 'America/Los_Angeles';
+
+            $timezone = $data['timezone'] ?? 'America/Los_Angeles';
+            $status   = isset($data['status']) ? (int)$data['status'] : 1;
+            $rol      = $data['rol'] ?? 'user';
 
             $stmt = $this->db->prepare("
                 INSERT INTO {$this->table}
-                (user_id, first_name, last_name, sex, birthday, height, email, telephone, password, system_type, timezone, created_at, created_by)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                (user_id, first_name, last_name, sex, email, telephone, password, timezone, status, rol, created_at, created_by)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             if (!$stmt) throw new mysqli_sql_exception("Error preparando inserción: " . $this->db->error);
 
             $stmt->bind_param(
-                "sssssssssssss",
+                "ssssssssisss",
                 $uuid,
                 $data['first_name'],
                 $data['last_name'],
                 $data['sex'],
-                $data['birthday'],
-                $converted,
                 $data['email'],
                 $data['telephone'],
                 $hashedPassword,
-                $system_type,
                 $timezone,
+                $status,
+                $rol,
                 $createdAt,
                 $createdBy
             );
@@ -355,41 +340,27 @@ class UserModel
             $updatedAt = $env->getCurrentDatetime();
             $updatedBy = $sessionUserId;
 
-            // Altura
-            $system = strtoupper($data['system_type'] ?? 'US');
-            $raw    = trim($data['height'] ?? '');
-            if ($system === 'EU') {
-                $cm           = (int)$raw;
-                $totalInches  = (int)round($cm / 2.54);
-                $feet         = intdiv($totalInches, 12);
-                $inches       = $totalInches % 12;
-                $height       = sprintf("%d'%02d\"", $feet, $inches);
-            } else {
-                $height       = $raw;
-            }
-
             $sql = "UPDATE {$this->table} SET
-                        first_name = ?, last_name = ?, sex = ?, birthday = ?, height = ?,
-                        email = ?, telephone = ?, system_type = ?, status = ?,
+                        first_name = ?, last_name = ?, sex = ?,
+                        email = ?, telephone = ?, timezone = ?, status = ?, rol = ?,
                         updated_at = ?, updated_by = ?";
 
             $params = [
                 $data['first_name'] ?? '',
                 $data['last_name']  ?? '',
                 $data['sex']        ?? '',
-                $data['birthday']   ?? '',
-                $height,
                 $data['email']      ?? '',
                 $data['telephone']  ?? '',
-                $system,
+                $data['timezone']   ?? 'America/Los_Angeles',
                 isset($data['status']) ? (int)$data['status'] : 1,
+                $data['rol']        ?? 'user',
                 $updatedAt,
                 $updatedBy
             ];
-            $types = "ssssssssiss";
+            $types = "ssssssisss";
 
             if (!empty($data['password'])) {
-                $sql    .= ", password = ?";
+                $sql     .= ", password = ?";
                 $params[] = password_hash($data['password'], PASSWORD_DEFAULT);
                 $types   .= "s";
             }
@@ -442,48 +413,6 @@ class UserModel
         return $ok;
     }
 
-    public function updateSystemTypeByUserId(string $userId, ?string $systemType): bool
-    {
-        $this->db->begin_transaction();
-        try {
-            $system = strtoupper($systemType ?? 'US');
-
-            // Auditoría
-            $sessionUserId = $_SESSION['user_id'] ?? null;
-            $env = new ClientEnvironmentInfo($_SERVER['DOCUMENT_ROOT'] . '/app/config/geolite.mmdb');
-            $env->applyAuditContext($this->db, $sessionUserId);
-            (new TimezoneManager($this->db))->applyTimezone();
-            $updatedAt = $env->getCurrentDatetime();
-            $updatedBy = $sessionUserId;
-
-            // Existe?
-            $chk = $this->db->prepare("SELECT 1 FROM {$this->table} WHERE user_id = ? LIMIT 1");
-            if (!$chk) throw new Exception("Error preparando la consulta: " . $this->db->error);
-            $chk->bind_param("s", $userId);
-            $chk->execute();
-            $chk->store_result();
-            if ($chk->num_rows === 0) {
-                throw new Exception("El registro no existe.");
-            }
-            $chk->close();
-
-            $stmt = $this->db->prepare("UPDATE {$this->table} SET system_type = ?, updated_at = ?, updated_by = ? WHERE user_id = ?");
-            if (!$stmt) throw new Exception('Error al preparar consulta: ' . $this->db->error);
-            $stmt->bind_param("ssss", $system, $updatedAt, $updatedBy, $userId);
-            $stmt->execute();
-
-            $this->db->commit();
-
-            if (isset($_SESSION['user_id']) && $_SESSION['user_id'] === $userId) {
-                $_SESSION['system_type'] = $system;
-            }
-            return true;
-        } catch (\Throwable $e) {
-            $this->db->rollback();
-            throw $e;
-        }
-    }
-
     public function updateProfile(string $id, array $data): bool
     {
         $this->db->begin_transaction();
@@ -507,48 +436,27 @@ class UserModel
             $updatedAt = $env->getCurrentDatetime();
             $updatedBy = $sessionUserId;
 
-            // Altura
-            $system = strtoupper($data['system_type'] ?? 'US');
-            $raw    = trim($data['height'] ?? '');
-            if ($system === 'EU') {
-                $cm           = (int)$raw;
-                $totalInches  = (int)round($cm / 2.54);
-                $feet         = intdiv($totalInches, 12);
-                $inches       = $totalInches % 12;
-                $height       = sprintf("%d'%02d\"", $feet, $inches);
-            } else {
-                $height       = $raw;
-            }
-
             $sql = "UPDATE {$this->table} SET
-                        first_name = ?, last_name = ?, sex = ?, birthday = ?, height = ?,
-                        email = ?, telephone = ?, system_type = ?, timezone = ?,
+                        first_name = ?, last_name = ?, sex = ?,
+                        email = ?, telephone = ?, timezone = ?,
                         updated_at = ?, updated_by = ?";
 
             $params = [
                 $data['first_name'] ?? '',
                 $data['last_name']  ?? '',
                 $data['sex']        ?? '',
-                $data['birthday']   ?? '',
-                $height,
                 $data['email']      ?? '',
                 $data['telephone']  ?? '',
-                $system,
                 $data['timezone']   ?? 'America/Los_Angeles',
                 $updatedAt,
                 $updatedBy
             ];
-            $types = "sssssssssss";
+            $types = "ssssssss";
 
             if (!empty($data['password'])) {
-                $sql      .= ", password = ?";
-                $params[]  = password_hash($data['password'], PASSWORD_DEFAULT);
-                $types    .= "s";
-            }
-            if (!empty($data['profile_image'])) {
-                $sql      .= ", profile_image = ?";
-                $params[]  = $data['profile_image'];
-                $types    .= "s";
+                $sql     .= ", password = ?";
+                $params[] = password_hash($data['password'], PASSWORD_DEFAULT);
+                $types   .= "s";
             }
 
             $sql    .= " WHERE user_id = ?";
@@ -565,18 +473,12 @@ class UserModel
             $this->db->commit();
 
             // Refrescar sesión (si aplica)
-            $_SESSION['first_name']  = $data['first_name']  ?? ($_SESSION['first_name'] ?? null);
-            $_SESSION['last_name']   = $data['last_name']   ?? ($_SESSION['last_name'] ?? null);
-            $_SESSION['user_name']   = trim(($_SESSION['first_name'] ?? '') . ' ' . ($_SESSION['last_name'] ?? ''));
-            $_SESSION['email']       = $data['email']       ?? ($_SESSION['email'] ?? null);
-            $_SESSION['system_type'] = $system;
-            $_SESSION['timezone']    = $data['timezone']    ?? ($_SESSION['timezone'] ?? null);
-            $_SESSION['birthday']    = $data['birthday']    ?? ($_SESSION['birthday'] ?? null);
-            $_SESSION['sex']         = $data['sex']         ?? ($_SESSION['sex'] ?? null);
-            $_SESSION['height']      = $height;
-            if (!empty($data['profile_image'])) {
-                $_SESSION['user_image'] = $data['profile_image'];
-            }
+            $_SESSION['first_name'] = $data['first_name'] ?? ($_SESSION['first_name'] ?? null);
+            $_SESSION['last_name']  = $data['last_name']  ?? ($_SESSION['last_name'] ?? null);
+            $_SESSION['user_name']  = trim(($_SESSION['first_name'] ?? '') . ' ' . ($_SESSION['last_name'] ?? ''));
+            $_SESSION['email']      = $data['email']      ?? ($_SESSION['email'] ?? null);
+            $_SESSION['timezone']   = $data['timezone']   ?? ($_SESSION['timezone'] ?? null);
+            $_SESSION['sex']        = $data['sex']        ?? ($_SESSION['sex'] ?? null);
 
             return true;
         } catch (\Throwable $e) {
@@ -608,13 +510,8 @@ class UserModel
             }
             $check->close();
 
-            // Dependencias (tablas de tu app que bloquean delete del user)
+            // Dependencias (ajusta a tus tablas)
             $relatedTables = [
-                'body_composition'     => ['user_id', true],
-                'lipid_profile_record' => ['user_id', true],
-                'renal_function'       => ['user_id', true],
-                'energy_metabolism'    => ['user_id', true],
-                'notifications'        => ['user_id', false],
                 'security_questions'   => ['user_id', false],
             ];
             foreach ($relatedTables as $table => [$field, $hasDeletedAt]) {
@@ -686,16 +583,7 @@ class UserModel
         // sex legible
         $user['sex'] = ($user['sex'] === 'm') ? 'Male' : (($user['sex'] === 'f') ? 'Female' : 'Other');
 
-        // birthday y age (si viene)
-        if (!empty($user['birthday'])) {
-            try {
-                $birth = new \DateTime($user['birthday']);
-                $user['birthday'] = $birth->format('m-d-Y');
-                $user['age']      = (new \DateTime())->diff($birth)->y;
-            } catch (\Throwable $e) {
-                // si falla el parseo, no lanzamos excepción
-            }
-        }
+        // (Sin birthday/age en la nueva estructura)
 
         return $user;
     }
