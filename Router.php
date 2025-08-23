@@ -1,5 +1,9 @@
 <?php
 
+namespace App;
+
+use Exception;
+
 class Router
 {
     protected $rutas = [];
@@ -7,7 +11,7 @@ class Router
     protected $groupAttributes = [];
     private $basePath = '';
 
-    public function __construct(ViewRenderer $viewRenderer)
+    public function __construct($viewRenderer)
     {
         $this->viewRenderer = $viewRenderer;
         // Detecta si el proyecto está en un subdirectorio
@@ -71,7 +75,7 @@ class Router
     public function route()
     {
         $metodoSolicitado = strtoupper($_SERVER['REQUEST_METHOD']);
-        
+
         // Obtiene la ruta de la URI sin la query string
         $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
@@ -130,8 +134,20 @@ class Router
     }
 
     // Métodos de ayuda para definir rutas más limpiamente
-    public function get($ruta, $opciones) { $this->agregarRuta('GET', $ruta, $opciones); }
-    public function post($ruta, $opciones) { $this->agregarRuta('POST', $ruta, $opciones); }
-    public function put($ruta, $opciones) { $this->agregarRuta('PUT', $ruta, $opciones); }
-    public function delete($ruta, $opciones) { $this->agregarRuta('DELETE', $ruta, $opciones); }
+    public function get($ruta, $opciones)
+    {
+        $this->agregarRuta('GET', $ruta, $opciones);
+    }
+    public function post($ruta, $opciones)
+    {
+        $this->agregarRuta('POST', $ruta, $opciones);
+    }
+    public function put($ruta, $opciones)
+    {
+        $this->agregarRuta('PUT', $ruta, $opciones);
+    }
+    public function delete($ruta, $opciones)
+    {
+        $this->agregarRuta('DELETE', $ruta, $opciones);
+    }
 }

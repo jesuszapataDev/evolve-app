@@ -2,8 +2,12 @@
   "name": "jzapata/biometrical-system",
   "autoload": {
     "psr-4": {
-      "App\\": "./App/",
-      "": ""
+      "App\\": "./",
+      "App\\Controllers\\": "controllers/",
+      "App\\Models\\": "models/",
+      "App\\Services\\": "services/",
+      "App\\Middlewares\\": "middlewares/",
+      "App\\Core\\": "core/"
     }
   },
   "authors": [

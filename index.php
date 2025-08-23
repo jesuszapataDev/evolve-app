@@ -1,113 +1,49 @@
 <?php
 
-// --- AUTOLOADER BÁSICO ---
-// Carga las clases necesarias (Router.php, controladores, etc.)
-spl_autoload_register(function ($className) {
-    if (file_exists($className . '.php')) {
-        require_once $className . '.php';
-    }
-});
+// ==================================================================
+// ARCHIVO: index.php (Punto de entrada de la aplicación)
+// ==================================================================
 
+// PASO 1: INCLUIR EL AUTOLOADER DE COMPOSER
+// Esta es la única línea de inclusión que necesitas.
+require_once __DIR__ . '/vendor/autoload.php';
 
-// --- CLASES DE EJEMPLO (En un proyecto real, estarían en sus propios archivos) ---
-
-class ViewRenderer
-{
-    public function render($vista, $data = [])
-    {
-        // Extrae los datos para que estén disponibles como variables en la vista
-        extract($data);
-        echo "<h1>Renderizando la vista: {$vista}</h1>";
-        if (!empty($data)) {
-            echo "<pre>Datos: " . print_r($data, true) . "</pre>";
-        }
-    }
-}
-
-class HomeController
-{
-    public function index()
-    {
-        echo "Estás en la página de inicio (desde HomeController).";
-    }
-    public function contact()
-    {
-        echo "Página de contacto.";
-    }
-}
-
-class UserController
-{
-    public function show($params)
-    {
-        echo "Mostrando perfil del usuario con ID: " . htmlspecialchars($params['id']);
-    }
-    public function store()
-    {
-        echo "Procesando datos del formulario de registro de usuario...<br>";
-        echo "Datos recibidos por POST: <pre>" . print_r($_POST, true) . "</pre>";
-    }
-}
-
-class AuthMiddleware
-{
-    private $rolesPermitidos;
-    public function __construct($roles = [])
-    {
-        $this->rolesPermitidos = $roles;
-    }
-    public function handle()
-    {
-        // Lógica de autenticación de ejemplo
-        $usuarioAutenticado = true; // Simula un usuario logueado
-        $rolUsuario = 'admin'; // Simula el rol del usuario
-
-        if (!$usuarioAutenticado) {
-            header('HTTP/1.1 401 Unauthorized');
-            echo "Error 401: No estás autorizado para ver esta página.";
-            exit();
-        }
-
-        if (!empty($this->rolesPermitidos) && !in_array($rolUsuario, $this->rolesPermitidos)) {
-            header('HTTP/1.1 403 Forbidden');
-            echo "Error 403: No tienes los permisos necesarios (Rol requerido: " . implode(', ', $this->rolesPermitidos) . ").";
-            exit();
-        }
-        // Si todo está bien, la ejecución continúa
-    }
-}
-
+// PASO 2: IMPORTAR LAS CLASES QUE VAS A UTILIZAR
+// Esto hace que el código sea más legible.
+use App\Router;
+use App\Core\ViewRenderer;
+use App\Middlewares\AuthMiddleware; // Asumiendo que creas esta clase en /middleware/
 
 // --- INICIALIZACIÓN Y DEFINICIÓN DE RUTAS ---
 
 $viewRenderer = new ViewRenderer();
 $router = new Router($viewRenderer);
 
-// Ruta simple que renderiza una vista
-$router->get('/', ['controlador' => 'HomeController', 'accion' => 'index']);
+// Usamos ::class para referirnos a las clases. Es una mejor práctica
+// porque los editores de código pueden detectar errores si la clase no existe.
+$router->get('/', [
+    'vista' => '/auth/login',
+    'vistaData' => ['title' => $traducciones['login_title'] ?? 'Login', 'layout' => false]
+]);
+$router->get('/login', [
+    'vista' => '/auth/login',
+    'vistaData' => ['title' => $traducciones['login_title'] ?? 'Login']
+]);
 
-// Ruta a otra acción de un controlador
-$router->get('/contacto', ['controlador' => 'HomeController', 'accion' => 'contact']);
+// Rutas para modulos
 
-// Ruta con un parámetro dinámico
-$router->get('/usuario/{id}', ['controlador' => 'UserController', 'accion' => 'show']);
+$router->get('/home', [
+    'vista' => '/modules/home',
+    'vistaData' => ['title' => $traducciones['home_title'] ?? 'home']
+]);
 
-// Ruta para procesar un formulario por POST
-$router->post('/usuario/crear', ['controlador' => 'UserController', 'accion' => 'store']);
 
-// Grupo de rutas para un panel de administración
-$router->group(['prefix' => '/admin', 'middleware' => 'AuthMiddleware'], function ($router) {
+// Grupo de rutas para el panel de administración
+// $router->group(['prefix' => '/admin', 'middleware' => AuthMiddleware::class], function ($router) {
 
-    // Ruta: /admin/dashboard
-    $router->get('/dashboard', ['vista' => 'admin/dashboard']);
+//     $router->get('/dashboard', ['vista' => 'admin/dashboard']);
 
-    // Ruta: /admin/usuarios (requiere rol específico)
-    $router->get('/usuarios', [
-        'vista' => 'admin/lista_usuarios',
-        'roles' => ['admin'] // Solo usuarios con rol 'admin' pueden acceder
-    ]);
-});
-
+// });
 
 // --- EJECUTAR EL ENRUTADOR ---
 $router->route();
