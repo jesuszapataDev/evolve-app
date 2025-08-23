@@ -1,6 +1,10 @@
 <?php
 
-require_once __DIR__ . '/../models/CountryModel.php';
+namespace App\Controllers;
+
+use App\Models\CountryModel;
+use Exception;
+use mysqli_sql_exception;
 
 class CountryController
 {
@@ -15,6 +19,13 @@ class CountryController
     {
         return json_decode(file_get_contents("php://input"), true) ?? [];
     }
+
+    private function errorResponse(int $http_code, string $message)
+    {
+        http_response_code($http_code);
+        $this->jsonResponse(false, $message);
+    }
+
 
     private function jsonResponse(bool $value, string $message = '', $data = null)
     {
@@ -53,23 +64,23 @@ class CountryController
         $this->jsonResponse($result, $result ? 'Updated successfully' : 'Error updating');
     }
 
-public function delete($params)
-{
-    if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-        $id = $params['id'] ?? 0;
+    public function delete($params)
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
+            $id = $params['id'] ?? 0;
 
-        try {
-            $result = $this->model->delete($id);
-            return $this->jsonResponse(true, 'Deleted successfully');
-        } catch (mysqli_sql_exception $e) {
-            return $this->jsonResponse(false, $e->getMessage());
-        } catch (Exception $e) {
-            return $this->jsonResponse(false, 'Unexpected error: ' . $e->getMessage());
+            try {
+                $result = $this->model->delete($id);
+                return $this->jsonResponse(true, 'Deleted successfully');
+            } catch (mysqli_sql_exception $e) {
+                return $this->jsonResponse(false, $e->getMessage());
+            } catch (Exception $e) {
+                return $this->jsonResponse(false, 'Unexpected error: ' . $e->getMessage());
+            }
+        } else {
+            return $this->errorResponse(405, 'Method Not Allowed');
         }
-    } else {
-        return $this->errorResponse(405, 'Method Not Allowed');
     }
-}
 
 
     public function export($userId)

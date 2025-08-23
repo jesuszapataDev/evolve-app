@@ -1,5 +1,11 @@
 <?php
 
+
+namespace App\Config;
+
+use mysqli;
+use mysqli_sql_exception;
+
 class Database
 {
     private static $instance = null;
@@ -7,7 +13,7 @@ class Database
 
     private function __construct()
     {
-        $this->loadEnv($_SERVER['DOCUMENT_ROOT'] . '/.env');
+        $this->loadEnv(APP_ROOT . '.env');
 
         $host = $_ENV['DB_HOST'] ?? 'localhost';
         $dbname = $_ENV['DB_NAME'] ?? 'bd_evolve';
@@ -25,23 +31,23 @@ class Database
         }
     }
 
-private function loadEnv($filePath)
-{
-    if (!file_exists($filePath)) {
-        $this->errorResponse(500, ".env file not found at $filePath");
-    }
-
-    $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
-    foreach ($lines as $line) {
-        $line = trim($line);
-        if (strpos($line, '#') === 0 || strpos($line, '=') === false) {
-            continue;
+    private function loadEnv($filePath)
+    {
+        if (!file_exists($filePath)) {
+            $this->errorResponse(500, ".env file not found at $filePath");
         }
 
-        list($key, $value) = explode('=', $line, 2);
-        $_ENV[trim($key)] = trim($value);
+        $lines = file($filePath, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+        foreach ($lines as $line) {
+            $line = trim($line);
+            if (strpos($line, '#') === 0 || strpos($line, '=') === false) {
+                continue;
+            }
+
+            list($key, $value) = explode('=', $line, 2);
+            $_ENV[trim($key)] = trim($value);
+        }
     }
-}
 
 
     public static function getInstance()

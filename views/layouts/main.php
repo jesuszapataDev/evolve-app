@@ -31,7 +31,7 @@
             <div class="content">
 
                 <!-- Start Content-->
-                <?php include $content; ?>
+                <?php echo $content; ?>
                 <!-- container -->
 
             </div> <!-- content -->
