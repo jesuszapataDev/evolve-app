@@ -1,0 +1,45 @@
+# Bloque del servidor para tu sitio web
+server {
+    listen 80;
+    server_name tu-dominio.com www.tu-dominio.com;
+
+      # Bloquea el acceso a carpetas sensibles
+    location ~ /(controllers|models|views|services|config|core)/ {
+        deny all;
+    }
+
+    # Bloquea el acceso a archivos PHP específicos
+    location ~ /Router\.php {
+        deny all;
+    }
+
+    # Tu regla del front controller
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # La ruta absoluta a la carpeta raíz de tu proyecto
+    root /var/www/html/tu-proyecto;
+    index index.php;
+
+    # Configuración principal para las URLs amigables
+    location / {
+        # Intenta servir el archivo/directorio solicitado directamente.
+        # Si no existe, pasa la solicitud a index.php, manteniendo los parámetros GET originales.
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    # Procesa los archivos PHP con PHP-FPM
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        
+        # Asegúrate de que la ruta al socket de PHP-FPM sea correcta para tu servidor.
+        # Puede ser un socket de red (ej. 127.0.0.1:9000) o un archivo.
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+    }
+
+    # Por seguridad, deniega el acceso a los archivos .htaccess
+    location ~ /\.ht {
+        deny all;
+    }
+}
