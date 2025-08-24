@@ -20,7 +20,8 @@
 
         <!-- User box -->
         <div class="user-box text-center">
-            <img src="public/assets/images/users/user-1.jpg" alt="user-img" title="Mat Helme" class="rounded-circle avatar-md">
+            <img src="public/assets/images/users/user-1.jpg" alt="user-img" title="Mat Helme"
+                class="rounded-circle avatar-md">
             <div class="dropdown">
                 <a href="javascript: void(0);" class="dropdown-toggle h5 mb-1 d-block" data-bs-toggle="dropdown">Geneva
                     Kennedy</a>
@@ -75,18 +76,18 @@
                     <span class="menu-text"> Session Management </span>
                 </a>
             </li>
-              <li class="menu-item">
+            <li class="menu-item">
                 <a href="audit_log" class="menu-link">
                     <span class="menu-icon"><i data-feather="message-square"></i></span>
                     <span class="menu-text"> Audit Log </span>
                 </a>
             </li>
 
-     
 
 
-            
-       
+
+
+
 
 
         </ul>

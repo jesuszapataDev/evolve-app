@@ -80,14 +80,15 @@ function handleRequest(url, method, data = null, showAlerts = true) {
           url: fullUrl,
           status,
           err,
-          response: xhr.responseText,
+          response: xhr.responseJSON,
         })
+        console.log(xhr.responseJSON.message)
+
+        showAlert(false, xhr.responseJSON.message)
+
         const errorMessage =
           xhr.responseJSON?.message || err || 'No se pudo procesar la solicitud'
 
-        if (showAlerts) {
-          showAlert(false, errorMessage)
-        }
         // La promesa también se resuelve en caso de error para no romper la cadena
         resolve({
           value: false,
@@ -216,4 +217,3 @@ export async function getAuditLogById(id) {
 export async function getAllAuditLogs() {
   return await handleRequest('/api/auditlog', 'GET')
 }
-

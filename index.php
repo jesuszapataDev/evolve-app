@@ -15,9 +15,10 @@ require_once __DIR__ . '/vendor/autoload.php';
 use App\Config\Language;
 
 if (isset($_GET['lang'])) {
-    $_SESSION['lang'] = $_GET['lang'];
+    $_SESSION['lang'] = strtoupper($_GET['lang']);
 }
-$lang = $_SESSION['lang'] ?? 'en';
+
+$lang = $_SESSION['lang'] ?? 'EN';
 $traducciones = Language::loadLanguage($lang);
 
 
@@ -96,15 +97,15 @@ $router->group(['prefix' => '/api'], function ($router) {
         'controlador' => SessionManagementController::class,
         'accion' => 'export'
     ]);
-        $router->get('/auditlog', [
+    $router->get('/auditlog', [
         'controlador' => AuditLogController::class,
         'accion' => 'getAll'
     ]);
-            $router->get('/auditlog/{id}', [
+    $router->get('/auditlog/{id}', [
         'controlador' => AuditLogController::class,
         'accion' => 'getById'
     ]);
-                $router->get('/auditlog/export/{id}', [
+    $router->get('/auditlog/export/{id}', [
         'controlador' => AuditLogController::class,
         'accion' => 'exportCSV'
     ]);
@@ -134,7 +135,7 @@ $router->group(['middleware' => AuthMiddleware::class], function ($router) use (
         'vista' => '/modules/session_management',
         'vistaData' => ['title' => $traducciones['home_title'] ?? 'home']
     ]);
-        $router->get('/audit_log', [
+    $router->get('/audit_log', [
         'vista' => '/modules/audit_log',
         'vistaData' => ['title' => $traducciones['home_title'] ?? 'home']
     ]);

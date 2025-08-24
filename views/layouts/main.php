@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-topbar-color="dark">
+<html lang="en">
 
 <?php include __DIR__ . '/../partials/head.php'; ?>
 
