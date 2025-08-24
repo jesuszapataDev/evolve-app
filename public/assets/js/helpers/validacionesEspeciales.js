@@ -61,6 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const targetInput = document.querySelector(targetInputSelector)
       const icon = this.querySelector('span.bi') // Busca el ícono dentro del botón
 
+      console.log(targetInput)
+
       if (targetInput && icon) {
         // Alterna el tipo de input entre 'password' y 'text'
         if (targetInput.type === 'password') {

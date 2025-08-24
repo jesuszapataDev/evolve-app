@@ -1219,4 +1219,7 @@ return [
   'validation_min_length' => 'La contraseña debe tener al menos 8 caracteres.',
   'validation_telephone_already_exits' => 'Este teléfono ya ha sido utilizado.',
 
+  'validation_min_length_password' => 'La contraseña debe tener al menos 8 caracteres.',
+  'validation_password_match' => 'Las contraseñas no coinciden.',
+
 ];

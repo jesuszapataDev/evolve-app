@@ -175,6 +175,10 @@ async function handleRequestFetch(url, method, data = null, showAlerts = true) {
 // Authentication Routes
 export const login = async (credentials) =>
   await handleRequest('/api/login', 'POST', credentials)
+export const logout = async () =>
+  await handleRequest('/api/logout', 'POST', null, false)
+export const register = async (userData) =>
+  await handleRequest('/api/register', 'POST', userData)
 
 // COUNTRIES
 export const getAllCountries = async () =>

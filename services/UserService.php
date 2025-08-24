@@ -122,7 +122,7 @@ class UserService
                 return $this->resp(false, "Email inválido o faltante.");
             }
             $user = $this->userModel->getUserByEmail($email);
-            return $user ? $this->resp(true, '', $user) : $this->resp(false, "Usuario no encontrado");
+            return $user ? $this->resp(false, '', $user) : $this->resp(true, "");
         } catch (mysqli_sql_exception $e) {
             return $this->resp(false, "Error al obtener usuario: " . $e->getMessage());
         }
