@@ -1,6 +1,9 @@
 <?php
 
-require_once __DIR__ . '/../models/SessionManagementModel.php';
+namespace App\Controllers;
+
+use App\Models\SessionManagementModel;
+
 
 class SessionManagementController
 {
@@ -37,71 +40,71 @@ class SessionManagementController
             $this->jsonResponse(false, $e->getMessage());
         }
     }
-public function kick()
-{
-    $input = json_decode(file_get_contents('php://input'), true);
-    $sessionId = $input['session_id'] ?? null;
-    $inactivityDuration = isset($input['inactivity_duration']) ? (string)$input['inactivity_duration'] : null;
-    $hasValidInactivity = is_numeric($inactivityDuration);
-    $status = $input['status'] ?? ($hasValidInactivity ? 'expired' : 'kicked');
+    public function kick()
+    {
+        $input = json_decode(file_get_contents('php://input'), true);
+        $sessionId = $input['session_id'] ?? null;
+        $inactivityDuration = isset($input['inactivity_duration']) ? (string) $input['inactivity_duration'] : null;
+        $hasValidInactivity = is_numeric($inactivityDuration);
+        $status = $input['status'] ?? ($hasValidInactivity ? 'expired' : 'kicked');
 
-    if (!$sessionId) {
-        return $this->jsonResponse(false, 'Missing session ID');
-    }
-
-    try {
-        $this->model->logoutSession($sessionId, $inactivityDuration, $status);
-        return $this->jsonResponse(true, 'Session terminated successfully');
-    } catch (Exception $e) {
-        return $this->jsonResponse(false, 'Error terminating session', ['error' => $e->getMessage()]);
-    }
-}
-
-
-public function storeStatus()
-{
-
-    $input = json_decode(file_get_contents('php://input'), true);
-    $status = $input['session_status'] ?? null;
-    $inactivityDuration = isset($input['inactivity_duration']) ? (string)$input['inactivity_duration'] : null;
-
-    if (!$status || !in_array($status, ['expired', 'kicked'], true)) {
-        return $this->jsonResponse(false, 'Invalid or missing session status');
-    }
-
-    try {
-        $_SESSION['session_status'] = $status;
-
-        if ($inactivityDuration !== null && $inactivityDuration !== '') {
-            $_SESSION['inactivity_duration'] = $inactivityDuration;
+        if (!$sessionId) {
+            return $this->jsonResponse(false, 'Missing session ID');
         }
 
-        return $this->jsonResponse(true, 'Session status stored successfully');
-    } catch (Exception $e) {
-        return $this->jsonResponse(false, 'Error storing session status', ['error' => $e->getMessage()]);
-    }
-}
-
-
-
-
-public function checkStatus()
-{
-
-    $sessionId = $_SESSION['session_id'] ?? null;
-
-    if (!$sessionId) {
-        return $this->jsonResponse(false, 'No active session');
+        try {
+            $this->model->logoutSession($sessionId, $inactivityDuration, $status);
+            return $this->jsonResponse(true, 'Session terminated successfully');
+        } catch (Exception $e) {
+            return $this->jsonResponse(false, 'Error terminating session', ['error' => $e->getMessage()]);
+        }
     }
 
-    $status = $this->model->getStatusBySessionId($sessionId);
 
-    if (!$status) {
-        return $this->jsonResponse(false, 'Session not found');
+    public function storeStatus()
+    {
+
+        $input = json_decode(file_get_contents('php://input'), true);
+        $status = $input['session_status'] ?? null;
+        $inactivityDuration = isset($input['inactivity_duration']) ? (string) $input['inactivity_duration'] : null;
+
+        if (!$status || !in_array($status, ['expired', 'kicked'], true)) {
+            return $this->jsonResponse(false, 'Invalid or missing session status');
+        }
+
+        try {
+            $_SESSION['session_status'] = $status;
+
+            if ($inactivityDuration !== null && $inactivityDuration !== '') {
+                $_SESSION['inactivity_duration'] = $inactivityDuration;
+            }
+
+            return $this->jsonResponse(true, 'Session status stored successfully');
+        } catch (Exception $e) {
+            return $this->jsonResponse(false, 'Error storing session status', ['error' => $e->getMessage()]);
+        }
     }
 
-    return $this->jsonResponse(true, 'Session status OK', ['status' => $status]);
-}
+
+
+
+    public function checkStatus()
+    {
+
+        $sessionId = $_SESSION['session_id'] ?? null;
+
+        if (!$sessionId) {
+            return $this->jsonResponse(false, 'No active session');
+        }
+
+        $status = $this->model->getStatusBySessionId($sessionId);
+
+        if (!$status) {
+            return $this->jsonResponse(false, 'Session not found');
+        }
+
+        return $this->jsonResponse(true, 'Session status OK', ['status' => $status]);
+    }
 
 
 
@@ -134,12 +137,12 @@ public function checkStatus()
     }
 
     public function export()
-{
-    try {
-        $this->model->exportToCSV();
-    } catch (Exception $e) {
-        $this->jsonResponse(false, 'Error exporting: ' . $e->getMessage());
+    {
+        try {
+            $this->model->exportToCSV();
+        } catch (Exception $e) {
+            $this->jsonResponse(false, 'Error exporting: ' . $e->getMessage());
+        }
     }
-}
 
 }

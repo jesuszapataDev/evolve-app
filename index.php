@@ -1,5 +1,6 @@
 <?php
 
+
 // ==================================================================
 // ARCHIVO: index.php (Punto de entrada de la aplicación)
 // ==================================================================
@@ -15,6 +16,8 @@ define('APP_ROOT', __DIR__ . '/'); // Define la ruta raíz de la aplicación
 use App\Router;
 use App\Core\ViewRenderer;
 use App\Controllers\CountryController; // Asegúrate de que la ruta sea correcta
+use App\Controllers\AuthController;
+
 use App\Middlewares\AuthMiddleware; // Asumiendo que creas esta clase en /middleware/
 
 // --- INICIALIZACIÓN Y DEFINICIÓN DE RUTAS ---
@@ -52,6 +55,12 @@ $router->group(['prefix' => '/api'], function ($router) {
     $router->get('/countries', [
         'controlador' => CountryController::class,
         'accion' => 'showAll'
+    ]);
+
+    // Inicisar sesión
+    $router->post('/login', [
+        'controlador' => AuthController::class,
+        'accion' => 'login'
     ]);
 
     /**

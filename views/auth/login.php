@@ -12,11 +12,17 @@
 
     <script src="public/assets/js/head.js"></script>
 
+    <link href="public/assets/css/app-styles.css" rel="stylesheet" type="text/css" id="app-style" />
+
     <link href="public/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="app-style" />
 
     <link href="public/assets/css/app.min.css" rel="stylesheet" type="text/css" />
 
     <link href="public/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- select2 -->
+    <link href="public/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+
 </head>
 
 <body class="authentication-bg authentication-bg-pattern">
@@ -65,21 +71,23 @@
                                         <h4 class="mt-3">Sign In</h4>
                                         <p class="text-muted mb-4">Enter your email address and password to access
                                             account.</p>
-                                        <form action="#">
+                                        <form id="signInForm" data-validation="reactive" novalidate>
                                             <div class="mb-3">
                                                 <label for="emailaddress" class="form-label">Email address</label>
-                                                <input class="form-control" type="email" id="emailaddress" required=""
-                                                    placeholder="Enter your email">
+                                                <input class="form-control" type="email" id="emailaddress" name="email"
+                                                    placeholder="Enter your email" data-rules="noVacio|email"
+                                                    data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
+                                                    data-message-email="<?= $traducciones['validation_email_format']; ?>">
                                             </div>
-
                                             <div class="mb-3">
                                                 <a href="auth-recoverpw.html"
                                                     class="text-muted font-13 float-end">Forgot your password?</a>
                                                 <label for="password" class="form-label">Password</label>
-                                                <input class="form-control" type="password" required="" id="password"
-                                                    placeholder="Enter your password">
+                                                <input class="form-control" type="password" id="password"
+                                                    name="password" placeholder="Enter your password"
+                                                    data-rules="noVacio"
+                                                    data-message-no-vacio="<?= $traducciones['validation_required']; ?>">
                                             </div>
-
                                             <div class="mb-3">
                                                 <button class="btn btn-primary btn-sm float-sm-end" type="submit"> Log
                                                     In </button>
@@ -87,28 +95,47 @@
                                         </form>
                                     </div>
                                 </div>
-
                                 <div class="tab-pane fade" id="signup-pane" role="tabpanel" aria-labelledby="signup-tab"
                                     tabindex="0">
                                     <div class="p-sm-3">
                                         <h4 class="mt-3">Free Sign Up</h4>
-                                        <p class="text-muted mb-4">Don't have an account? Create your account, it takes
-                                            less than a minute</p>
-                                        <form action="#">
+                                        <p class="text-muted mb-4">Don't have an account? Create your account...</p>
+                                        <form id="signUpForm" data-validation="reactive" novalidate>
                                             <div class="mb-3">
                                                 <label for="fullname" class="form-label">Full Name</label>
                                                 <input class="form-control" type="text" id="fullname"
-                                                    placeholder="Enter your name" required>
+                                                    name="nombre_completo" placeholder="Enter your name"
+                                                    data-rules="noVacio|longitudMaxima:100"
+                                                    data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
+                                                    data-message-longitud-maxima="<?= $traducciones['validation_max_length_name']; ?>">
                                             </div>
                                             <div class="mb-3">
                                                 <label for="emailaddress2" class="form-label">Email address</label>
-                                                <input class="form-control" type="email" id="emailaddress2" required
-                                                    placeholder="Enter your email">
+                                                <input class="form-control" type="email" id="emailaddress2"
+                                                    name="correo" placeholder="Enter your email"
+                                                    data-rules="noVacio|email"
+                                                    data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
+                                                    data-message-email="<?= $traducciones['validation_email_format']; ?>">
+                                            </div>
+                                            <div class="row mb-3">
+                                                <div class="col-md-6 mb-3">
+                                                    <label class="form-label" for="country-select">Country</label>
+                                                    <div data-phone-select=""></div>
+                                                </div>
+                                                <div class="col-md-6 mb-3">
+                                                    <label for="phone" class="form-label">Telephone</label>
+                                                    <input type="text" id="phone" name="phone" class="form-control"
+                                                        data-rules="longitudExacta:10"
+                                                        data-message-longitud-exacta="<?= $traducciones['validation_phone_exact_length']; ?>">
+                                                </div>
                                             </div>
                                             <div class="mb-3">
                                                 <label for="password2" class="form-label">Password</label>
-                                                <input class="form-control" type="password" required id="password2"
-                                                    placeholder="Enter your password">
+                                                <input class="form-control" type="password" id="password2"
+                                                    name="contrasena" placeholder="Enter your password"
+                                                    data-rules="noVacio|longitudMinima:8"
+                                                    data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
+                                                    data-message-longitud-minima="<?= $traducciones['validation_min_length']; ?>">
                                             </div>
                                             <div class="mb-0">
                                                 <button class="btn btn-success btn-sm float-sm-end" type="submit"> Sign
@@ -124,12 +151,18 @@
             </div>
         </div>
     </div>
+    <script src="public/assets/js/imask.js"></script>
+
     <script src="public/assets/js/vendor.min.js"></script>
 
     <script src="public/assets/js/app.min.js"></script>
-    <script type="module" src="public/assets/js/modules/login.js"></script>
 
-    <script src="public/assets/js/pages/authentication.init.js"></script>
+    <script src="public/assets/libs/select2/js/select2.min.js"></script>
+
+    <script type="module" src="public/assets/js/helpers/validarFormulario.js"></script>
+
+
+    <script type="module" src="public/assets/js/modules/login.js"></script>
 
 </body>
 

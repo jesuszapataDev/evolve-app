@@ -1,5 +1,11 @@
 <?php
-require_once __DIR__ . '/../config/Database.php';
+
+namespace App\Models;
+
+use App\Config\ClientEnvironmentInfo;
+use App\Config\Database;
+use App\Config\TimezoneManager;
+
 require_once __DIR__ . '/../helpers/session_timezone_helper.php';
 
 class SessionManagementModel
@@ -44,7 +50,7 @@ class SessionManagementModel
         $stmt->bind_param("ssi", $ipAddress, $userType, $withinMinutes);
         $stmt->execute();
         $result = $stmt->get_result()->fetch_assoc();
-        return (int)($result['failed_attempts'] ?? 0);
+        return (int) ($result['failed_attempts'] ?? 0);
     }
 
     /**
@@ -65,7 +71,7 @@ class SessionManagementModel
             $sessionId = $this->generateUUIDv4();
 
             // Inicializar entorno de auditoría y zona horaria
-            $env = new ClientEnvironmentInfo($_SERVER['DOCUMENT_ROOT'] . '/app/config/geolite.mmdb');
+            $env = new ClientEnvironmentInfo(APP_ROOT . '/config/geolite.mmdb');
             $env->applyAuditContext($this->db, $userId);
             $tzManager = new TimezoneManager($this->db);
             $tzManager->applyTimezone();
@@ -83,14 +89,14 @@ class SessionManagementModel
             $inactivityDuration = null;
 
             // Info del cliente
-            $ip        = $_SERVER['REMOTE_ADDR']     ?? 'UNKNOWN';
+            $ip = $_SERVER['REMOTE_ADDR'] ?? 'UNKNOWN';
             $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? 'UNKNOWN';
-            $hostname  = $env->getClientHostname();
-            $os        = $env->getClientOs();
-            $browser   = $env->getClientBrowser();
+            $hostname = $env->getClientHostname();
+            $os = $env->getClientOs();
+            $browser = $env->getClientBrowser();
 
             // Normalizar userType
-            $userType = strtolower((string)$userType);
+            $userType = strtolower((string) $userType);
             $fullName = 'UNKNOWN';
             $username = 'UNKNOWN';
 
@@ -141,16 +147,30 @@ class SessionManagementModel
 
             $stmtInsert->bind_param(
                 'ssssssssisssssssssssssss',
-                $sessionId, $userId, $username, $userType, $fullName,
-                $loginTime, $logoutTime, $inactivityDuration,
-                $loginSuccess, $failureReason, $sessionStatus,
-                $ip, $geo['client_city'],
+                $sessionId,
+                $userId,
+                $username,
+                $userType,
+                $fullName,
+                $loginTime,
+                $logoutTime,
+                $inactivityDuration,
+                $loginSuccess,
+                $failureReason,
+                $sessionStatus,
+                $ip,
+                $geo['client_city'],
                 $geo['client_region'],
                 $geo['client_country'],
                 $geo['client_zipcode'],
                 $geo['client_coordinates'],
-                $hostname, $os, $browser, $userAgent,
-                $deviceId, $deviceType, $createdAt
+                $hostname,
+                $os,
+                $browser,
+                $userAgent,
+                $deviceId,
+                $deviceType,
+                $createdAt
             );
 
             $stmtInsert->execute();
@@ -206,8 +226,8 @@ class SessionManagementModel
                 require_once $_SERVER['DOCUMENT_ROOT'] . '/app/models/SessionConfigModel.php';
                 $configModel = new SessionConfigModel();
                 $config = $configModel->getConfig();
-                $timeoutMinutes = (int)($config['timeout_minutes'] ?? 5);
-                $inactivityDuration = (string)($timeoutMinutes * 60);
+                $timeoutMinutes = (int) ($config['timeout_minutes'] ?? 5);
+                $inactivityDuration = (string) ($timeoutMinutes * 60);
             }
 
             // 5) UPDATE
@@ -249,8 +269,14 @@ class SessionManagementModel
         $output = fopen('php://output', 'w');
 
         fputcsv($output, [
-            'Session ID', 'User ID', 'User Type', 'Full Name', 'Login Time',
-            'IP Address', 'User Agent', 'Created At'
+            'Session ID',
+            'User ID',
+            'User Type',
+            'Full Name',
+            'Login Time',
+            'IP Address',
+            'User Agent',
+            'Created At'
         ]);
 
         $sql = "SELECT session_id, user_id, user_type, full_name, login_time, ip_address, user_agent, created_at
@@ -279,11 +305,14 @@ class SessionManagementModel
     {
         return sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
             mt_rand(0, 0xffff),
             mt_rand(0, 0x0fff) | 0x4000,
             mt_rand(0, 0x3fff) | 0x8000,
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff)
         );
     }
 }

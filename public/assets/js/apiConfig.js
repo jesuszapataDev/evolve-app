@@ -1,7 +1,7 @@
 import { showAlert } from './helpers/alerts.js'
 
 function getBaseUrl() {
-  const localBaseUrl = 'http://localhost/biometrical-system' // Cambia esta URL según tu configuración local
+  const localBaseUrl = 'http://localhost/evolve-app' // Cambia esta URL según tu configuración local
   const prodBaseUrl = 'localhost' // Cambia esta URL por la de tu servidor de producción
 
   // Verificamos si estamos en un entorno de localhost
@@ -17,9 +17,12 @@ function validateUrl() {
   let url = new URL(window.location.href)
   let protocol = url.protocol
   let host = url.host
+
   let pathname = url.pathname
 
-  return `${protocol}//${host}`
+  return `${protocol}//${host}${
+    pathname.includes('evolve-app') ? pathname : ''
+  }`.replace(/\/$/, '') // Aseguramos que no termine con '/'
 }
 
 function handleRequest(url, method, data = null, showAlerts = true) {
@@ -175,32 +178,9 @@ async function handleRequestFetch(url, method, data = null, showAlerts = true) {
   }
 }
 
-// DASHBOARD DATA
-
-export const getUserDashboardData = async ({
-  id_biomarker,
-  minDate,
-  maxDate,
-  status = 'all',
-}) => {
-  return await handleRequest(
-    `/biomarkers/filtered/${id_biomarker}/${minDate}/${maxDate}/${status}`,
-    'GET'
-  )
-}
-
-export const userInOutRange = async ({ id_biomarker, minDate, maxDate }) => {
-  return await handleRequest(
-    `/biomarkers/in-out-range-percentage_user`,
-    'POST',
-    {
-      id_biomarker,
-      min: minDate,
-      max: maxDate,
-      status: 'all',
-    }
-  )
-}
+// Authentication Routes
+export const login = async (credentials) =>
+  await handleRequest('/api/login', 'POST', credentials)
 
 // COUNTRIES
 export const getAllCountries = async () =>
@@ -221,4 +201,6 @@ export const deleteCountry = async (id) =>
 // COUNTRIES FOR SELECT
 
 export const getCountries = async () =>
-  await handleRequestFetch(`/countries/all`, 'GET', null, false)
+  await handleRequestFetch(`/api/countries`, 'GET', null, false)
+
+console.log(getCountries())

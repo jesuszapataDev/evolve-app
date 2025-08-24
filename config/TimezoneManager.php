@@ -1,9 +1,14 @@
 <?php
-final class TimezoneManager
-{
-    private mysqli $mysqli;
+namespace App\Config;
 
-    public function __construct(mysqli $mysqli)
+use DateTime;
+use DateTimeZone;
+use Exception;
+class TimezoneManager
+{
+    private $mysqli;
+
+    public function __construct($mysqli)
     {
         $this->mysqli = $mysqli;
     }

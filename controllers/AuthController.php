@@ -1,27 +1,28 @@
 <?php
 
-require_once __DIR__ . '/../models/AuthModel.php';
-require_once __DIR__ . '/../models/UserModel.php';
-require_once __DIR__ . '/../models/SecurityQuestionsModel.php';
+namespace App\Controllers;
 
+use App\Models\SessionManagementModel;
+use App\Models\UserModel;
+use App\Models\AuthModel;
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
-require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/phpmailer/phpmailer/src/Exception.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/phpmailer/phpmailer/src/PHPMailer.php';
-require_once $_SERVER['DOCUMENT_ROOT'] . '/vendor/phpmailer/phpmailer/src/SMTP.php';
+require_once APP_ROOT . '/vendor/phpmailer/phpmailer/src/Exception.php';
+require_once APP_ROOT . '/vendor/phpmailer/phpmailer/src/PHPMailer.php';
+require_once APP_ROOT . '/vendor/phpmailer/phpmailer/src/SMTP.php';
 
 class AuthController
 {
     private $authModel;
     private $userModel;
-    private $securityQuestionsModel;
+
 
     public function __construct()
     {
         $this->authModel = new AuthModel();
         $this->userModel = new UserModel();
-        $this->securityQuestionsModel = new SecurityQuestionsModel();
+
     }
 
     private function getJsonInput(): array
@@ -35,56 +36,59 @@ class AuthController
         http_response_code($status);
         header('Content-Type: application/json');
         echo json_encode([
-            'value'   => $value,
+            'value' => $value,
             'message' => $message,
-            'data'    => $data
+            'data' => $data
         ]);
         exit;
     }
 
     public function login()
     {
-        $input    = $this->getJsonInput();
+        $input = $this->getJsonInput();
 
-        $email    = $input['email'] ?? '';
+        $email = $input['email'] ?? '';
         $password = $input['password'] ?? '';
         $language = strtoupper($input['language'] ?? 'EN');
 
         // Auditoría
-        $deviceId    = $input['device_id']   ?? null;
-        $deviceType  = $input['device_type'] ?? null; // <-- reemplaza is_mobile
-        $userAgent   = $input['user_agent']  ?? ($_SERVER['HTTP_USER_AGENT'] ?? 'Unknown');
-        $ipAddress   = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
-        $userType    = 'user';
+        $deviceId = $input['device_id'] ?? null;
+        $deviceType = $input['device_type'] ?? null; // <-- reemplaza is_mobile
+        $userAgent = $input['user_agent'] ?? ($_SERVER['HTTP_USER_AGENT'] ?? 'Unknown');
+        $ipAddress = $_SERVER['REMOTE_ADDR'] ?? 'unknown';
+        $userType = 'user';
 
         // Cargar idioma
-        $langFile = $_SERVER['DOCUMENT_ROOT'] . "/lang/{$language}.php";
+        $langFile = APP_ROOT . "/lang/{$language}.php";
         if (!file_exists($langFile)) {
-            $langFile = $_SERVER['DOCUMENT_ROOT'] . "/lang/EN.php";
+            $langFile = APP_ROOT . "/lang/EN.php";
         }
         $lang = require $langFile;
 
         // Helpers y modelos
-        require_once __DIR__ . '/../helpers/login_helpers.php';
-        require_once __DIR__ . '/../models/SessionManagementModel.php';
+        require_once APP_ROOT . 'helpers/login_helpers.php';
+
         $SessionManagementModel = new SessionManagementModel();
 
         $failureCode = null;
-        $usuario     = null;
+        $usuario = null;
 
         // ──────── BLOQUEO POR SESIÓN ────────
         $maxAttempts = 3;
         $lockoutTime = 60; // segundos
-        $attemptKey  = 'login_attempts_' . md5($email);
-        $now         = time();
+        $attemptKey = 'login_attempts_' . md5($email);
+        $now = time();
         $attemptData = $_SESSION[$attemptKey] ?? ['count' => 0, 'last_attempt' => 0, 'locked_until' => 0];
 
         if ($attemptData['locked_until'] > $now) {
-            $wait    = ceil(($attemptData['locked_until'] - $now) / 60);
+            $wait = ceil(($attemptData['locked_until'] - $now) / 60);
             $details = getFailureDetails('too_many_attempts');
 
             if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
-                try { $usuario = $this->userModel->getUserByEmail($email); } catch (\Throwable $t) {}
+                try {
+                    $usuario = $this->userModel->getUserByEmail($email);
+                } catch (\Throwable $t) {
+                }
             }
 
             // create(user_id, userType, deviceId, deviceType, success, reason)
@@ -138,7 +142,7 @@ class AuthController
 
             if (!$usuario) {
                 $failureCode = 'user_not_found';
-            } elseif ((int)$usuario['status'] === 0) {
+            } elseif ((int) $usuario['status'] === 0) {
                 $failureCode = 'user_blocked';
             } elseif (!password_verify($password, $usuario['password'])) {
                 $failureCode = 'invalid_password';
@@ -164,7 +168,7 @@ class AuthController
 
                     $bloqueado = $this->userModel->updateStatus([
                         'user_id' => $usuario['user_id'],
-                        'status'  => 0
+                        'status' => 0
                     ]);
 
                     if (!$bloqueado) {
@@ -186,18 +190,18 @@ class AuthController
             }
 
             // ✅ LOGIN EXITOSO
-            $_SESSION['idioma']     = $language;
-            $_SESSION['user_id']    = $usuario['user_id'];
+            $_SESSION['idioma'] = $language;
+            $_SESSION['user_id'] = $usuario['user_id'];
 
             // Normaliza rol a 'User' | 'Administrator'
-            $normalizedRole         = ucfirst(strtolower($usuario['rol'] ?? 'User'));
-            $_SESSION['roles_user'] = in_array($normalizedRole, ['User','Administrator'], true) ? $normalizedRole : 'User';
+            $normalizedRole = ucfirst(strtolower($usuario['rol'] ?? 'User'));
+            $_SESSION['roles_user'] = in_array($normalizedRole, ['User', 'Administrator'], true) ? $normalizedRole : 'User';
 
-            $_SESSION['sex']        = $usuario['sex'] ?? null;
-            $_SESSION['timezone']   = $usuario['timezone'] ?? null;
-            $_SESSION['user_name']  = trim(($usuario['first_name'] ?? '') . ' ' . ($usuario['last_name'] ?? ''));
-            $_SESSION['logged_in']  = true;
-            $_SESSION['user_type']  = $userType;
+            $_SESSION['sex'] = $usuario['sex'] ?? null;
+            $_SESSION['timezone'] = $usuario['timezone'] ?? null;
+            $_SESSION['user_name'] = trim(($usuario['first_name'] ?? '') . ' ' . ($usuario['last_name'] ?? ''));
+            $_SESSION['logged_in'] = true;
+            $_SESSION['user_type'] = $userType;
 
             unset($_SESSION[$attemptKey]);
 
@@ -226,7 +230,7 @@ class AuthController
                 'Excepción inesperada: ' . $e->getMessage()
             );
             return $this->jsonResponse(false, $lang['login_success_no'], [
-                'code'  => 'unknown_failure',
+                'code' => 'unknown_failure',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -234,7 +238,7 @@ class AuthController
 
     public function registrar()
     {
-        $data     = $this->getJsonInput();
+        $data = $this->getJsonInput();
 
         // Campos requeridos según nueva estructura (sin birthday; con timezone)
         $required = ['first_name', 'last_name', 'sex', 'email', 'password', 'telephone', 'timezone'];
@@ -283,7 +287,7 @@ class AuthController
 
     private function sendWelcomeEmail($email, $lang = 'EN')
     {
-        $host    = defined('APP_URL') ? APP_URL : 'http://localhost/';
+        $host = defined('APP_URL') ? APP_URL : 'http://localhost/';
         $logoUrl = rtrim($host, '/') . '/public/assets/images/logo-index.png';
         $subject = $lang === 'ES' ? 'Bienvenido a VITAKEE' : 'Welcome to VITAKEE';
 
@@ -347,19 +351,19 @@ class AuthController
 
         try {
             $mail->isSMTP();
-            $mail->Host       = $_ENV['MAIL_HOST'] ?? 'localhost';
-            $mail->SMTPAuth   = true;
-            $mail->Username   = $_ENV['MAIL_USERNAME'] ?? '';
-            $mail->Password   = $_ENV['MAIL_PASSWORD'] ?? '';
+            $mail->Host = $_ENV['MAIL_HOST'] ?? 'localhost';
+            $mail->SMTPAuth = true;
+            $mail->Username = $_ENV['MAIL_USERNAME'] ?? '';
+            $mail->Password = $_ENV['MAIL_PASSWORD'] ?? '';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port       = $_ENV['MAIL_PORT'] ?? 587;
+            $mail->Port = $_ENV['MAIL_PORT'] ?? 587;
 
             $mail->setFrom($_ENV['MAIL_FROM'] ?? 'noreply@example.com', $_ENV['MAIL_FROM_NAME'] ?? 'Vitakee');
             $mail->addAddress($email);
 
             $mail->isHTML(true);
             $mail->Subject = $subject;
-            $mail->Body    = $body;
+            $mail->Body = $body;
 
             $mail->send();
         } catch (Exception $e) {
@@ -369,7 +373,7 @@ class AuthController
 
     public function checkUserImage()
     {
-        $input  = $this->getJsonInput();
+        $input = $this->getJsonInput();
         $userId = $input['user_id'] ?? null;
 
         if (!$userId) {
@@ -388,14 +392,14 @@ class AuthController
 
     public function logout()
     {
-        $userRole  = $_SESSION['roles_user'] ?? 'User';
+        $userRole = $_SESSION['roles_user'] ?? 'User';
         $sessionId = $_SESSION['session_id'] ?? null;
         $inactivity = $_SESSION['inactivity_duration'] ?? null;
-        $status     = $_SESSION['session_status'] ?? '';
+        $status = $_SESSION['session_status'] ?? '';
 
         // Solo User / Administrator
         $baseUrl = match ($userRole) {
-            default         => ($_ENV['APP_URL'] ?? 'http://localhost/')
+            default => ($_ENV['APP_URL'] ?? 'http://localhost/')
         };
 
         if ($sessionId && !in_array($status, ['expired', 'kicked'], true)) {

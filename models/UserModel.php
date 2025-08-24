@@ -1,6 +1,9 @@
 <?php
+namespace App\Models;
 
-require_once __DIR__ . '/../config/Database.php';
+use App\Config\Database;
+
+
 
 class UserModel
 {
@@ -97,7 +100,7 @@ class UserModel
             throw new mysqli_sql_exception("Error al contar usuarios: " . $this->db->error);
         }
         $row = $result->fetch_assoc();
-        return (int)($row['total'] ?? 0);
+        return (int) ($row['total'] ?? 0);
     }
 
     /* =========================
@@ -130,7 +133,7 @@ class UserModel
         }
         $stmt->bind_param("s", $email);
         $stmt->execute();
-        $res  = $stmt->get_result();
+        $res = $stmt->get_result();
         $user = $res->fetch_assoc();
         if ($user && password_verify($password, $user['password'])) {
             unset($user['password']);
@@ -155,10 +158,11 @@ class UserModel
     public function updatePassword(array $data): bool
     {
         $newPassword = $data['newPassword'] ?? null;
-        $userId      = $data['userId']      ?? null;
-        $token       = $data['token']       ?? null;
+        $userId = $data['userId'] ?? null;
+        $token = $data['token'] ?? null;
 
-        if (!$newPassword) return false;
+        if (!$newPassword)
+            return false;
 
         // Auditoría
         $env = new ClientEnvironmentInfo($_SERVER['DOCUMENT_ROOT'] . '/app/config/geolite.mmdb');
@@ -171,7 +175,8 @@ class UserModel
         if (!empty($userId)) {
             $hash = password_hash($newPassword, PASSWORD_DEFAULT);
             $stmt = $this->db->prepare("UPDATE {$this->table} SET password = ?, updated_at = ?, updated_by = ? WHERE user_id = ?");
-            if (!$stmt) throw new mysqli_sql_exception("Error al preparar la actualización: " . $this->db->error);
+            if (!$stmt)
+                throw new mysqli_sql_exception("Error al preparar la actualización: " . $this->db->error);
             $stmt->bind_param("ssss", $hash, $updatedAt, $updatedBy, $userId);
             $stmt->execute();
             $ok = $stmt->affected_rows > 0;
@@ -193,7 +198,8 @@ class UserModel
             $stmt->execute();
             $reset = $stmt->get_result()->fetch_assoc();
             $stmt->close();
-            if (!$reset) return false;
+            if (!$reset)
+                return false;
 
             $createdAt = new DateTime($reset['created_at']);
             if ((time() - $createdAt->getTimestamp()) > 600) {
@@ -209,13 +215,15 @@ class UserModel
             $stmt->execute();
             $user = $stmt->get_result()->fetch_assoc();
             $stmt->close();
-            if (!$user) return false;
+            if (!$user)
+                return false;
 
-            $uid  = $user['user_id'];
+            $uid = $user['user_id'];
             $hash = password_hash($newPassword, PASSWORD_DEFAULT);
 
             $stmt = $this->db->prepare("UPDATE {$this->table} SET password = ?, updated_at = ?, updated_by = ? WHERE user_id = ?");
-            if (!$stmt) throw new mysqli_sql_exception("Error al preparar la actualización: " . $this->db->error);
+            if (!$stmt)
+                throw new mysqli_sql_exception("Error al preparar la actualización: " . $this->db->error);
             $stmt->bind_param("ssss", $hash, $updatedAt, $uid, $uid);
             $stmt->execute();
             $ok = $stmt->affected_rows > 0;
@@ -243,7 +251,8 @@ class UserModel
         try {
             // Email único (activos)
             $chk = $this->db->prepare("SELECT user_id FROM {$this->table} WHERE email = ? AND deleted_at IS NULL");
-            if (!$chk) throw new mysqli_sql_exception("Error preparando validación de email: " . $this->db->error);
+            if (!$chk)
+                throw new mysqli_sql_exception("Error preparando validación de email: " . $this->db->error);
             $chk->bind_param("s", $data['email']);
             $chk->execute();
             $chk->store_result();
@@ -252,7 +261,7 @@ class UserModel
             }
             $chk->close();
 
-            $uuid           = $this->generateUUIDv4();
+            $uuid = $this->generateUUIDv4();
             $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
 
             // Auditoría / TZ
@@ -264,15 +273,16 @@ class UserModel
             $createdBy = $sessionUserId;
 
             $timezone = $data['timezone'] ?? 'America/Los_Angeles';
-            $status   = isset($data['status']) ? (int)$data['status'] : 1;
-            $rol      = $data['rol'] ?? 'user';
+            $status = isset($data['status']) ? (int) $data['status'] : 1;
+            $rol = $data['rol'] ?? 'user';
 
             $stmt = $this->db->prepare("
                 INSERT INTO {$this->table}
                 (user_id, first_name, last_name, sex, email, telephone, password, timezone, status, rol, created_at, created_by)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
-            if (!$stmt) throw new mysqli_sql_exception("Error preparando inserción: " . $this->db->error);
+            if (!$stmt)
+                throw new mysqli_sql_exception("Error preparando inserción: " . $this->db->error);
 
             $stmt->bind_param(
                 "ssssssssisss",
@@ -305,11 +315,14 @@ class UserModel
     {
         return sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
             mt_rand(0, 0xffff),
             mt_rand(0, 0x0fff) | 0x4000,
             mt_rand(0, 0x3fff) | 0x8000,
-            mt_rand(0, 0xffff), mt_rand(0, 0xffff), mt_rand(0, 0xffff)
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff),
+            mt_rand(0, 0xffff)
         );
     }
 
@@ -323,7 +336,8 @@ class UserModel
         try {
             // Email único
             $chk = $this->db->prepare("SELECT user_id FROM {$this->table} WHERE email = ? AND user_id != ? AND deleted_at IS NULL");
-            if (!$chk) throw new Exception('Error al preparar validación de email: ' . $this->db->error);
+            if (!$chk)
+                throw new Exception('Error al preparar validación de email: ' . $this->db->error);
             $chk->bind_param("ss", $data['email'], $id);
             $chk->execute();
             $chk->store_result();
@@ -347,30 +361,31 @@ class UserModel
 
             $params = [
                 $data['first_name'] ?? '',
-                $data['last_name']  ?? '',
-                $data['sex']        ?? '',
-                $data['email']      ?? '',
-                $data['telephone']  ?? '',
-                $data['timezone']   ?? 'America/Los_Angeles',
-                isset($data['status']) ? (int)$data['status'] : 1,
-                $data['rol']        ?? 'user',
+                $data['last_name'] ?? '',
+                $data['sex'] ?? '',
+                $data['email'] ?? '',
+                $data['telephone'] ?? '',
+                $data['timezone'] ?? 'America/Los_Angeles',
+                isset($data['status']) ? (int) $data['status'] : 1,
+                $data['rol'] ?? 'user',
                 $updatedAt,
                 $updatedBy
             ];
             $types = "ssssssisss";
 
             if (!empty($data['password'])) {
-                $sql     .= ", password = ?";
+                $sql .= ", password = ?";
                 $params[] = password_hash($data['password'], PASSWORD_DEFAULT);
-                $types   .= "s";
+                $types .= "s";
             }
 
-            $sql    .= " WHERE user_id = ?";
+            $sql .= " WHERE user_id = ?";
             $params[] = $id;
-            $types   .= "s";
+            $types .= "s";
 
             $stmt = $this->db->prepare($sql);
-            if (!$stmt) throw new Exception('Error al preparar la consulta de actualización: ' . $this->db->error);
+            if (!$stmt)
+                throw new Exception('Error al preparar la consulta de actualización: ' . $this->db->error);
 
             $stmt->bind_param($types, ...$params);
             if (!$stmt->execute()) {
@@ -387,10 +402,10 @@ class UserModel
 
     public function updateStatus(array $data): bool
     {
-        $userId    = $data['user_id'] ?? null;
+        $userId = $data['user_id'] ?? null;
         $newStatus = $data['status'] ?? null;
 
-        if ($userId === null || !in_array((int)$newStatus, [0,1], true)) {
+        if ($userId === null || !in_array((int) $newStatus, [0, 1], true)) {
             return false;
         }
 
@@ -402,9 +417,10 @@ class UserModel
         $updatedBy = $userId;
 
         $stmt = $this->db->prepare("UPDATE {$this->table} SET status = ?, updated_at = ?, updated_by = ? WHERE user_id = ?");
-        if (!$stmt) throw new mysqli_sql_exception("Error al preparar la consulta: " . $this->db->error);
+        if (!$stmt)
+            throw new mysqli_sql_exception("Error al preparar la consulta: " . $this->db->error);
 
-        $newStatus = (int)$newStatus;
+        $newStatus = (int) $newStatus;
         $stmt->bind_param("isss", $newStatus, $updatedAt, $updatedBy, $userId);
         $stmt->execute();
         $ok = $stmt->affected_rows > 0;
@@ -419,7 +435,8 @@ class UserModel
         try {
             // Email único
             $chk = $this->db->prepare("SELECT user_id FROM {$this->table} WHERE email = ? AND user_id != ? AND deleted_at IS NULL");
-            if (!$chk) throw new Exception('Error al preparar validación de email: ' . $this->db->error);
+            if (!$chk)
+                throw new Exception('Error al preparar validación de email: ' . $this->db->error);
             $chk->bind_param("ss", $data['email'], $id);
             $chk->execute();
             $chk->store_result();
@@ -443,28 +460,29 @@ class UserModel
 
             $params = [
                 $data['first_name'] ?? '',
-                $data['last_name']  ?? '',
-                $data['sex']        ?? '',
-                $data['email']      ?? '',
-                $data['telephone']  ?? '',
-                $data['timezone']   ?? 'America/Los_Angeles',
+                $data['last_name'] ?? '',
+                $data['sex'] ?? '',
+                $data['email'] ?? '',
+                $data['telephone'] ?? '',
+                $data['timezone'] ?? 'America/Los_Angeles',
                 $updatedAt,
                 $updatedBy
             ];
             $types = "ssssssss";
 
             if (!empty($data['password'])) {
-                $sql     .= ", password = ?";
+                $sql .= ", password = ?";
                 $params[] = password_hash($data['password'], PASSWORD_DEFAULT);
-                $types   .= "s";
+                $types .= "s";
             }
 
-            $sql    .= " WHERE user_id = ?";
+            $sql .= " WHERE user_id = ?";
             $params[] = $id;
-            $types   .= "s";
+            $types .= "s";
 
             $stmt = $this->db->prepare($sql);
-            if (!$stmt) throw new Exception('Error al preparar consulta: ' . $this->db->error);
+            if (!$stmt)
+                throw new Exception('Error al preparar consulta: ' . $this->db->error);
             $stmt->bind_param($types, ...$params);
             if (!$stmt->execute()) {
                 throw new Exception('No se pudo actualizar el usuario: ' . $stmt->error);
@@ -474,11 +492,11 @@ class UserModel
 
             // Refrescar sesión (si aplica)
             $_SESSION['first_name'] = $data['first_name'] ?? ($_SESSION['first_name'] ?? null);
-            $_SESSION['last_name']  = $data['last_name']  ?? ($_SESSION['last_name'] ?? null);
-            $_SESSION['user_name']  = trim(($_SESSION['first_name'] ?? '') . ' ' . ($_SESSION['last_name'] ?? ''));
-            $_SESSION['email']      = $data['email']      ?? ($_SESSION['email'] ?? null);
-            $_SESSION['timezone']   = $data['timezone']   ?? ($_SESSION['timezone'] ?? null);
-            $_SESSION['sex']        = $data['sex']        ?? ($_SESSION['sex'] ?? null);
+            $_SESSION['last_name'] = $data['last_name'] ?? ($_SESSION['last_name'] ?? null);
+            $_SESSION['user_name'] = trim(($_SESSION['first_name'] ?? '') . ' ' . ($_SESSION['last_name'] ?? ''));
+            $_SESSION['email'] = $data['email'] ?? ($_SESSION['email'] ?? null);
+            $_SESSION['timezone'] = $data['timezone'] ?? ($_SESSION['timezone'] ?? null);
+            $_SESSION['sex'] = $data['sex'] ?? ($_SESSION['sex'] ?? null);
 
             return true;
         } catch (\Throwable $e) {
@@ -496,9 +514,9 @@ class UserModel
         $this->db->begin_transaction();
         try {
             // Idioma
-            $lang          = strtoupper($_SESSION['idioma'] ?? 'EN');
+            $lang = strtoupper($_SESSION['idioma'] ?? 'EN');
             $archivoIdioma = $_SERVER['DOCUMENT_ROOT'] . "/lang/{$lang}.php";
-            $t             = file_exists($archivoIdioma) ? include $archivoIdioma : [];
+            $t = file_exists($archivoIdioma) ? include $archivoIdioma : [];
 
             // Existe?
             $check = $this->db->prepare("SELECT user_id FROM {$this->table} WHERE user_id = ? LIMIT 1");
@@ -512,7 +530,7 @@ class UserModel
 
             // Dependencias (ajusta a tus tablas)
             $relatedTables = [
-                'security_questions'   => ['user_id', false],
+                'security_questions' => ['user_id', false],
             ];
             foreach ($relatedTables as $table => [$field, $hasDeletedAt]) {
                 $sql = $hasDeletedAt
@@ -527,7 +545,7 @@ class UserModel
                 $row = $stmt->get_result()->fetch_assoc();
                 $stmt->close();
 
-                if ((int)($row['total'] ?? 0) > 0) {
+                if ((int) ($row['total'] ?? 0) > 0) {
                     $msg = $t['user_delete_dependency'] ?? "Cannot delete user: related records exist in table '{table}'.";
                     $msg = str_replace('{table}', $table, $msg);
                     throw new mysqli_sql_exception($msg);

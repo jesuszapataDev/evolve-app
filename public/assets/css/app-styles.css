@@ -1,0 +1,74 @@
+/* select2 */
+.select2-results__options {
+  max-height: 250px; /* Puedes ajustar esta altura a tu gusto */
+  overflow-y: auto;
+}
+
+/* Contenedor principal de cada opción/selección */
+.country-option-container {
+  display: flex; /* Para alinear el sufijo y los detalles uno al lado del otro */
+  align-items: center; /* Centrar verticalmente */
+  padding: 4px 0; /* Espaciado interno */
+  box-sizing: border-box; /* Incluir padding en el ancho/alto */
+}
+
+/* Estilo para el sufijo (ej. VE) */
+.country-sufijo {
+  font-weight: normal;
+  font-size: 1.2em; /* Hazlo un poco más grande */
+  margin-right: 10px; /* Espacio entre el sufijo y el prefijo/nombre */
+
+  padding: 3px 6px; /* Espaciado dentro del borde */
+  min-width: 40px; /* Ancho mínimo para mantener uniformidad */
+  text-align: center;
+  line-height: 1; /* Ajustar línea para que se centre mejor verticalmente */
+}
+
+/* Contenedor para el prefijo y el nombre del país */
+.country-details {
+  display: flex;
+  flex-direction: column; /* Para apilar el prefijo y el nombre */
+  line-height: 1.2; /* Espaciado entre líneas */
+}
+
+/* Estilo para el prefijo (+58) */
+.country-prefijo {
+  font-size: 0.7rem; /* Tamaño normal del texto */
+  font-weight: normal;
+  color: var(--color-gray-dark); /* Color oscuro */
+}
+
+/* Estilo para el nombre del país (VENEZUELA) */
+.country-name {
+  font-size: 0.7rem; /* Tamaño normal del texto */
+  color: var(--color-gray-dark); /* Un color ligeramente más claro */
+}
+
+/* Estilos específicos para la selección de Select2 (el que se ve en el input) */
+.select2-container .select2-selection--single {
+  height: auto !important;
+}
+
+.select2-container .select2-selection__rendered {
+  line-height: normal; /* Asegurar que el texto se alinee correctamente */
+  padding-left: 8px; /* Ajustar padding si es necesario */
+  padding-right: 20px !important; /* Asegurar espacio para la flecha de select2 */
+}
+
+.select2-results__option--highlighted {
+  background-color: #2f54a2 !important; /* Cambia el color de fondo al resaltar */
+  color: var(
+    --color-white-light
+  ) !important; /* Cambia el color del texto al resaltar */
+}
+
+.select2-results__option--highlighted span {
+  color: var(
+    --color-white-light
+  ) !important; /* Cambia el color del texto al resaltar */
+}
+
+/* Estilos específicos para las opciones en el menú desplegable */
+.select2-container .select2-results__option {
+  padding: 0 6px; /* Ajustar padding si es necesario */
+}
