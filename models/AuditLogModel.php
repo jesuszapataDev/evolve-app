@@ -1,6 +1,9 @@
 <?php
+namespace App\Models;
 
-require_once __DIR__ . '/../config/Database.php';
+use App\Config\ClientEnvironmentInfo;
+use App\Config\Database;
+use App\Config\TimezoneManager;
 
 class AuditLogModel
 {

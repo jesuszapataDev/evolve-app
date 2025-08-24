@@ -155,7 +155,7 @@
 <script src="public/assets/libs/bootstrap-table/bootstrap-table.min.js"></script>
 
 <script src="public/assets/js/pages/bootstrap-tables.init.js"></script>
-
+<script src="public/assets/js/leaflet.js"></script>
 <!-- App js -->
 <script type="module" src="public/assets/js/app.js"></script>
 

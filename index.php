@@ -30,6 +30,7 @@ use App\Core\ViewRenderer;
 use App\Controllers\CountryController; // Asegúrate de que la ruta sea correcta
 use App\Controllers\AuthController;
 use App\Controllers\SessionConfigController;
+use App\Controllers\AuditLogController;
 use App\Controllers\SessionManagementController;
 use App\Middlewares\AuthMiddleware; // Asumiendo que creas esta clase en /middleware/
 
@@ -94,6 +95,18 @@ $router->group(['prefix' => '/api'], function ($router) {
     $router->get('/session-audit/export/1', [
         'controlador' => SessionManagementController::class,
         'accion' => 'export'
+    ]);
+        $router->get('/auditlog', [
+        'controlador' => AuditLogController::class,
+        'accion' => 'getAll'
+    ]);
+            $router->get('/auditlog/{id}', [
+        'controlador' => AuditLogController::class,
+        'accion' => 'getById'
+    ]);
+                $router->get('/auditlog/export/{id}', [
+        'controlador' => AuditLogController::class,
+        'accion' => 'exportCSV'
     ]);
 
 
