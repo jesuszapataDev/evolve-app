@@ -65,6 +65,46 @@ class UserController
         imagedestroy($srcImg);
         return "/uploads/users/{$filename}";
     }
+public function showByEmail($params)
+{
+    // Permite recibir el parámetro desde $params, POST o GET
+    $email = $params['email'] ?? $_POST['email'] ?? $_GET['email'] ?? null;
+
+    try {
+        if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->jsonResponse(false, "Email inválido o faltante.");
+        }
+
+        $user = $this->userModel->getUserByEmail($email);
+
+        return $user
+            ? $this->jsonResponse(true, '', $user)
+            : $this->jsonResponse(false, "Usuario no encontrado");
+    } catch (mysqli_sql_exception $e) {
+        return $this->errorResponse(400, "Error al obtener usuario: " . $e->getMessage());
+    }
+}
+
+public function showByTelephone($params)
+{
+    // Permite recibir el parámetro desde $params, POST o GET
+    $telephone = $params['telephone'] ?? $_POST['telephone'] ?? $_GET['telephone'] ?? null;
+
+    try {
+        if (!$telephone || !is_string($telephone)) {
+            return $this->jsonResponse(false, "Teléfono inválido o faltante.");
+        }
+
+        // No normalizamos aquí: el modelo ya hace el REPLACE para comparar.
+        $user = $this->userModel->getUserByTelephone($telephone);
+
+        return $user
+            ? $this->jsonResponse(true, '', $user)
+            : $this->jsonResponse(false, "Usuario no encontrado");
+    } catch (mysqli_sql_exception $e) {
+        return $this->errorResponse(400, "Error al obtener usuario: " . $e->getMessage());
+    }
+}
 
     /**
      * Actualiza el tipo de sistema (métrico/imperial) del usuario en sesión.
