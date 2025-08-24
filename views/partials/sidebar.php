@@ -76,7 +76,7 @@
                 </a>
             </li>
               <li class="menu-item">
-                <a href="apps-chat.html" class="menu-link">
+                <a href="audit_log" class="menu-link">
                     <span class="menu-icon"><i data-feather="message-square"></i></span>
                     <span class="menu-text"> Audit Log </span>
                 </a>

@@ -121,6 +121,10 @@ $router->group(['middleware' => AuthMiddleware::class], function ($router) use (
         'vista' => '/modules/session_management',
         'vistaData' => ['title' => $traducciones['home_title'] ?? 'home']
     ]);
+        $router->get('/audit_log', [
+        'vista' => '/modules/audit_log',
+        'vistaData' => ['title' => $traducciones['home_title'] ?? 'home']
+    ]);
 
 });
 
