@@ -34,7 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
     formSignUp.addEventListener('validation:success', async (evento) => {
       console.log('✅ Formulario Sign Up OK. Enviando:', evento.detail.datos)
 
-      let response = await register(evento.detail.datos)
+      let response = await register({
+        ...evento.detail.datos,
+      })
 
       if (response.value) {
         formSignIn.reset() // Resetea el formulario de Sign In

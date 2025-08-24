@@ -17,7 +17,7 @@ return [
   'login_button' => 'Iniciar sesión',
   'signup_button' => 'Registrarse',
   'create_user' => 'Crear usuario',
-    'audit_log_view_title' => 'Audit Log',
+  'audit_log_view_title' => 'Audit Log',
   // Test Images
   'name_test_image' => 'Nombre',
   'description_test_image' => 'Descripción',
@@ -1221,5 +1221,6 @@ return [
 
   'validation_min_length_password' => 'La contraseña debe tener al menos 8 caracteres.',
   'validation_password_match' => 'Las contraseñas no coinciden.',
+  'validation_gender_required' => 'Por favor, selecciona una opción.',
 
 ];

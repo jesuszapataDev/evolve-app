@@ -52,14 +52,14 @@
                                         <p class="text-muted mb-4">Enter your email address and password to access
                                             account.</p>
                                         <form id="signInForm" data-validation="reactive" novalidate>
-                                            <div class="mb-3">
+                                            <div class="mb-2">
                                                 <label for="emailaddress" class="form-label">Email address</label>
                                                 <input class="form-control" type="email" id="emailaddress" name="email"
                                                     placeholder="Enter your email" data-rules="noVacio|email"
                                                     data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
                                                     data-message-email="<?= $traducciones['validation_email_format']; ?>">
                                             </div>
-                                            <div class="mb-3">
+                                            <div class="mb-2">
                                                 <a href="auth-recoverpw.html"
                                                     class="text-muted font-13 float-end">Forgot your password?</a>
                                                 <label for="password" class="form-label">Password</label>
@@ -75,7 +75,7 @@
                                                 </div>
                                             </div>
 
-                                            <div class="mb-3">
+                                            <div class="mb-2">
                                                 <button class="btn btn-primary btn-sm float-sm-end" type="submit"> Log
                                                     In </button>
                                             </div>
@@ -88,37 +88,64 @@
                                         <h4 class="mt-3">Free Sign Up</h4>
                                         <p class="text-muted mb-4">Don't have an account? Create your account...</p>
                                         <form id="signUpForm" data-validation="reactive" novalidate>
-                                            <div class="mb-3">
-                                                <label for="first_name" class="form-label">Full Name</label>
-                                                <input class="form-control" type="text" id="first_name"
-                                                    name="first_name" placeholder="Enter your name"
-                                                    data-rules="noVacio|longitudMaxima:100"
-                                                    data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
-                                                    data-message-longitud-maxima="<?= $traducciones['validation_max_length_name']; ?>">
-                                            </div>
-                                            <div class="mb-3">
-                                                <label for="last_name" class="form-label">Last Name</label>
-                                                <input class="form-control" type="text" id="last_name" name="last_name"
-                                                    placeholder="Enter your last name"
-                                                    data-rules="noVacio|longitudMaxima:100"
-                                                    data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
-                                                    data-message-longitud-maxima="<?= $traducciones['validation_max_length_name']; ?>">
 
+                                            <div class="row mb-2">
+                                                <div class="col-md-6">
+                                                    <label for="first_name" class="form-label">Full Name</label>
+                                                    <input class="form-control" type="text" id="first_name"
+                                                        name="first_name" placeholder="Enter your name"
+                                                        data-rules="noVacio|longitudMaxima:100"
+                                                        data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
+                                                        data-message-longitud-maxima="<?= $traducciones['validation_max_length_name']; ?>">
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <label for="last_name" class="form-label">Last Name</label>
+                                                    <input class="form-control" type="text" id="last_name"
+                                                        name="last_name" placeholder="Enter your last name"
+                                                        data-rules="noVacio|longitudMaxima:100"
+                                                        data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
+                                                        data-message-longitud-maxima="<?= $traducciones['validation_max_length_name']; ?>">
+
+                                                </div>
                                             </div>
-                                            <div class="mb-3">
+
+                                            <div class="mb-2">
                                                 <label for="email" class="form-label">Email address</label>
                                                 <input class="form-control" type="email" id="email" name="email"
                                                     placeholder="Enter your email" data-rules="noVacio|email"
                                                     data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
                                                     data-message-email="<?= $traducciones['validation_email_format']; ?>">
                                             </div>
-                                            <div class="row mb-3">
-                                                <div class="col-md-6 mb-3">
+
+                                            <div class="mb-2">
+                                                <label
+                                                    class="form-label d-block"><?= htmlspecialchars($traducciones['signup_gender_label']) ?></label>
+
+                                                <div id="gender-radio-group">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="sex"
+                                                            id="sex_m" value="m" data-rules="noVacio"
+                                                            data-message-no-vacio="<?= $traducciones['validation_gender_required']; ?>"
+                                                            data-error-container="#gender-radio-group">
+                                                        <label class="form-check-label"
+                                                            for="sex_m"><?= htmlspecialchars($traducciones['signup_gender_male']) ?></label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="sex"
+                                                            id="sex_f" value="f">
+                                                        <label class="form-check-label"
+                                                            for="sex_f"><?= htmlspecialchars($traducciones['signup_gender_female']) ?></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-2">
+                                                <div class="col-md-6">
                                                     <label class="form-label" for="country-select">Country</label>
                                                     <div data-phone-select=""></div>
                                                 </div>
 
-                                                <div class="col-md-6 mb-3">
+                                                <div class="col-md-6">
                                                     <label for="telephone"
                                                         class="form-label"><?= $traducciones['telephone_label'] ?? 'Telephone' ?></label>
                                                     <input type="text" id="telephone" name="telephone"
@@ -130,36 +157,45 @@
                                                         data-validate-masked="true">
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <label><?= $traducciones['password'] ?? 'Contraseña'; ?></label>
-                                                <div class="input-group input-group-merge">
-                                                    <input type="password_register" id="password" name="password"
-                                                        class="form-control" data-error-container=".input-group"
-                                                        data-rules="noVacio|longitudMinima:8"
-                                                        data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
-                                                        data-message-longitud-minima="<?= $traducciones['validation_min_length_password']; ?>"
-                                                        data-revalidate-targets="#confirm_password">
-                                                    <div class="input-group-text toggle-password-button"
-                                                        data-target-input="#password_register">
-                                                        <span class="bi bi-eye"></span>
+
+                                            <div class="row mb-2">
+                                                <div class="col-md-6">
+                                                    <label
+                                                        class="form-label"><?= $traducciones['password'] ?? 'Contraseña'; ?></label>
+                                                    <div class="input-group input-group-merge">
+                                                        <input type="password" id="password_register" name="password"
+                                                            class="form-control" data-error-container=".input-group"
+                                                            data-rules="noVacio|longitudMinima:8"
+                                                            data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
+                                                            data-message-longitud-minima="<?= $traducciones['validation_min_length_password']; ?>"
+                                                            data-revalidate-targets="#confirm_password">
+                                                        <div class="input-group-text toggle-password-button"
+                                                            data-target-input="#password_register">
+                                                            <span class="bi bi-eye"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <label
+                                                        class="form-label"><?= $traducciones['confirm_password'] ?? 'Confirm Password'; ?></label>
+                                                    <div class="input-group input-group-merge">
+                                                        <input type="password" name="confirm_password"
+                                                            id="confirm_password" class="form-control"
+                                                            data-error-container=".input-group"
+                                                            data-rules="coincideCon:#password_register"
+                                                            data-message-coincide-con="<?= $traducciones['validation_password_match']; ?>">
+                                                        <div class="input-group-text toggle-password-button"
+                                                            data-target-input="#confirm_password">
+                                                            <span class="bi bi-eye"></span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="col-md-6">
-                                                <label
-                                                    class="form-label"><?= $traducciones['confirm_password'] ?? 'Confirm Password'; ?></label>
-                                                <div class="input-group input-group-merge">
-                                                    <input type="password" name="confirm_password" id="confirm_password"
-                                                        class="form-control" data-error-container=".input-group"
-                                                        data-rules="coincideCon:#password"
-                                                        data-message-coincide-con="<?= $traducciones['validation_password_match']; ?>">
-                                                    <div class="input-group-text toggle-password-button"
-                                                        data-target-input="#confirm_password">
-                                                        <span class="bi bi-eye"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
+
+
+
 
                                             <div class="mb-0">
                                                 <button class="btn btn-success btn-sm float-sm-end" type="submit"> Sign

@@ -3,7 +3,9 @@
 namespace App\Models;
 
 
+use App\Config\ClientEnvironmentInfo;
 use App\Config\Database;
+use App\Config\TimezoneManager;
 
 
 class AuthModel
@@ -102,7 +104,7 @@ class AuthModel
 
             // Inicializar entorno y zona horaria
             $userId = 0; // aún no existe
-            $env = new ClientEnvironmentInfo($_SERVER['DOCUMENT_ROOT'] . '/app/config/geolite.mmdb');
+            $env = new ClientEnvironmentInfo(APP_ROOT . '/config/geolite.mmdb');
             $env->applyAuditContext($this->db, $userId);
             $tzManager = new TimezoneManager($this->db);
             $tzManager->applyTimezone();

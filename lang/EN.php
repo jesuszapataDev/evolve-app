@@ -1215,5 +1215,6 @@ return [
 
   'validation_min_length_password' => 'The password must be at least 8 characters long.',
   'validation_password_match' => 'The passwords do not match.',
+  'validation_gender_required' => 'Please select an option.',
 
 ];
