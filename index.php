@@ -29,6 +29,8 @@ use App\Router;
 use App\Core\ViewRenderer;
 use App\Controllers\CountryController; // Asegúrate de que la ruta sea correcta
 use App\Controllers\AuthController;
+use App\Controllers\SessionConfigController;
+use App\Controllers\SessionManagementController;
 use App\Middlewares\AuthMiddleware; // Asumiendo que creas esta clase en /middleware/
 
 // --- INICIALIZACIÓN Y DEFINICIÓN DE RUTAS ---
@@ -67,7 +69,10 @@ $router->group(['prefix' => '/api'], function ($router) {
     'controlador' => SessionManagementController::class,
     'accion' => 'showAll'
 ]);
-
+    $router->post('/session-status', [
+    'controlador' => SessionManagementController::class,
+    'accion' => 'checkStatus'
+]);
 $router->get('/session-config', [
     'controlador' => SessionConfigController::class,
     'accion' => 'show'

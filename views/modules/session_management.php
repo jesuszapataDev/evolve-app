@@ -114,7 +114,7 @@
       </form>
     </div>
 
-
+<script src="public/assets/js/logout.js"></script>
 
     <script>
 
@@ -213,7 +213,7 @@
             pageList: [5, 10, 20, 50, 100],
             showRefresh: true,
             showColumns: true,
-            url: 'session-audit',
+            url: 'api/session-audit',
             responseHandler: res => res.data || []
         });
     }
@@ -228,7 +228,7 @@ document.getElementById('btnSessionConfig')?.addEventListener('click', async () 
     const modal = new bootstrap.Modal(document.getElementById('sessionConfigModal'));
 
     try {
-        const res = await fetch('session-config');
+        const res = await fetch('api/session-config');
         const json = await res.json();
 
         if (json.value && json.data) {
@@ -271,7 +271,7 @@ document.getElementById('sessionConfigForm')?.addEventListener('submit', async f
     });
 
     try {
-        const response = await fetch('session-config', {
+        const response = await fetch('api/session-config', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ timeout_minutes: timeout })
@@ -570,7 +570,7 @@ else {
         }).then(result => {
             if (result.isConfirmed) {
                 $.ajax({
-                    url: `session-audit/kick/1`,
+                    url: `api/session-audit/kick/1`,
                     method: 'POST',
                     contentType: 'application/json',
                     data: JSON.stringify({ session_id: row.session_id }),
@@ -632,7 +632,7 @@ function formatDateTime(dateStr) {
             });
 
             try {
-                const response = await fetch('session-audit/export/1');
+                const response = await fetch('api/session-audit/export/1');
                 const contentType = response.headers.get("Content-Type");
 
                 if (contentType && contentType.includes("text/csv")) {

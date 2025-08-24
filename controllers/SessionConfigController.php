@@ -1,14 +1,17 @@
 <?php
+declare(strict_types=1);
 
-require_once __DIR__ . '/../models/SessionConfigModel.php';
+namespace App\Controllers;
+
+use App\Services\SessionConfigService;
 
 class SessionConfigController
 {
-    private $model;
+    private SessionConfigService $service;
 
     public function __construct()
     {
-        $this->model = new SessionConfigModel();
+        $this->service = new SessionConfigService();
     }
 
     private function getJsonInput(): array
@@ -16,41 +19,28 @@ class SessionConfigController
         return json_decode(file_get_contents("php://input"), true) ?? [];
     }
 
-    private function jsonResponse(bool $value, string $message = '', $data = null)
+    private function jsonResponse(bool $value, string $message = '', $data = null, int $status = 200)
     {
+        http_response_code($status);
         header('Content-Type: application/json');
         echo json_encode([
-            'value' => $value,
+            'value'   => $value,
             'message' => $message,
-            'data' => $data
+            'data'    => $data
         ]);
         exit;
     }
 
     public function show()
     {
-        try {
-            $config = $this->model->getConfig();
-            $this->jsonResponse(true, '', $config);
-        } catch (Exception $e) {
-            $this->jsonResponse(false, $e->getMessage());
-        }
+        $r = $this->service->getConfig();
+        return $this->jsonResponse($r['value'], $r['message'], $r['data'], $r['status']);
     }
 
     public function update()
     {
         $data = $this->getJsonInput();
-        $timeout = isset($data['timeout_minutes']) ? (int) $data['timeout_minutes'] : 0;
-
-        if ($timeout <= 0) {
-            return $this->jsonResponse(false, 'Invalid timeout value.');
-        }
-
-        try {
-            $success = $this->model->updateTimeout($timeout);
-            $this->jsonResponse($success, $success ? 'Session timeout updated.' : 'Update failed.');
-        } catch (Exception $e) {
-            $this->jsonResponse(false, $e->getMessage());
-        }
+        $r    = $this->service->update($data);
+        return $this->jsonResponse($r['value'], $r['message'], $r['data'], $r['status']);
     }
 }

@@ -5,7 +5,7 @@
     let warningThresholdMs = 4 * 60 * 1000;
 
     try {
-        const res = await fetch('/session-config');
+        const res = await fetch('api/session-config');
         const data = await res.json();
         if (data.value && data.data?.timeout_minutes) {
             timeoutMinutes = parseInt(data.data.timeout_minutes);
@@ -64,7 +64,7 @@
     // ✅ Verificar si el backend ha terminado la sesión (expirada o forzada)
     async function checkSessionStatus() {
         try {
-            const res = await fetch('/session-status', {
+            const res = await fetch('api/session-status', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' }
             });
@@ -132,7 +132,7 @@ async function checkInactivity() {
         console.log("⛔ Sesión expirada por inactividad:", Math.floor(inactivityTime / 1000), "segundos");
 
         try {
-            await fetch('/session-audit/kick/1', {
+            await fetch('api/session-audit/kick/1', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -142,7 +142,7 @@ async function checkInactivity() {
                 })
             });
 
-            await fetch('/session-audit/store-status', {
+            await fetch('api/session-audit/store-status', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
