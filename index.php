@@ -59,39 +59,42 @@ $router->group(['prefix' => '/api'], function ($router) {
         'controlador' => AuthController::class,
         'accion' => 'login'
     ]);
+    $router->post('/register', [
+        'controlador' => AuthController::class,
+        'accion' => 'registrar'
+    ]);
 
     $router->get('/logout', [
         'controlador' => AuthController::class,
         'accion' => 'logout',
-
     ]);
     $router->get('/session-audit', [
-    'controlador' => SessionManagementController::class,
-    'accion' => 'showAll'
-]);
+        'controlador' => SessionManagementController::class,
+        'accion' => 'showAll'
+    ]);
     $router->post('/session-status', [
-    'controlador' => SessionManagementController::class,
-    'accion' => 'checkStatus'
-]);
-$router->get('/session-config', [
-    'controlador' => SessionConfigController::class,
-    'accion' => 'show'
-]);
+        'controlador' => SessionManagementController::class,
+        'accion' => 'checkStatus'
+    ]);
+    $router->get('/session-config', [
+        'controlador' => SessionConfigController::class,
+        'accion' => 'show'
+    ]);
 
-$router->post('/session-config', [
-    'controlador' => SessionConfigController::class,
-    'accion' => 'update'
-]);
+    $router->post('/session-config', [
+        'controlador' => SessionConfigController::class,
+        'accion' => 'update'
+    ]);
 
-$router->post('/session-audit/kick/1', [
-    'controlador' => SessionManagementController::class,
-    'accion' => 'kick'
-]);
+    $router->post('/session-audit/kick/1', [
+        'controlador' => SessionManagementController::class,
+        'accion' => 'kick'
+    ]);
 
-$router->get('/session-audit/export/1', [
-    'controlador' => SessionManagementController::class,
-    'accion' => 'export'
-]);
+    $router->get('/session-audit/export/1', [
+        'controlador' => SessionManagementController::class,
+        'accion' => 'export'
+    ]);
 
 
     // Verificar telefono
@@ -114,7 +117,7 @@ $router->group(['middleware' => AuthMiddleware::class], function ($router) use (
         'vista' => '/modules/home',
         'vistaData' => ['title' => $traducciones['home_title'] ?? 'home']
     ]);
-        $router->get('/session_management', [
+    $router->get('/session_management', [
         'vista' => '/modules/session_management',
         'vistaData' => ['title' => $traducciones['home_title'] ?? 'home']
     ]);
