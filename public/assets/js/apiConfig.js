@@ -207,17 +207,8 @@ export const verifyPhone = async (phone) =>
 // AUDIT LOGS
 
 export async function getAuditLogById(id) {
-  return await handleRequest(`/auditlog/${id}`, 'GET')
+  return await handleRequest(`/api/auditlog/${id}`, 'GET')
 }
 export async function getAllAuditLogs() {
-  return await handleRequest('/auditlog', 'GET')
-}
-
-// SPECIALIST
-export async function selectSpecialisties() {
-  return await handleRequestFetch('/specialties', 'GET')
-}
-
-export async function selectTitles() {
-  return await handleRequestFetch('/titles', 'GET')
+  return await handleRequest('/api/auditlog', 'GET')
 }

@@ -12,9 +12,6 @@
         $traducciones = [];
     }
     ?>
-    <div id="wrapper">
-        <div class="content-page">
-            <div class="content">
                 <div class="container-fluid">
                     <div class="card-body">
 
@@ -228,16 +225,16 @@
         </div>
     </div>
 
-    <?php include 'layouts/footer.php'; ?>
 
 
-<script src="/public/assets/js/logout.js"></script>
+
+<script src="public/assets/js/logout.js"></script>
     <script type="module">
         document.getElementById('exportAuditCsvBtn').addEventListener('click', function () {
 
             Swal.fire({
-                title: language.export_loading_title,
-                text: language.export_loading_text,
+                title: idioma.export_loading_title,
+                text: idioma.export_loading_text,
                 allowOutsideClick: false,
                 allowEscapeKey: false,
                 didOpen: () => {
@@ -245,7 +242,7 @@
                 }
             });
 
-            fetch('auditlog/export/1')
+            fetch('api/auditlog/export/1')
                 .then(async response => {
                     const contentType = response.headers.get("Content-Type");
 
@@ -253,7 +250,7 @@
                         const blob = await response.blob();
                         const url = window.URL.createObjectURL(blob);
 
-                        const filename = `${language.csv_filename_prefix_audit_logs}.csv`;
+                        const filename = `${idioma.csv_filename_prefix_audit_logs}.csv`;
 
                         const a = document.createElement('a');
                         a.href = url;
@@ -268,16 +265,16 @@
                         const res = await response.json();
                         Swal.fire({
                             icon: 'info',
-                            title: language.no_records_title,
-                            text: language.no_records_text
+                            title: idioma.no_records_title,
+                            text: idioma.no_records_text
                         });
                     }
                 })
                 .catch(error => {
                     Swal.fire({
                         icon: 'error',
-                        title: language.export_error_title,
-                        text: language.export_error_text
+                        title: idioma.export_error_title,
+                        text: idioma.export_error_text
                     });
                 });
 
@@ -287,13 +284,13 @@
         import {
             getAllAuditLogs,
             getAuditLogById // Asumo que tienes una función para obtener un solo log
-        } from '/public/assets/js/apiConfig.js'
+        } from '/evolve-app/public/assets/js/apiConfig.js'
 
 
         function createChangesTable(targetElement, data) {
             targetElement.innerHTML = '';
             if (!data || Object.keys(data).length === 0) {
-                targetElement.textContent = language.audit_no_changes_text;
+                targetElement.textContent = idioma.audit_no_changes_text;
                 return;
             }
 
@@ -303,9 +300,9 @@
             table.innerHTML = `
         <thead class="table-light">
             <tr>
-                <th>${language.audit_fiel_text}</th>
-                <th>${language.audit_old_value_text}</th>
-                <th>${language.audit_new_value_text}</th>
+                <th>${idioma.audit_fiel_text}</th>
+                <th>${idioma.audit_old_value_text}</th>
+                <th>${idioma.audit_new_value_text}</th>
             </tr>
         </thead>
     `;
@@ -333,7 +330,7 @@
         function createKeyValueTable(targetElement, data) {
             targetElement.innerHTML = ''; // Limpiar contenido anterior
             if (!data || Object.keys(data).length === 0) {
-                targetElement.textContent = language.audit_no_data_available;
+                targetElement.textContent = idioma.audit_no_data_available;
                 return;
             }
 
@@ -342,8 +339,8 @@
             table.innerHTML = `
         <thead class="table-light">
             <tr>
-                 <th>${language.audit_property_text}</th>
-                <th>${language.audit_value_text}</th>
+                 <th>${idioma.audit_property_text}</th>
+                <th>${idioma.audit_value_text}</th>
             </tr>
         </thead>
     `;
