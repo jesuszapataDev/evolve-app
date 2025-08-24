@@ -25,7 +25,7 @@ return [
   'fil_test_image' => 'File',
   'only_jpg_png_pdf_test_image' => 'Only JPG, PNG or PDF',
   'preview_test_image' => 'Preview',
-
+  'audit_log_view_title' => 'Audit Log',
   'value_notification' => 'Value',
   'status_notification' => 'Status',
   'date_notification' => 'Date',

@@ -17,7 +17,7 @@ return [
   'login_button' => 'Iniciar sesión',
   'signup_button' => 'Registrarse',
   'create_user' => 'Crear usuario',
-
+    'audit_log_view_title' => 'Audit Log',
   // Test Images
   'name_test_image' => 'Nombre',
   'description_test_image' => 'Descripción',
@@ -25,7 +25,7 @@ return [
   'fil_test_image' => 'Archivo',
   'only_jpg_png_pdf_test_image' => 'Solo JPG, PNG o PDF',
   'preview_test_image' => 'Vista previa',
-
+  'audit_log_view_title' => 'Registro de Auditoría',
   'value_notification' => 'Valor',
   'status_notification' => 'Estado',
   'date_notification' => 'Fecha',

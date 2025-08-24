@@ -5,7 +5,7 @@
     if (!in_array($idioma, ['EN', 'ES'])) {
         $idioma = 'EN';
     }
-    $archivo_idioma = $_SERVER['DOCUMENT_ROOT'] . '/lang/' . $idioma . '.php';
+    $archivo_idioma = APP_ROOT . '/lang/' . $idioma . '.php';
     if (file_exists($archivo_idioma)) {
         $traducciones = include $archivo_idioma;
     } else {
