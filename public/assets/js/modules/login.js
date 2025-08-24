@@ -1,4 +1,4 @@
-import { login } from '../apiConfig.js'
+import { login, register } from '../apiConfig.js'
 import { countrySelect } from '/evolve-app/public/assets/js/helpers/countrySelect.js'
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -31,9 +31,14 @@ document.addEventListener('DOMContentLoaded', () => {
   // --- Manejador para el Formulario de Sign Up ---
   const formSignUp = document.getElementById('signUpForm')
   if (formSignUp) {
-    formSignUp.addEventListener('validation:success', (evento) => {
+    formSignUp.addEventListener('validation:success', async (evento) => {
       console.log('✅ Formulario Sign Up OK. Enviando:', evento.detail.datos)
-      // crearCuenta(evento.detail.datos);
+
+      let response = await register(evento.detail.datos)
+
+      if (response.value) {
+        formSignIn.reset() // Resetea el formulario de Sign In
+      }
     })
     formSignUp.addEventListener('validation:failed', () => {
       console.log('❌ Formulario Sign Up con errores.')

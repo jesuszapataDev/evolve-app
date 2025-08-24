@@ -43,12 +43,16 @@ const reglasDeValidacion = {
       return valor.length === longitudRequerida
     }
   },
-  coincideCon: (idCampoOriginal) => {
-    return (valorConfirmacion) => {
-      const campoOriginal = document.getElementById(idCampoOriginal)
-      if (!campoOriginal) return false
-      return valorConfirmacion === campoOriginal.value
+  coincideCon: (selectorDestino) => (valor) => {
+    const campoDestino = document.querySelector(selectorDestino)
+    if (!campoDestino) {
+      console.error(
+        `Campo de destino '${selectorDestino}' no encontrado para la regla 'coincideCon'.`
+      )
+      return false // Falla si el campo a comparar no existe.
     }
+    // La validación es exitosa si el valor actual es igual al del campo de destino.
+    return valor === campoDestino.value
   },
   longitudMinima: (min) => {
     const minLen = Number(min)
@@ -129,18 +133,13 @@ const reglasDeValidacion = {
 
   chequearDuplicidad: async (input) => {
     const url = input.dataset.validateDuplicateUrl
-    // const accion = input.dataset.validateAction
     const inputName = input.name
-
-    // ✅ INICIO DE LA MEJORA
-    // Verificamos si debemos usar el valor enmascarado o el limpio.
     const usarValorEnmascarado = input.dataset.validateMasked === 'true'
     const valor = usarValorEnmascarado
       ? input.value
       : obtenerValorDelCampo(input)
-    // ✅ FIN DE LA MEJORA
 
-    // El resto de la función es casi igual...
+    // Se elimina la dependencia de 'accion'
     if (!valor || !url || !inputName) return { esValido: true, mensaje: null }
 
     const idSelector = input.dataset.recordIdSelector
@@ -156,7 +155,6 @@ const reglasDeValidacion = {
 
     try {
       const formData = new FormData()
-      // formData.append('accion', accion)
       formData.append(inputName, valor)
 
       if (recordId && idInput) {
@@ -174,7 +172,11 @@ const reglasDeValidacion = {
       }
 
       const data = await respuesta.json()
-      const esValido = data.value ? true : false
+
+      // ✅ LÓGICA AJUSTADA: El campo es válido si la API devuelve `value: false`.
+      const esValido = data.value === false
+
+      // Se mantiene la lógica del mensaje dinámico.
       const mensajeApi = data.mensaje || null
 
       return { esValido, mensaje: mensajeApi }
@@ -335,7 +337,6 @@ const validarInput = async (input) => {
       mostrarError(input, mensaje)
       esValido = false
 
-      console.log(input)
       break
     }
   }
@@ -360,6 +361,22 @@ const validarInput = async (input) => {
       return false
     }
   }
+
+  const revalidateTargets = input.dataset.revalidateTargets
+  if (revalidateTargets) {
+    // Puede haber múltiples selectores separados por coma
+    revalidateTargets.split(',').forEach((selector) => {
+      const targetInput = document.querySelector(selector.trim())
+      // Si el campo a re-validar existe y tiene reglas, lo validamos.
+      if (
+        targetInput &&
+        (targetInput.dataset.rules || targetInput.dataset.validateDuplicateUrl)
+      ) {
+        validarInput(targetInput)
+      }
+    })
+  }
+
   return esValido
 }
 
