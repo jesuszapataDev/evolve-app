@@ -1,18 +1,17 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Controllers;
 
-use App\Models\CountryModel;
-use Exception;
-use mysqli_sql_exception;
+use App\Services\CountryService;
 
 class CountryController
 {
-    private $model;
+    private CountryService $service;
 
     public function __construct()
     {
-        $this->model = new CountryModel();
+        $this->service = new CountryService();
     }
 
     private function getJsonInput(): array
@@ -20,75 +19,57 @@ class CountryController
         return json_decode(file_get_contents("php://input"), true) ?? [];
     }
 
-    private function errorResponse(int $http_code, string $message)
+    private function jsonResponse(bool $value, string $message = '', $data = null, int $status = 200)
     {
-        http_response_code($http_code);
-        $this->jsonResponse(false, $message);
-    }
-
-
-    private function jsonResponse(bool $value, string $message = '', $data = null)
-    {
+        http_response_code($status);
         header('Content-Type: application/json');
         echo json_encode([
-            'value' => $value,
+            'value'   => $value,
             'message' => $message,
-            'data' => $data
+            'data'    => $data
         ]);
         exit;
     }
 
     public function showAll()
     {
-        $items = $this->model->getAll();
-        $this->jsonResponse(true, '', $items);
+        $r = $this->service->listAll();
+        return $this->jsonResponse($r['value'], $r['message'], $r['data'], $r['status']);
     }
 
     public function showById($params)
     {
-        $item = $this->model->getById($params['id'] ?? 0);
-        $this->jsonResponse((bool) $item, $item ? '' : 'Not found', $item);
+        $r = $this->service->getById($params['id'] ?? 0);
+        return $this->jsonResponse($r['value'], $r['message'], $r['data'], $r['status']);
     }
 
     public function create()
     {
         $data = $this->getJsonInput();
-        $result = $this->model->create($data);
-        $this->jsonResponse($result, $result ? 'Created successfully' : 'Error creating');
+        $r    = $this->service->create($data);
+        return $this->jsonResponse($r['value'], $r['message'], $r['data'], $r['status']);
     }
 
     public function update($params)
     {
         $data = $this->getJsonInput();
-        $result = $this->model->update($params['id'] ?? 0, $data);
-        $this->jsonResponse($result, $result ? 'Updated successfully' : 'Error updating');
+        $r    = $this->service->update($params['id'] ?? 0, $data);
+        return $this->jsonResponse($r['value'], $r['message'], $r['data'], $r['status']);
     }
 
     public function delete($params)
     {
-        if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
-            $id = $params['id'] ?? 0;
-
-            try {
-                $result = $this->model->delete($id);
-                return $this->jsonResponse(true, 'Deleted successfully');
-            } catch (mysqli_sql_exception $e) {
-                return $this->jsonResponse(false, $e->getMessage());
-            } catch (Exception $e) {
-                return $this->jsonResponse(false, 'Unexpected error: ' . $e->getMessage());
-            }
-        } else {
-            return $this->errorResponse(405, 'Method Not Allowed');
+        if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'DELETE') {
+            return $this->jsonResponse(false, 'Method Not Allowed', null, 405);
         }
+        $r = $this->service->delete($params['id'] ?? 0);
+        return $this->jsonResponse($r['value'], $r['message'], $r['data'], $r['status']);
     }
 
-
-    public function export($userId)
+    public function export($userId = null)
     {
-        try {
-            $this->model->exportAllCountriesToCSV();
-        } catch (Exception $e) {
-            echo json_encode(['value' => false, 'message' => $e->getMessage()]);
-        }
+        $r = $this->service->export();
+        // Si el modelo hizo streaming y finalizó, no se ejecuta lo siguiente.
+        return $this->jsonResponse($r['value'], $r['message'], $r['data'], $r['status']);
     }
 }

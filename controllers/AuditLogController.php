@@ -1,14 +1,17 @@
 <?php
+declare(strict_types=1);
 
-require_once __DIR__ . '/../models/AuditLogModel.php';
+namespace App\Controllers;
+
+use App\Services\AuditLogService;
 
 class AuditLogController
 {
-    private $auditLogModel;
+    private AuditLogService $service;
 
     public function __construct()
     {
-        $this->auditLogModel = new AuditLogModel();
+        $this->service = new AuditLogService();
     }
 
     private function getJsonInput(): array
@@ -17,72 +20,46 @@ class AuditLogController
         return json_decode($input, true) ?? [];
     }
 
-    private function jsonResponse(bool $value, string $message = '', $data = null)
+    private function jsonResponse(bool $value, string $message = '', $data = null, int $status = 200)
     {
+        http_response_code($status);
         header('Content-Type: application/json');
-
-        $response = [
-            'value' => $value,
+        echo json_encode([
+            'value'   => $value,
             'message' => $message,
-            'data' => is_array($data) ? $data : ($data !== null ? [$data] : [])
-        ];
-
-        echo json_encode($response);
+            'data'    => is_array($data) ? $data : ($data !== null ? [$data] : [])
+        ]);
         exit;
     }
 
     public function getAll()
     {
-        try {
-            $logs = $this->auditLogModel->getAll();
-            return $this->jsonResponse(true, '', $logs);
-        } catch (mysqli_sql_exception $e) {
-            return $this->jsonResponse(false, "Error al listar los registros de auditoría: " . $e->getMessage());
-        }
+        $r = $this->service->listAll();
+        return $this->jsonResponse($r['value'], $r['message'], $r['data'], $r['status']);
     }
 
     public function getById($params)
     {
-        $id = $params['id'] ?? null;
-        try {
-            $log = $this->auditLogModel->getById($id);
-            if ($log) {
-                return $this->jsonResponse(true, '', $log);
-            } else {
-                return $this->jsonResponse(false, "Registro de auditoría no encontrado");
-            }
-        } catch (mysqli_sql_exception $e) {
-            return $this->jsonResponse(false, "Error al obtener el registro de auditoría: " . $e->getMessage());
-        }
+        $r = $this->service->getById($params['id'] ?? null);
+        return $this->jsonResponse($r['value'], $r['message'], $r['data'], $r['status']);
     }
 
     public function exportCSV()
     {
-        try {
-            $this->auditLogModel->exportAllToCSV();
-        } catch (Exception $e) {
-            $this->errorResponse(500, "Error al exportar auditoría: " . $e->getMessage());
-        }
+        $r = $this->service->exportCSV();
+        // Si el modelo ya envió el archivo (stream + exit), no llegaremos aquí.
+        return $this->jsonResponse($r['value'], $r['message'], $r['data'], $r['status']);
     }
 
+    /* (Opcional) Si aún usas vistas en otra ruta, puedes mantener este helper: */
     protected function view($vista, $data = [])
     {
-        $rutaVista = __DIR__ . '/../Views/' . $vista . '.php';
-        if (file_exists($rutaVista)) {
+        $rutaVista = APP_ROOT . '/Views/' . $vista . '.php';
+        if (is_file($rutaVista)) {
             extract($data);
             include $rutaVista;
         } else {
-            $this->errorResponse(500, "Error interno del servidor: Vista no encontrada.");
+            $this->jsonResponse(false, "Error interno del servidor: Vista no encontrada.", null, 500);
         }
-    }
-
-    private function errorResponse($http_code, $message)
-    {
-        http_response_code($http_code);
-        echo json_encode([
-            'value' => false,
-            'message' => $message
-        ]);
-        exit;
     }
 }

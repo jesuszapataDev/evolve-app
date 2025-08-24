@@ -1,7 +1,11 @@
 <?php
 namespace App\Models;
 
+
+
 use App\Config\Database;
+use App\Config\ClientEnvironmentInfo;
+use App\Config\TimezoneManager;
 
 
 
@@ -165,7 +169,7 @@ class UserModel
             return false;
 
         // Auditoría
-        $env = new ClientEnvironmentInfo($_SERVER['DOCUMENT_ROOT'] . '/app/config/geolite.mmdb');
+        $env = new ClientEnvironmentInfo(APP_ROOT . '/app/config/geolite.mmdb');
         $env->applyAuditContext($this->db, $userId);
         (new TimezoneManager($this->db))->applyTimezone();
         $updatedAt = $env->getCurrentDatetime();
@@ -266,7 +270,7 @@ class UserModel
 
             // Auditoría / TZ
             $sessionUserId = $_SESSION['user_id'] ?? null;
-            $env = new ClientEnvironmentInfo($_SERVER['DOCUMENT_ROOT'] . '/app/config/geolite.mmdb');
+            $env = new ClientEnvironmentInfo(APP_ROOT . '/app/config/geolite.mmdb');
             $env->applyAuditContext($this->db, $sessionUserId);
             (new TimezoneManager($this->db))->applyTimezone();
             $createdAt = $env->getCurrentDatetime();
@@ -348,7 +352,7 @@ class UserModel
 
             // Auditoría
             $sessionUserId = $_SESSION['user_id'] ?? null;
-            $env = new ClientEnvironmentInfo($_SERVER['DOCUMENT_ROOT'] . '/app/config/geolite.mmdb');
+            $env = new ClientEnvironmentInfo(APP_ROOT . '/app/config/geolite.mmdb');
             $env->applyAuditContext($this->db, $sessionUserId);
             (new TimezoneManager($this->db))->applyTimezone();
             $updatedAt = $env->getCurrentDatetime();
@@ -410,7 +414,7 @@ class UserModel
         }
 
         // Auditoría
-        $env = new ClientEnvironmentInfo($_SERVER['DOCUMENT_ROOT'] . '/app/config/geolite.mmdb');
+        $env = new ClientEnvironmentInfo(APP_ROOT . '/app/config/geolite.mmdb');
         $env->applyAuditContext($this->db, $userId);
         (new TimezoneManager($this->db))->applyTimezone();
         $updatedAt = $env->getCurrentDatetime();
@@ -447,7 +451,7 @@ class UserModel
 
             // Auditoría
             $sessionUserId = $_SESSION['user_id'] ?? null;
-            $env = new ClientEnvironmentInfo($_SERVER['DOCUMENT_ROOT'] . '/app/config/geolite.mmdb');
+            $env = new ClientEnvironmentInfo(APP_ROOT . '/app/config/geolite.mmdb');
             $env->applyAuditContext($this->db, $sessionUserId);
             (new TimezoneManager($this->db))->applyTimezone();
             $updatedAt = $env->getCurrentDatetime();
@@ -515,7 +519,7 @@ class UserModel
         try {
             // Idioma
             $lang = strtoupper($_SESSION['idioma'] ?? 'EN');
-            $archivoIdioma = $_SERVER['DOCUMENT_ROOT'] . "/lang/{$lang}.php";
+            $archivoIdioma = APP_ROOT . "/lang/{$lang}.php";
             $t = file_exists($archivoIdioma) ? include $archivoIdioma : [];
 
             // Existe?
@@ -554,7 +558,7 @@ class UserModel
 
             // Auditoría
             $sessionUserId = $_SESSION['user_id'] ?? null;
-            $env = new ClientEnvironmentInfo($_SERVER['DOCUMENT_ROOT'] . '/app/config/geolite.mmdb');
+            $env = new ClientEnvironmentInfo(APP_ROOT . '/app/config/geolite.mmdb');
             $env->applyAuditContext($this->db, $sessionUserId);
             (new TimezoneManager($this->db))->applyTimezone();
             $deletedAt = $env->getCurrentDatetime();
