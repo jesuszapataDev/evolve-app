@@ -2,7 +2,7 @@ import { login } from '../apiConfig.js'
 import { countrySelect } from '/evolve-app/public/assets/js/helpers/countrySelect.js'
 
 document.addEventListener('DOMContentLoaded', () => {
-  countrySelect('phone', '[data-phone-select]', null)
+  countrySelect('telephone', '[data-phone-select]', null)
 
   // El inicializador general se encarga de activar ambos formularios
   if (typeof inicializarValidacionReactiva === 'function') {
@@ -19,7 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
       let response = await login(evento.detail.datos)
 
-      console.log(response)
+      if (response.value) {
+        window.location.href = 'home'
+      }
     })
     formSignIn.addEventListener('validation:failed', () => {
       console.log('❌ Formulario Sign In con errores.')

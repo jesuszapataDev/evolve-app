@@ -1,3 +1,5 @@
+import { getBaseUrl } from '../apiConfig.js'
+
 /**
  * Objeto con reglas de validación comunes para reutilizar.
  */
@@ -127,7 +129,7 @@ const reglasDeValidacion = {
 
   chequearDuplicidad: async (input) => {
     const url = input.dataset.validateDuplicateUrl
-    const accion = input.dataset.validateAction
+    // const accion = input.dataset.validateAction
     const inputName = input.name
 
     // ✅ INICIO DE LA MEJORA
@@ -139,8 +141,7 @@ const reglasDeValidacion = {
     // ✅ FIN DE LA MEJORA
 
     // El resto de la función es casi igual...
-    if (!valor || !url || !accion || !inputName)
-      return { esValido: true, mensaje: null }
+    if (!valor || !url || !inputName) return { esValido: true, mensaje: null }
 
     const idSelector = input.dataset.recordIdSelector
     let idInput = null
@@ -155,14 +156,14 @@ const reglasDeValidacion = {
 
     try {
       const formData = new FormData()
-      formData.append('accion', accion)
+      // formData.append('accion', accion)
       formData.append(inputName, valor)
 
       if (recordId && idInput) {
         formData.append(idInput.name, recordId)
       }
 
-      const respuesta = await fetch(url, {
+      const respuesta = await fetch(`${getBaseUrl()}${url}`, {
         method: 'POST',
         body: formData,
       })
@@ -173,7 +174,7 @@ const reglasDeValidacion = {
       }
 
       const data = await respuesta.json()
-      const esValido = data.estado === 'disponible'
+      const esValido = data.value ? true : false
       const mensajeApi = data.mensaje || null
 
       return { esValido, mensaje: mensajeApi }

@@ -2,27 +2,7 @@
 <html lang="en" data-topbar-color="dark">
 
 <head>
-    <meta charset="utf-8" />
-    <title>Auth Pages | Create Account | Sign In | Ubold - Responsive Bootstrap 5 Admin Dashboard</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta content="A fully featured admin theme which can be used to build CRM, CMS, etc." name="description" />
-    <meta content="Coderthemes" name="author" />
-
-    <link rel="shortcut icon" href="public/assets/images/favicon.ico">
-
-    <script src="public/assets/js/head.js"></script>
-
-    <link href="public/assets/css/app-styles.css" rel="stylesheet" type="text/css" id="app-style" />
-
-    <link href="public/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" id="app-style" />
-
-    <link href="public/assets/css/app.min.css" rel="stylesheet" type="text/css" />
-
-    <link href="public/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
-
-    <!-- select2 -->
-    <link href="public/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
-
+    <?php include __DIR__ . '/../partials/head.php'; ?>
 </head>
 
 <body class="authentication-bg authentication-bg-pattern">
@@ -122,15 +102,15 @@
                                                     <label class="form-label" for="country-select">Country</label>
                                                     <div data-phone-select=""></div>
                                                 </div>
+
                                                 <div class="col-md-6 mb-3">
                                                     <label for="phone"
                                                         class="form-label"><?= $traducciones['telephone_label'] ?? 'Telephone' ?></label>
-                                                    <input type="text" id="phone" name="phone" class="form-control"
-                                                        data-rules="noVaciolongitudMinima:8"
+                                                    <input type="text" id="telephone" name="telephone"
+                                                        class="form-control" data-rules="noVacio|longitudMinima:8"
                                                         data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
                                                         data-message-longitud-minima="<?= $traducciones['validation_phone_min_length']; ?>"
-                                                        data-validate-duplicate-url="/api/tu_controlador.php"
-                                                        data-validate-action="verificarTelefono"
+                                                        data-validate-duplicate-url="/api/check/telephone"
                                                         data-message-duplicado="Este teléfono ya está registrado."
                                                         data-validate-masked="true">
                                                 </div>
@@ -157,6 +137,8 @@
             </div>
         </div>
     </div>
+    <script type="module" src="public/assets/js/helpers/validarFormulario.js"></script>
+
     <script src="public/assets/js/imask.js"></script>
 
     <script src="public/assets/js/vendor.min.js"></script>
@@ -164,8 +146,8 @@
     <script src="public/assets/js/app.min.js"></script>
 
     <script src="public/assets/libs/select2/js/select2.min.js"></script>
+
     <script type="module" src="public/assets/js/modules/login.js"></script>
-    <script type="module" src="public/assets/js/helpers/validarFormulario.js"></script>
 
 </body>
 

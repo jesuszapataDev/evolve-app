@@ -23,4 +23,20 @@
 
     <!-- Icons css -->
     <link href="public/assets/css/icons.min.css" rel="stylesheet" type="text/css" />
+
+    <!-- CUSTOM STYLES -->
+    <link href="public/assets/css/app-styles.css" rel="stylesheet" type="text/css" />
+
+    <!-- SELECT2 -->
+
+    <!-- select2 -->
+    <link href="public/assets/libs/select2/css/select2.min.css" rel="stylesheet" type="text/css" />
+    <!-- SWEET ALERT -->
+    <link href="public/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css" />
+    <script src="public/assets/libs/sweetalert2/sweetalert2.all.min.js"></script>
+
+    <script>
+        const traducciones = <?= json_encode($traducciones) ?>;
+
+    </script>
 </head>

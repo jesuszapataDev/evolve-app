@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__ . '/../services/UserService.php';
+namespace App\Controllers;
+
+use App\Services\UserService;
 
 class UserController
 {
@@ -19,9 +21,9 @@ class UserController
         header('Content-Type: application/json');
 
         $response = [
-            'value'   => $value,
+            'value' => $value,
             'message' => $message,
-            'data'    => is_array($data) ? $data : ($data !== null ? [$data] : []),
+            'data' => is_array($data) ? $data : ($data !== null ? [$data] : []),
         ];
 
         echo json_encode($response);
@@ -59,7 +61,7 @@ class UserController
     public function update_system_type_session_user()
     {
         $method = $_SERVER['REQUEST_METHOD'];
-        $lang   = strtoupper($_SESSION['idioma'] ?? 'EN');
+        $lang = strtoupper($_SESSION['idioma'] ?? 'EN');
 
         if (!($method === 'PUT' || ($method === 'POST' && (($_POST['_method'] ?? '') === 'PUT')))) {
             $msg = $lang === 'ES' ? "Método no permitido. Se requiere PUT." : "Method not allowed. PUT required.";
@@ -93,7 +95,7 @@ class UserController
     public function showById($params)
     {
         $id = $params['id'] ?? null;
-        $r  = $this->userService->getById($id);
+        $r = $this->userService->getById($id);
         return $this->jsonResponse($r['value'], $r['message'], $r['data']);
     }
 
@@ -103,7 +105,7 @@ class UserController
             return $this->errorResponse(405, "Método no permitido. Se requiere POST.");
         }
         $data = $_POST;
-        $r    = $this->userService->create($data);
+        $r = $this->userService->create($data);
         return $this->jsonResponse($r['value'], $r['message'], $r['data']);
     }
 
@@ -113,7 +115,7 @@ class UserController
             return $this->errorResponse(405, "Method Not Allowed. Use POST.");
         }
 
-        $data            = $_POST;
+        $data = $_POST;
         $data['user_id'] = $params['id'] ?? $data['user_id'] ?? null;
 
         $r = $this->userService->updateStatus($data);
@@ -136,7 +138,7 @@ class UserController
         }
 
         $data = $_POST;
-        $r    = $this->userService->update($id, $data);
+        $r = $this->userService->update($id, $data);
         return $this->jsonResponse($r['value'], $r['message'], $r['data']);
     }
 
@@ -154,7 +156,7 @@ class UserController
             parse_str(file_get_contents("php://input"), $putData);
         }
 
-        $r = $this->userService->updateProfile((string)$id, $putData, $_FILES);
+        $r = $this->userService->updateProfile((string) $id, $putData, $_FILES);
         return $this->jsonResponse($r['value'], $r['message'], $r['data']);
     }
 
@@ -164,13 +166,13 @@ class UserController
             return $this->errorResponse(405, "Method Not Allowed. DELETE required.");
         }
 
-        $id   = $params['id'] ?? null;
+        $id = $params['id'] ?? null;
         if (!$id) {
             return $this->errorResponse(400, "Missing ID parameter.");
         }
         $lang = strtoupper($_SESSION['idioma'] ?? 'EN');
 
-        $r = $this->userService->delete((string)$id, $lang);
+        $r = $this->userService->delete((string) $id, $lang);
         return $this->jsonResponse($r['value'], $r['message'], $r['data']);
     }
 
@@ -186,7 +188,7 @@ class UserController
     public function getSessionUserData($params)
     {
         $userId = $params['id'] ?? null;
-        $r      = $this->userService->getSessionUserData($userId);
+        $r = $this->userService->getSessionUserData($userId);
         return $this->jsonResponse($r['value'], $r['message'], $r['data']);
     }
 }

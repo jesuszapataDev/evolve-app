@@ -1,8 +1,10 @@
 import { showAlert } from './helpers/alerts.js'
 
-function getBaseUrl() {
+export function getBaseUrl() {
   const localBaseUrl = 'http://localhost/evolve-app' // Cambia esta URL según tu configuración local
   const prodBaseUrl = 'localhost' // Cambia esta URL por la de tu servidor de producción
+
+  console.log(window.location.origin)
 
   // Verificamos si estamos en un entorno de localhost
   if (window.location.origin.includes('localhost')) {
@@ -14,15 +16,7 @@ function getBaseUrl() {
 }
 
 function validateUrl() {
-  let url = new URL(window.location.href)
-  let protocol = url.protocol
-  let host = url.host
-
-  let pathname = url.pathname
-
-  return `${protocol}//${host}${
-    pathname.includes('evolve-app') ? pathname : ''
-  }`.replace(/\/$/, '') // Aseguramos que no termine con '/'
+  return getBaseUrl()
 }
 
 function handleRequest(url, method, data = null, showAlerts = true) {
@@ -203,4 +197,10 @@ export const deleteCountry = async (id) =>
 export const getCountries = async () =>
   await handleRequestFetch(`/api/countries`, 'GET', null, false)
 
-console.log(getCountries())
+// VERIFICAR DUPLCIADOS
+
+export const verifyEmail = async (email) =>
+  await handleRequest(`/api/verify-email`, 'POST', { email }, false)
+
+export const verifyPhone = async (phone) =>
+  await handleRequest(`/api/verify-phone`, 'POST', { phone }, false)

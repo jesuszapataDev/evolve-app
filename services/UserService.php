@@ -1,7 +1,11 @@
 <?php
 declare(strict_types=1);
 
-require_once __DIR__ . '/../models/UserModel.php';
+namespace App\Services;
+
+use App\Models\UserModel;
+
+
 
 class UserService
 {
@@ -18,94 +22,94 @@ class UserService
     private function resp(bool $value, string $message = '', $data = null): array
     {
         return [
-            'value'   => $value,
+            'value' => $value,
             'message' => $message,
-            'data'    => is_array($data) ? $data : ($data !== null ? [$data] : []),
+            'data' => is_array($data) ? $data : ($data !== null ? [$data] : []),
         ];
     }
 
-private function loadLang(string $langCode): array
-{
-    // Si APP_ROOT no está definida (p.ej., en entornos de prueba), la definimos al raíz del proyecto.
-    if (!defined('APP_ROOT')) {
-        define('APP_ROOT', rtrim(str_replace('\\', '/', realpath(__DIR__ . '/..')), '/'));
-        // __DIR__ apunta a /services; .. sube al raíz del proyecto donde está /lang
+    private function loadLang(string $langCode): array
+    {
+        // Si APP_ROOT no está definida (p.ej., en entornos de prueba), la definimos al raíz del proyecto.
+        if (!defined('APP_ROOT')) {
+            define('APP_ROOT', rtrim(str_replace('\\', '/', realpath(__DIR__ . '/..')), '/'));
+            // __DIR__ apunta a /services; .. sube al raíz del proyecto donde está /lang
+        }
+
+        $code = strtoupper($langCode ?: 'EN');
+        $file = APP_ROOT . "/lang/{$code}.php";
+
+        return is_file($file) ? include $file : [];
     }
-
-    $code = strtoupper($langCode ?: 'EN');
-    $file = APP_ROOT . "/lang/{$code}.php";
-
-    return is_file($file) ? include $file : [];
-}
 
 
     /**
      * Sube la imagen de perfil, la normaliza a JPG y devuelve la ruta relativa.
      * Devuelve null si no hay archivo; lanza excepción si el archivo es inválido.
      */
-   /***************
- * Subida de imagen de perfil usando APP_ROOT
- ***************/
-private function handleProfileImageUpload(string $userId, array $files): ?string
-{
-    if (empty($files['profile_image']) || $files['profile_image']['error'] !== UPLOAD_ERR_OK) {
-        return null;
-    }
+    /***************
+     * Subida de imagen de perfil usando APP_ROOT
+     ***************/
+    private function handleProfileImageUpload(string $userId, array $files): ?string
+    {
+        if (empty($files['profile_image']) || $files['profile_image']['error'] !== UPLOAD_ERR_OK) {
+            return null;
+        }
 
-    // Asegurar APP_ROOT
-    if (!defined('APP_ROOT')) {
-        define('APP_ROOT', rtrim(str_replace('\\', '/', realpath(__DIR__ . '/..')), '/'));
-        // __DIR__ = /services; APP_ROOT = raíz del proyecto (donde vive /uploads)
-    }
+        // Asegurar APP_ROOT
+        if (!defined('APP_ROOT')) {
+            define('APP_ROOT', rtrim(str_replace('\\', '/', realpath(__DIR__ . '/..')), '/'));
+            // __DIR__ = /services; APP_ROOT = raíz del proyecto (donde vive /uploads)
+        }
 
-    $tmpPath  = $files['profile_image']['tmp_name'];
-    $mimeInfo = @getimagesize($tmpPath);
-    if ($mimeInfo === false) {
-        throw new RuntimeException("El archivo no es una imagen válida.");
-    }
+        $tmpPath = $files['profile_image']['tmp_name'];
+        $mimeInfo = @getimagesize($tmpPath);
+        if ($mimeInfo === false) {
+            throw new RuntimeException("El archivo no es una imagen válida.");
+        }
 
-    switch ($mimeInfo['mime']) {
-        case 'image/jpeg':
-            $srcImg = imagecreatefromjpeg($tmpPath);
-            break;
-        case 'image/png':
-            $srcImg  = imagecreatefrompng($tmpPath);
-            $width   = imagesx($srcImg);
-            $height  = imagesy($srcImg);
-            $bg      = imagecreatetruecolor($width, $height);
-            $white   = imagecolorallocate($bg, 255, 255, 255);
-            imagefill($bg, 0, 0, $white);
-            imagecopy($bg, $srcImg, 0, 0, 0, 0, $width, $height);
+        switch ($mimeInfo['mime']) {
+            case 'image/jpeg':
+                $srcImg = imagecreatefromjpeg($tmpPath);
+                break;
+            case 'image/png':
+                $srcImg = imagecreatefrompng($tmpPath);
+                $width = imagesx($srcImg);
+                $height = imagesy($srcImg);
+                $bg = imagecreatetruecolor($width, $height);
+                $white = imagecolorallocate($bg, 255, 255, 255);
+                imagefill($bg, 0, 0, $white);
+                imagecopy($bg, $srcImg, 0, 0, 0, 0, $width, $height);
+                imagedestroy($srcImg);
+                $srcImg = $bg;
+                break;
+            case 'image/gif':
+                $srcImg = imagecreatefromgif($tmpPath);
+                break;
+            default:
+                throw new RuntimeException("Formato de imagen no soportado ({$mimeInfo['mime']}).");
+        }
+
+        // Guardar bajo APP_ROOT/uploads/users/
+        $uploadDir = APP_ROOT . '/uploads/users/';
+        if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true)) {
             imagedestroy($srcImg);
-            $srcImg = $bg;
-            break;
-        case 'image/gif':
-            $srcImg = imagecreatefromgif($tmpPath);
-            break;
-        default:
-            throw new RuntimeException("Formato de imagen no soportado ({$mimeInfo['mime']}).");
-    }
+            throw new RuntimeException("No se pudo crear el directorio de uploads.");
+        }
 
-    // Guardar bajo APP_ROOT/uploads/users/
-    $uploadDir = APP_ROOT . '/uploads/users/';
-    if (!is_dir($uploadDir) && !mkdir($uploadDir, 0755, true)) {
+        $filename = "user_{$userId}.jpg";
+        $destination = $uploadDir . $filename;
+
+        if (!imagejpeg($srcImg, $destination, 85)) {
+            imagedestroy($srcImg);
+            throw new RuntimeException("Error al generar el JPEG.");
+        }
+
         imagedestroy($srcImg);
-        throw new RuntimeException("No se pudo crear el directorio de uploads.");
+
+        // Ruta pública relativa (sirve para el front)
+        return "/uploads/users/{$filename}";
     }
-
-    $filename    = "user_{$userId}.jpg";
-    $destination = $uploadDir . $filename;
-
-    if (!imagejpeg($srcImg, $destination, 85)) {
-        imagedestroy($srcImg);
-        throw new RuntimeException("Error al generar el JPEG.");
-    }
-
-    imagedestroy($srcImg);
-
-    // Ruta pública relativa (sirve para el front)
-    return "/uploads/users/{$filename}";
-}
 
     /* ========================
      *  Casos de uso (Servicio)
@@ -130,6 +134,8 @@ private function handleProfileImageUpload(string $userId, array $files): ?string
             if (!$telephone || !is_string($telephone)) {
                 return $this->resp(false, "Teléfono inválido o faltante.");
             }
+            // Formatear telefono
+            $telephone = preg_replace('/[^\d]/', '', $telephone); // Eliminar caracteres no numéricos
             $user = $this->userModel->getUserByTelephone($telephone);
             return $user ? $this->resp(true, '', $user) : $this->resp(false, "Usuario no encontrado");
         } catch (mysqli_sql_exception $e) {
@@ -148,8 +154,8 @@ private function handleProfileImageUpload(string $userId, array $files): ?string
         try {
             $ok = $this->userModel->updateSystemTypeByUserId($userId, $systemType);
             $success = $lang === 'ES' ? "Sistema de unidades actualizado correctamente." : "System type updated successfully.";
-            $fail    = $lang === 'ES' ? "Error al actualizar el sistema de unidades." : "Error updating system type.";
-            return $this->resp((bool)$ok, $ok ? $success : $fail, $ok);
+            $fail = $lang === 'ES' ? "Error al actualizar el sistema de unidades." : "Error updating system type.";
+            return $this->resp((bool) $ok, $ok ? $success : $fail, $ok);
         } catch (Throwable $e) {
             $msg = ($lang === 'ES' ? "Error al actualizar el sistema de unidades: " : "Error updating system type: ") . $e->getMessage();
             return $this->resp(false, $msg);
@@ -180,7 +186,7 @@ private function handleProfileImageUpload(string $userId, array $files): ?string
     {
         try {
             $result = $this->userModel->create($data);
-            return $this->resp((bool)$result, $result ? "Usuario guardado correctamente" : "Error al guardar usuario", $result);
+            return $this->resp((bool) $result, $result ? "Usuario guardado correctamente" : "Error al guardar usuario", $result);
         } catch (mysqli_sql_exception $e) {
             return $this->resp(false, "Error al guardar usuario: " . $e->getMessage());
         }
@@ -230,7 +236,7 @@ private function handleProfileImageUpload(string $userId, array $files): ?string
     {
         $t = $this->loadLang($langCode);
         $msgSuccess = $t['user_deleted_successfully'] ?? "User deleted successfully";
-        $msgError   = $t['user_delete_error']         ?? "Error deleting user";
+        $msgError = $t['user_delete_error'] ?? "Error deleting user";
 
         try {
             $deleted = $this->userModel->delete($id);
