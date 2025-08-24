@@ -82,14 +82,6 @@
                     <span class="menu-text"> Audit Log </span>
                 </a>
             </li>
-
-
-
-
-
-
-
-
         </ul>
         <!--- End Menu -->
         <div class="clearfix"></div>

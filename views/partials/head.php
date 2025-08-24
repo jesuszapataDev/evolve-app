@@ -16,8 +16,6 @@
     <link href="public/assets/libs/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" type="text/css" />
     <link href="public/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 
-
-
     <!-- App css -->
     <link href="public/assets/libs/switchery/switchery.min.css" rel="stylesheet" />
     <link href="public/assets/css/app-styles.css" rel="stylesheet" />

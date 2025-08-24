@@ -21,12 +21,14 @@
 </footer>
 <!-- end Footer -->
 
+<!-- Vendor js -->
+<script src="public/assets/js/vendor.min.js"></script>
 
+<!-- App js -->
+<script src="public/assets/js/app.min.js"></script>
 
 <!-- Vendor js -->
 
-<script src="public/assets/js/vendor.min.js"></script>
-<script src="public/assets/js/app.min.js"></script>
 
 
 
@@ -51,11 +53,12 @@
 
 <script src="public/assets/js/leaflet.js"></script>
 <!-- App js -->
-<script type="module" src="public/assets/js/app.js"></script>
+<!-- <script type="module" src="public/assets/js/app.js"></script> -->
 
 
 <script src="public/assets/js/cropper.min.js"></script>
 <!-- Carga de jsPDF -->
 <script src="public/assets/js/jspdf.umd.min.js"></script>
+
 
 <!-- App js -->
