@@ -81,17 +81,17 @@
             if (status === 'kicked') {
                 Swal.fire({
                     icon: 'warning',
-                    title: language.sessionKickedTitle || 'Session Terminated by Administrator',
-                    text: language.sessionKickedText || 'Your session was forcibly terminated by an administrator.',
-                    confirmButtonText: language.confirmButtonText_helper || 'Acknowledge'
-                }).then(() => window.location.href = '/logout');
+                    title: idioma.sessionKickedTitle || 'Session Terminated by Administrator',
+                    text: idioma.sessionKickedText || 'Your session was forcibly terminated by an administrator.',
+                    confirmButtonText: idioma.confirmButtonText_helper || 'Acknowledge'
+                }).then(() => window.location.href = 'api/logout');
             } else if (status === 'expired') {
                 Swal.fire({
                     icon: 'info',
-                    title: language.sessionExpiredTitle || 'Session Expired',
-                    text: language.sessionExpiredText || 'Your session expired due to inactivity.',
-                    confirmButtonText: language.sessionRestart || 'Restart Session'
-                }).then(() => window.location.href = '/logout');
+                    title: idioma.sessionExpiredTitle || 'Session Expired',
+                    text: idioma.sessionExpiredText || 'Your session expired due to inactivity.',
+                    confirmButtonText: idioma.sessionRestart || 'Restart Session'
+                }).then(() => window.location.href = 'api/logout');
             }
         } catch (error) {
             console.error("❌ Error while checking session status:", error);
@@ -121,8 +121,8 @@ async function checkInactivity() {
 
         Swal.fire({
             icon: 'warning',
-            title: language.sessionWarningTitle || 'Inactivity Detected',
-            text: language.sessionWarningText || 'Your session will be terminated in 1 minute due to inactivity.',
+            title: idioma.sessionWarningTitle || 'Inactivity Detected',
+            text: idioma.sessionWarningText || 'Your session will be terminated in 1 minute due to inactivity.',
             timer: 5000
         });
     }
@@ -154,7 +154,7 @@ async function checkInactivity() {
             console.error("❌ Error during inactivity-based session termination:", error);
         }
 
-        window.location.href = '/logout';
+        window.location.href = 'api/logout';
     }
 }
 

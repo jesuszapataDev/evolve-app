@@ -8,6 +8,7 @@
     ?>
 
             <div class="container-fluid">
+                
                 <h4 class="page-title"><?= $traducciones['session_log_view_title'] ?? 'Session Audit Log' ?></h4>
                 <div id="toolbar">
                     <button class="btn btn-add-user" id="btnSessionConfig">
@@ -113,7 +114,8 @@
         </div>
       </form>
     </div>
-
+</div>
+</div>
 <script src="public/assets/js/logout.js"></script>
 
     <script>
@@ -242,8 +244,8 @@ document.getElementById('btnSessionConfig')?.addEventListener('click', async () 
         document.getElementById('inactivityTime').value = '';
         Swal.fire({
             icon: 'error',
-            title: language.session_config_error_title || 'Error',
-            text: language.session_config_error_text || 'Could not load session config.'
+            title: idioma.session_config_error_title || 'Error',
+            text: idioma.session_config_error_text || 'Could not load session config.'
         });
     }
 
@@ -258,13 +260,13 @@ document.getElementById('sessionConfigForm')?.addEventListener('submit', async f
     if (isNaN(timeout) || timeout < 1) {
         return Swal.fire({
             icon: 'warning',
-            title: language.invalid_timeout_title || 'Invalid Value',
-            text: language.invalid_timeout_text || 'Please enter a valid number greater than 0.'
+            title: idioma.invalid_timeout_title || 'Invalid Value',
+            text: idioma.invalid_timeout_text || 'Please enter a valid number greater than 0.'
         });
     }
 
     Swal.fire({
-        title: language.saving || 'Saving...',
+        title: idioma.saving || 'Saving...',
         allowOutsideClick: false,
         allowEscapeKey: false,
         didOpen: () => Swal.showLoading()
@@ -283,8 +285,8 @@ document.getElementById('sessionConfigForm')?.addEventListener('submit', async f
         if (result.value) {
             Swal.fire({
                 icon: 'success',
-                title: language.update_success_title || 'Updated!',
-                text: language.update_success_text || 'Session timeout updated successfully.'
+                title: idioma.update_success_title || 'Updated!',
+                text: idioma.update_success_text || 'Session timeout updated successfully.'
             });
 
             const modal = bootstrap.Modal.getInstance(document.getElementById('sessionConfigModal'));
@@ -292,13 +294,13 @@ document.getElementById('sessionConfigForm')?.addEventListener('submit', async f
         } else {
             Swal.fire({
                 icon: 'error',
-                title: language.update_error_title || 'Error updating',
-                text: result.message || language.update_error_text || 'Could not update session timeout.'
+                title: idioma.update_error_title || 'Error updating',
+                text: result.message || idioma.update_error_text || 'Could not update session timeout.'
             });
         }
 
     } catch (error) {
-        let errorMessage = language.update_error_text || 'Could not update session timeout.';
+        let errorMessage = idioma.update_error_text || 'Could not update session timeout.';
 
         try {
             const errData = await error.response?.json?.();
@@ -309,7 +311,7 @@ document.getElementById('sessionConfigForm')?.addEventListener('submit', async f
 
         Swal.fire({
             icon: 'error',
-            title: language.update_error_title || 'Update Error',
+            title: idioma.update_error_title || 'Update Error',
             text: errorMessage
         });
 
