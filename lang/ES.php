@@ -26,8 +26,6 @@ return [
   'only_jpg_png_pdf_test_image' => 'Solo JPG, PNG o PDF',
   'preview_test_image' => 'Vista previa',
 
-  // Notificaciones de biomarcadores
-  'biomarker_notification' => 'Biomarcador',
   'value_notification' => 'Valor',
   'status_notification' => 'Estado',
   'date_notification' => 'Fecha',
@@ -62,7 +60,6 @@ return [
   'user_delete_error' => 'Error al eliminar el usuario',
   'missing_user_id' => 'ID de usuario requerido',
   // Perfil lipídico
-  'edit_title_lipid' => 'Editar Registro de Perfil Lipídico',
   'ldl_cholesterol' => 'Colesterol LDL (mg/dL)',
   'hdl_cholesterol' => 'Colesterol HDL (mg/dL)',
   'total_cholesterol' => 'Colesterol Total (mg/dL)',
@@ -73,12 +70,7 @@ return [
   'Total Cholesterol' => 'Colesterol Total',
   'Triglycerides' => 'Triglicéridos',
   'Non-HDL Cholesterol' => 'Colesterol No-HDL',
-  'lipid_details_title' => 'Detalles del Perfil Lipídico',
   'recommendation' => 'Recomendación',
-  'lipid_records' => 'Registros de Perfil Lipídico',
-  'lipid_records_history' => 'Historial del Perfil Lipídico',
-  'lipid_profile_date' => 'Fecha del Perfil Lipídico',
-  'lipid_profile_time' => 'Hora del Perfil Lipídico',
   'ldl' => 'LDL',
   'hdl' => 'HDL',
   'non_hdl' => 'No HDL',
@@ -90,69 +82,31 @@ return [
   'sessionDetailTitle' => 'Detalles de la Sesión',
 
   // --- Específicas para Función Renal ---
-  'renal_function_records' => 'Registros de Función Renal',
-  'add_edit_title_renal' => 'Añadir/Editar Registro de Función Renal',
-  'add_title_renal' => 'Añadir Registro de Función Renal',
-  'edit_title_renal' => 'Editar Registro de Función Renal',
   'albumin' => 'Albúmina',
   'creatinine' => 'Creatinina',
   'albumin_creatinine_ratio' => 'Proporción Albúmina/Creatinina (PAC)',
-  'acr_description_tooltip' => 'Mide albúmina y creatinina en orina; es un indicador clave de salud renal y detección temprana de daño.',
-  'acr_accuracy_tooltip' => 'Fiabilidad: Muy Alta. Biomarcador sensible para detectar y monitorear enfermedad renal crónica y riesgo cardiovascular.',
 
-  'successTitle_renal' => '¡Éxito!',
-  'saveSuccess_renal' => 'El registro de función renal ha sido guardado.',
-  'errorTitle_renal' => 'Error',
-  'loadError_renal' => 'No se pudo cargar el registro.',
-  'deleteError_renal' => 'No se pudo eliminar el registro.',
-  'saveError_renal' => 'No se pudo guardar el registro.',
 
-  'confirmDeleteTitle_renal' => '¿Estás seguro?',
-  'confirmDeleteText_renal' => 'No podrás revertir esta acción.',
-  'confirmDeleteBtn_renal' => 'Sí, ¡elimínalo!',
-  'deletedTitle_renal' => '¡Eliminado!',
-  'deletedText_renal' => 'El registro ha sido eliminado.',
 
-  'csv_filename_prefix_renal' => 'Registros_Función_Renal',
-  'viewComponent_renal' => 'Ver componentes del registro',
-  'viewImage_renal' => 'Ver imagen de la prueba',
 
   // Glucosa y cetonas
-  'title_energy_metabolism' => 'Registros de Metabolismo Energético',
-  'add_modal_title_glucose' => 'Agregar Registro de Glucosa y Cetonas',
-  'glucose_register' => 'Glucosa en sangre (mg/dL)',
-  'ketone_register' => 'Cetonas (mmol/L)',
-  'edit_modal_title_glucose' => 'Editar Registro de Metabolismo Energético',
-  'glucose_date' => 'Fecha de Glucosa',
-  'glucose_time' => 'Hora de Glucosa',
-  'glucose_details_title' => 'Detalles de Metabolismo Energético',
-  'glucose' => 'Glucosa',
-  'ketone' => 'Cetona',
 
   // Composición corporal
   'bmi' => 'Índice de Masa Corporal (IMC)',
-  'body_fat_pct' => 'Porcentaje de Grasa Corporal',
   'water_pct' => 'Porcentaje de Agua Corporal Total',
   'muscle_pct' => 'Porcentaje de Masa Muscular',
-  'resting_metabolism' => 'Tasa Metabólica en Reposo (TMR)',
   'visceral_fat' => 'Grasa Visceral',
-  'body_age' => 'Edad Corporal',
   'modal_title_add' => 'Composición Corporal',
   'modal_title_edit' => 'Editar Composición Corporal',
   'composition_date' => 'Fecha de Composición',
   'composition_time' => 'Hora de Composición',
-  'body_details_title' => 'Detalles de la Composición Corporal',
   'weight_lb' => 'Peso (lb)',
   'weight_kg' => 'Peso (KG)',
   'water_pct' => 'Agua (%)',
   'muscle_pct' => 'Músculo (%)',
-  'resting_metabolism' => 'Metabolismo en reposo (kcal)',
-  'page_title_body' => 'Registros de Composición Corporal',
 
   'water_pct_description_tooltip' => 'Estima el porcentaje total de agua en el cuerpo. Se calcula usando la fórmula de Watson, que se basa en tu sexo, edad, peso y altura.',
   'water_pct_accuracy_tooltip' => 'Fiabilidad de la estimación: 92-95% en adultos sanos. Es una estimación precisa basada en la fórmula de Watson, pero no es aplicable para casos clínicos o condiciones que alteran el balance de fluidos.',
-  'body_age_description_tooltip' => 'Estima una edad de referencia para la salud de tu cuerpo. Se calcula a partir de tu IMC, grasa corporal, masa muscular, grasa visceral, hidratación y metabolismo.',
-  'body_age_accuracy_tooltip' => 'Fiabilidad científica: No cuantificable. Es un índice motivacional calculado con una fórmula propia, no un valor médico. Su propósito es orientar, no diagnosticar.',
   'bmi_description_tooltip' => 'Ofrece un indicador general del estado de peso de una persona. El IMC se calcula usando únicamente el peso y la altura.',
   'bmi_accuracy_tooltip' => 'Fiabilidad como indicador de grasa: 65-75%. Es una referencia general que no distingue entre masa grasa y muscular, por lo que su precisión para un individuo es limitada y no es un diagnóstico.',
 
@@ -251,24 +205,8 @@ return [
   'administrator' => 'Administrador',
   'user' => 'Usuario',
 
-  // Especialistas
 
-  'page_title_specialists' => 'Especialistas',
-  'add_new_specialist' => 'Agregar Especialista',
-  'specialty' => 'Especialidad',
   'title' => 'Título',
-  'edit_specialist' => 'Editar Especialista',
-  'delete_specialist' => 'Eliminar Especialista',
-  'success_update_specialists' => 'Especialista actualizado con éxito.',
-  'error_update_specialists' => 'Error al actualizar el especialista.',
-  'success_delete_specialists' => 'Especialista eliminado con éxito.',
-  'error_delete_specialists' => 'Error al eliminar el especialista.',
-  'error_loading_specialists' => 'Error al cargar los especialistas.',
-  'success_create_specialists' => 'Especialista creado con éxito.',
-  'error_create_specialists' => 'Error al crear el especialista.',
-  'select_speciality_specialists' => 'Seleccionar...',
-  'select_title_specialists' => 'Selecciona...',
-  'view_specialist_title' => 'Detalles de  Especialista',
   'english' => 'Inglés',
   'spanish' => 'Español',
   'available' => 'Disponible',
@@ -349,12 +287,6 @@ return [
 
   // Página general
   'page_title_dashboard' => 'Registros del Usuario',
-  'body_composition_modal_title' => 'Registros de Composición Corporal',
-  'lipid_profile_modal_title' => 'Registros de Perfil Lipídico',
-  'glucose_ketone_modal_title' => 'Registros de Glucosa y Cetonas',
-  'body_button_details' => 'Detalles Corporales',
-  'lipid_button_details' => 'Detalles Lipídicos',
-  'glucose_button_details' => 'Detalles Metabolismo Energético',
 
   // Footer
   'footer_text' => 'Todos los derechos reservados.',
@@ -375,9 +307,7 @@ return [
   'panel_modal_button_cancel' => 'Cancelar',
 
 
-  // Tabla de biomarcadores
   'table_column_user_name' => 'Nombre del Usuario',
-  'table_column_biomarker' => 'Biomarcador',
   'table_column_value' => 'Valor',
   'table_column_status' => 'Estado',
   'table_column_date' => 'Fecha',
@@ -386,17 +316,13 @@ return [
 
 
   // Modal de Comentario
-  'biomarker_view_modal_title' => 'Detalles del Biomarcador',
   'comment_modal_title' => 'Agregar Comentario',
   'comment_modal_title_edit' => 'Editar Comentario',
-  'comment_modal_label_biomarker' => 'Biomarcador',
   'comment_modal_value_text' => 'Valor',
   'comment_modal_label_comment' => 'Comentario',
   'comment_modal_button_save' => 'Guardar',
   'comment_modal_button_cancel' => 'Cancelar',
   'tab_comments' => 'Comentarios',
-  'comment_placeholder_body_componente' => 'Escribe tu comentario aquí...',
-  'comment_required_body_componente' => 'Debes escribir un comentario antes de guardar.',
   'success_create_comment' => 'Comentario guardado exitosamente.',
   'error_create_comment' => 'Error al guardar el comentario.',
   'success_delete_comment' => 'Comentario eliminado correctamente.',
@@ -406,32 +332,10 @@ return [
   'delete_confirm_btn_comment' => 'Sí, eliminar',
 
   // Sección de Biomarcadores
-  'add_biomarker_button' => 'Agregar Biomarcador',
   'export_csv_button' => 'Exportar CSV',
 
-  'biomarkers_table_column_name' => 'Nombre',
-  'biomarkers_table_column_unit' => 'Unidad',
-  'biomarkers_table_column_reference_min' => 'Ref. Mín.',
-  'biomarkers_table_column_reference_max' => 'Ref. Máx.',
-  'biomarkers_table_column_deficiency_label' => 'Etiqueta de Deficiencia',
-  'biomarkers_table_column_excess_label' => 'Etiqueta de Exceso',
-  'biomarkers_table_column_description' => 'Descripción',
-  'biomarkers_table_column_actions' => 'Acciones',
 
   // Modal de Biomarcador
-  'biomarker_modal_title_add' => 'Agregar Biomarcador',
-  'biomarker_modal_title_edit' => 'Editar Biomarcador',
-  'biomarker_modal_label_panel' => 'Panel',
-  'biomarker_modal_label_name' => 'Nombre',
-  'biomarker_modal_label_unit' => 'Unidad',
-  'biomarker_modal_label_reference_min' => 'Ref. Mín.',
-  'biomarker_modal_label_reference_max' => 'Ref. Máx.',
-  'biomarker_modal_label_deficiency' => 'Etiqueta de Deficiencia',
-  'biomarker_modal_label_excess' => 'Etiqueta de Exceso',
-  'biomarker_modal_label_max_exam' => 'Maximo de examenes por dia',
-  'biomarker_modal_label_description' => 'Descripción',
-  'biomarker_modal_button_save' => 'Guardar',
-  'biomarker_modal_button_cancel' => 'Cancelar',
   'max_exam_invalid' => 'El valor debe ser mayor a 0.',
 
   // Sección de Respaldos
@@ -613,25 +517,11 @@ return [
 
   // Dashboard de Salud - Vista General
 //admin
-  'dashboard_health_overview_title_admin' => 'Resumen de Salud de Usuarios',
-  'dashboard_health_overview_print_pdf' => 'Imprimir / Exportar PDF',
-  'dashboard_health_overview_today' => 'Hoy',
-  'dashboard_health_overview_weekly' => 'Semanal',
-  'dashboard_health_overview_monthly' => 'Mensual',
 
-  'dashboard_biomarkers_distribution_title' => 'Distribución de biomarcadores por usuario',
-  'dashboard_biomarkers_select_biomarker' => 'Seleccionar biomarcador',
-  'dashboard_biomarkers_select_user' => 'Seleccionar usuarios',
-  'dashboard_biomarkers_select_status' => 'Seleccionar estado',
-  'dashboard_biomarkers_all' => 'Todos',
-  'dashboard_biomarkers_in_range' => 'En rango',
-  'dashboard_biomarkers_out_range' => 'Fuera de rango',
-  'table_column_biomarker2' => 'Biomarcadores',
   // Tabla: Registros recientes
   'dashboard_recent_records_title' => 'Registros recientes de todos los usuarios',
   'dashboard_recent_records_date' => 'Fecha',
   'dashboard_recent_records_user' => 'Usuario',
-  'dashboard_recent_records_biomarker' => 'Biomarcador',
   'dashboard_recent_records_value' => 'Valor',
   'dashboard_recent_records_status' => 'Estado',
   'dashboard_recent_records_actions' => 'Acciones',
@@ -660,19 +550,11 @@ return [
 
 
   //user
-  'dashboard_health_overview_title' => 'Resumen de Salud',
-  'dashboard_health_overview_print_pdf' => 'Imprimir / Exportar PDF',
-  'dashboard_health_overview_today' => 'Hoy',
-  'dashboard_health_overview_weekly' => 'Semanal',
-  'dashboard_health_overview_monthly' => 'Mensual',
 
-  'dashboard_biomarker_progress_title' => 'Progreso del Biomarcador',
-  'dashboard_biomarker_select_biomarker' => 'Seleccionar biomarcador',
   'dashboard_filter_day' => 'Filtrar por día',
 
   'dashboard_recent_records_title_user' => 'Tabla de Registros Recientes',
   'dashboard_recent_records_date_user' => 'Fecha',
-  'dashboard_recent_records_biomarker_user' => 'Biomarcador',
   'dashboard_recent_records_value_user' => 'Valor',
   'dashboard_recent_records_status_user' => 'Estado',
   'dashboard_recent_records_actions_user' => 'Ver',
@@ -680,7 +562,6 @@ return [
   'dashboard_test_submission_history_title' => 'Historial de Envío de Pruebas',
   'dashboard_test_submission_history_panel' => 'Panel',
   'dashboard_test_submission_history_date' => 'Fecha',
-  'dashboard_test_submission_history_biomarkers_added' => 'Biomarcadores Agregados',
   'dashboard_test_submission_history_status' => 'Estado',
   'dashboard_test_submission_history_actions' => 'Acciones',
 
@@ -688,9 +569,6 @@ return [
 
 
   'dashboard_title' => 'Dashboard',
-  'dashboard_health_overview_title' => 'Resumen de Salud',
-  'dashboard_health_overview_print_pdf' => 'Imprimir / Exportar PDF',
-  'dashboard_health_overview_today' => 'Hoy',
   'dashboard_cards_active_markers' => 'Marcadores Activos',
   'dashboard_cards_entries' => 'Entradas por fecha',
   'dashboard_cards_in_range' => 'En Rango',
@@ -701,7 +579,6 @@ return [
 
   'navigation_section_title' => 'NAVEGACIÓN',
   'user_management_section_title' => 'GESTIÓN DE USUARIOS',
-  'health_data_management_section_title' => 'GESTIÓN DE DATOS DE SALUD',
   'admin_management_section_title' => 'GESTIÓN ADMINISTRATIVA',
   'user_record_section_title' => 'REGISTRO DEL USUARIO',
   'account_section_title' => 'Cuenta',
@@ -710,43 +587,25 @@ return [
 
   'dashboard_title' => 'Inicio',
   'users_records_title' => 'Registros de Usuarios',
-  'biomarkers_title' => 'Biomarcadores',
   'test_panels_title' => 'Paneles',
   'users_view_title' => 'Usuarios',
   'backups_view_title' => 'Copias de Seguridad',
-  'body_composition_title' => 'Composición Corporal',
-  'lipid_profile_title' => 'Perfil Lipídico',
-  'glucose_ketone_title' => 'Metabolismo Energético',
-  'energy_metabolism_title' => 'Metabolismo Energético',
 
-  'renal_function_title' => 'Función Renal',
-  'renal_button_details' => 'Detalles Función Renal ',
-  'renal_records' => 'Registros de Funciones Renales',
-  'renal_details_title' => 'Detalles de Función Renal',
-  'noRecordsRenal' => 'No hay registros renales disponibles',
 
   'profile_user_title' => 'Mi Perfil',
   'courses_title' => 'Mis Cursos',
   'grades_title' => 'Mis Calificaciones',
 
-  'renalDetails_user_record' => 'Función Renal',
-  'noRecordsRenal_user_record' => 'No hay registros de funciones renales disponibles',
-  'renal_records' => 'Registros de Funciones Renales',
-  'renal_details_title' => 'Detalles de Función Renal',
-  'renal_date' => 'Fecha',
-  'renal_time' => 'Hora',
   'acr' => 'Relación Albúmina-Creatinina (ACR)',
 
   'view_full_list' => 'Ver todas',
 
   'user_name' => 'Nombre del usuario',
-  'biomarker' => 'Biomarcador',
   'latest_value' => 'Último valor',
   'status' => 'Estado',
   'clear_all' => 'Marcar Como Leídas',
   'record_date' => 'Fecha de registro',
   'no_data_available' => 'No hay datos disponibles',
-  'biomarker_alerts' => 'Alertas de biomarcadores',
   'high' => 'Alto',
   'low' => 'Bajo',
   'normal' => 'Normal',
@@ -816,81 +675,14 @@ return [
   'uploading_title_test_image' => 'Subiendo...',
   'uploading_text_test_image' => 'Por favor espera mientras se sube la imagen.',
 
-  //respuestas_lipid_componente
-  'errorLoadingRanges_lipid_component' => 'No se pudieron cargar los rangos de biomarcadores.',
-  'errorLoadingData_lipid_component' => 'Fallo al cargar rangos o comentarios',
-  'noComments_lipid_component' => 'No hay comentarios para este panel y prueba.',
-  'errorDataLoad_lipid_component' => 'No se pudieron cargar los datos lipídicos.',
-  'missingData_lipid_component' => 'Faltan datos para consultar el historial.',
-  'noHistory_lipid_component' => 'No hay datos históricos disponibles.',
-  'viewHistory_lipid_component' => 'Ver historial',
-  'commentLabel_lipid_component' => 'Comentario:',
-  'refRangeLabel_lipid_component' => 'Rango de Referencia:',
-  'deficiencyLabel_lipid_component' => 'Deficiencia:',
-  'excessLabel_lipid_component' => 'Exceso:',
-  'descriptionLabel_lipid_component' => 'Descripción:',
-  'error_lipid_component' => 'Error',
-  'noData_lipid_component' => 'Sin datos',
-
-  //respuestas lipid_profile
-  'viewComponent_lipid_profile' => 'Ver componente',
-  'viewImage_lipid_profile' => 'Ver imagen',
-  'edit_lipid_profile' => 'Editar',
-  'confirmDeleteTitle_lipid_profile' => '¿Estás seguro?',
-  'confirmDeleteText_lipid_profile' => '¡Esta acción no se puede deshacer!',
-  'confirmDeleteBtn_lipid_profile' => 'Sí, eliminarlo',
-  'deletedTitle_lipid_profile' => '¡Eliminado!',
-  'deletedText_lipid_profile' => 'El registro ha sido eliminado.',
-  'successTitle_lipid_profile' => 'Éxito',
-  'saveSuccess_lipid_profile' => '¡Registro guardado exitosamente!',
-  'errorTitle_lipid_profile' => 'Error',
-  'loadError_lipid_profile' => 'Error al cargar el registro.',
-  'deleteError_lipid_profile' => 'Error al eliminar el registro.',
-  'saveError_lipid_profile' => 'Error al guardar el registro.',
-
-  //respuestas de glucose componente
-  'errorLoadingBiomarkers_glucose_componente' => 'No se pudieron cargar los rangos de biomarcadores.',
-  'failLoading_glucose_componente' => 'Fallo al cargar rangos o comentarios',
-  'missingData_glucose_componente' => 'Faltan datos necesarios para cargar el historial.',
-  'historyError_glucose_componente' => 'No se pudo cargar el historial.',
-  'noData_glucose_componente' => 'No hay datos históricos disponibles.',
-  'noDataTitle_glucose_componente' => 'Sin datos',
-  'commentLabel_glucose_componente' => 'Comentario:',
-  'referenceRange_glucose_componente' => 'Rango de referencia:',
-  'deficiency_glucose_componente' => 'Deficiencia:',
-  'excess_glucose_componente' => 'Exceso:',
-  'description_glucose_componente' => 'Descripción:',
-  'viewHistory_glucose_componente' => 'Ver datos históricos',
-  'errorTitle_glucose_componente' => 'Error',
-  'glucose_glucose_componente' => 'Glucosa',
-  'ketone_glucose_componente' => 'Cetonas',
-  'ketones_glucose_componente' => 'Cetonas',
 
 
 
-  //respuestas glucose ketone
-  'updatedTitle_glucose_ketone' => '¡Actualizado!',
-  'savedTitle_glucose_ketone' => '¡Guardado!',
-  'deletedTitle_glucose_ketone' => '¡Eliminado!',
-  'updateText_glucose_ketone' => 'Registro actualizado con éxito.',
-  'saveText_glucose_ketone' => 'Registro guardado con éxito.',
-  'deleteSuccess_glucose_ketone' => 'El registro ha sido eliminado.',
-  'deleteConfirm_glucose_ketone' => '¿Estás seguro?',
-  'deleteWarning_glucose_ketone' => '¡Esta acción no se puede deshacer!',
-  'deleteConfirmBtn_glucose_ketone' => '¡Sí, eliminar!',
-  'loadError_glucose_ketone' => 'No se pudieron cargar los registros de glucosa y cetonas.',
-  'editError_glucose_ketone' => 'No se pudo cargar el registro para editar.',
-  'saveError_glucose_ketone' => 'No se pudo guardar el registro.',
-  'updateError_glucose_ketone' => 'Algo salió mal al actualizar el registro.',
-  'deleteError_glucose_ketone' => 'No se pudo eliminar el registro.',
+
+
 
   // ENERGY METABOLISM
   // --- Títulos Generales y de Modales ---
-  'title_energy_metabolism' => 'Metabolismo Energético',
-  'add_modal_title_glucose' => 'Añadir Registro de Metabolismo Energético',
-  'edit_modal_title_glucose' => 'Editar Registro de Metabolismo Energético',
-  'glucose_register' => 'Registro de Glucosa (mg/dL)',
-  'ketone_register' => 'Registro de Cetonas (mmol/L)',
 
   // --- Botones y Acciones ---
   'add_new' => 'Añadir Nuevo',
@@ -904,58 +696,22 @@ return [
   'time' => 'Hora',
 
   // --- Mensajes de Notificaciones (Éxito) ---
-  'updatedTitle_glucose_ketone' => 'Registro Actualizado',
-  'updateText_glucose_ketone' => 'El registro de metabolismo energético ha sido actualizado exitosamente.',
-  'savedTitle_glucose_ketone' => 'Registro Guardado',
-  'saveText_glucose_ketone' => 'El registro de metabolismo energético se ha guardado correctamente.',
-  'deletedTitle_glucose_ketone' => 'Registro Eliminado',
-  'deleteSuccess_glucose_ketone' => 'El registro de metabolismo energético ha sido eliminado.',
 
   // --- Mensajes de Confirmación y Advertencia ---
-  'deleteConfirm_glucose_ketone' => '¿Estás seguro de que quieres eliminar este registro?',
-  'deleteWarning_glucose_ketone' => 'Esta acción no se puede deshacer.',
-  'deleteConfirmBtn_glucose_ketone' => 'Sí, ¡eliminar!',
 
   // --- Mensajes de Error ---
   'input_generic_error' => 'Este campo es obligatorio.',
-  'loadError_glucose_ketone' => 'Error al cargar los datos de metabolismo energético.',
-  'editError_glucose_ketone' => 'No se pudo cargar la información del registro para editar.',
-  'saveError_glucose_ketone' => 'Error al intentar guardar el registro.',
-  'updateError_glucose_ketone' => 'Error al intentar actualizar el registro.',
-  'deleteError_glucose_ketone' => 'No se pudo eliminar el registro.',
 
   // --- Mensajes de Exportación y Sin Registros ---
   'no_records_title' => 'Sin Registros',
-  'no_records_text' => 'No hay registros de metabolismo energético para exportar.',
   'export_error_title' => 'Error de Exportación',
   'export_error_text' => 'Ocurrió un error al generar el archivo CSV.',
   'export_loading_title' => 'Exportando Datos',
   'export_loading_text' => 'Por favor, espera mientras se generan los datos...',
-  'csv_filename_prefix_glucose' => 'Metabolismo_Energetico',
 
 
-  //body composition componente
-  'errorTitle_body_componente' => 'Error',
-  'loadRangesFail_body_componente' => 'No se pudieron cargar los rangos de biomarcadores.',
-  'loadCommentsFail_body_componente' => 'No se pudieron cargar los comentarios.',
-  'loadDataFail_body_componente' => 'Error al cargar los datos.',
-  'missingHistoryData_body_componente' => 'Faltan datos para consultar el historial.',
-  'noHistoryTitle_body_componente' => 'Sin datos',
-  'noHistoryText_body_componente' => 'No hay datos históricos disponibles.',
-  'referenceRangeLabel_body_componente' => 'Rango de Referencia:',
-  'deficiencyLabel_body_componente' => 'Deficiencia:',
-  'excessLabel_body_componente' => 'Exceso:',
-  'descriptionLabel_body_componente' => 'Descripción:',
-  'viewHistoryText_body_componente' => 'Ver Historial',
 
 
-  //body_composition
-  'titleError_body_composition' => 'Error',
-  'titleSuccess_body_composition' => '¡Éxito!',
-  'genericLoadError_body_composition' => 'No se pudieron cargar los detalles.',
-  'genericSaveSuccess_body_composition' => 'Datos guardados exitosamente.',
-  'genericSaveError_body_composition' => 'Hubo un problema al guardar los datos.',
-  'genericFetchError_body_composition' => 'No se pudieron obtener los registros.',
   'no_records_title' => 'Sin registros',
   'no_records_text' => 'No se encontraron registros para este usuario.',
   'export_error_title' => 'Error',
@@ -963,17 +719,9 @@ return [
   'export_loading_title' => 'Generando archivo...',
   'export_loading_text' => 'Por favor espera mientras se prepara tu descarga.',
   'csv_filename_prefix' => 'composicion_corporal',
-  'csv_filename_prefix_body' => 'composicion_corporal',
-  'csv_filename_prefix_lipid' => 'perfil_lipidico',
-  'csv_filename_prefix_glucose' => 'Metabolismo_Energetico',
-  'csv_filename_prefix_biomarker' => 'biomarcadores',
   'csv_filename_prefix_panel' => 'paneles',
   'csv_filename_prefix_audit_logs' => 'audit_logs',
 
-  'energy_metabolism_button' => 'Metabolismo Energético',
-  'body_composition_button' => 'Composición Corporal',
-  'lipid_profile_button' => 'Perfil Lipídico',
-  'renal_function_button' => 'Función Renal',
 
 
   //profile_user
@@ -996,10 +744,6 @@ return [
   'noRecordsTitle_user_record' => 'Sin registros',
   'view_user_record' => 'Ver',
   'comment_user_record' => 'Comentar',
-  'bodyDetails_user_record' => 'Detalles de Composición Corporal',
-  'lipidDetails_user_record' => 'Detalles del Perfil Lipídico',
-  'glucoseDetails_user_record' => 'Detalles de Metabolismo Energético',
-  'renalDetails_user_record' => 'Detalles de Función Renal',
   'view_panels_button' => 'Ver Paneles',
   'column_view_panels' => 'Paneles',
   'view_records' => 'Ver Registros',
@@ -1032,7 +776,6 @@ return [
   'noData_alert' => 'No hay datos disponibles.',
   'loadError_alert' => 'Error al cargar los datos. Por favor inténtalo de nuevo más tarde.',
 
-  //comment biomarker
   'success_update_comment' => 'Comentario actualizado correctamente.',
   'error_update_comment' => 'No se pudo actualizar el comentario.',
   'success_delete_comment' => 'Comentario eliminado correctamente.',
@@ -1043,29 +786,14 @@ return [
   'error_loading_comment' => 'No se pudieron cargar los comentarios.',
   'success_create_comment' => 'Comentario creado correctamente.',
   'error_create_comment' => 'No se pudo crear el comentario.',
-  'select_biomarker_comment' => 'Seleccione biomarcador…',
   'modal_add_comment' => 'Agregar comentario',
   'modal_edit_comment' => 'Editar comentario',
 
 
-  //biomarker
-  'tituloError_biomarker' => '¡Error!',
-  'tituloExito_biomarker' => '¡Éxito!',
-  'errorCargarBiomarcadores_biomarker' => 'No se pudieron cargar los biomarcadores.',
-  'errorGenerico_biomarker' => 'Ocurrió un error inesperado.',
-  'sinPanels_biomarker' => 'No hay panels',
-  'errorCargarPanels_biomarker' => 'Error al cargar',
-  'errorObtener_biomarker' => 'Error al obtener biomarcador.',
-  'errorConexion_biomarker' => 'No se pudo conectar al servidor.',
-  'guardadoExito_biomarker' => 'Biomarcador guardado correctamente.',
-  'guardadoError_biomarker' => 'No se pudo guardar el biomarcador.',
 
 
   //backups
-  'tituloError_backups' => '¡Error!',
-  'tituloExito_backups' => '¡Éxito!',
   'errorCargarBackups_backups' => 'No se pudieron cargar los respaldos.',
-  'titulobackupError_backups' => 'Ocurrió un error inesperado al intentar crear el backup.',
   'backupCreado_backups' => '¡Respaldo creado!',
   'restaurado_backups' => '¡Restaurado!',
   'restaurarError_backups' => 'Error al restaurar el respaldo.',
@@ -1077,17 +805,13 @@ return [
 
   //dashboard
   'noAlertDetails_dashboard' => 'No hay detalles de alerta disponibles para este usuario.',
-  'biomarker_dashboard' => 'Biomarcador',
   'value_dashboard' => 'Valor',
   'referenceRange_dashboard' => 'Rango de Referencia',
   'date_dashboard' => 'Fecha',
   'name_dashboard' => 'Nombre',
   'status_dashboard' => 'Estado',
-  'detailsTitle_dashboard' => 'Detalles del biomarcador',
 
   //security question
-  'tituloError_security' => '¡Error!',
-  'tituloExito_security' => '¡Éxito!',
   'loadError_security' => 'No se pudieron cargar las preguntas de seguridad.',
   'loadAjaxError_security' => 'Error al obtener las preguntas de seguridad.',
   'updateSuccess_security' => '¡Actualizado!',
@@ -1329,8 +1053,6 @@ return [
   'recovery_email_sent' => 'Las instrucciones para recuperar su contraseña fueron enviadas al correo electrónico registrado.',
   'reset_email_recently_sent' => 'Ya se envió un correo recientemente. Por favor, espera unos minutos antes de intentar nuevamente.',
 
-  'add_specialty_button' => 'Agregar Especialidad',
-  'specialty_modal_title' => 'Especialidad',
   'name_en' => 'Nombre (EN)',
   'name_es' => 'Nombre (ES)',
   'save' => 'Guardar',
@@ -1338,36 +1060,15 @@ return [
   'addSpecialty' => 'Agregar Especialidad',
   'editSpecialty' => 'Editar Especialidad',
   'csvFilenamePrefix_speciality' => 'Especialidades',
-  'specialty_view_view_title' => 'Especialidades',
-  'view_specialty_modal_title' => 'Detalles de Especialidad',
-  'add_new_specialty' => 'Agregar especialidad',
-  'edit_specialty' => 'Editar especialidad',
-  'delete_specialty' => 'Eliminar especialidad',
-  'delete_confirm_title_specialty' => '¿Desea eliminar esta especialidad?',
-  'delete_confirm_text_specialty' => 'Esta acción no se puede deshacer.',
-  'delete_confirm_btn_specialty' => 'Eliminar',
-  'titleSuccess_specialty' => 'Éxito',
-  'success_create_specialty' => 'Especialidad creada correctamente.',
-  'success_update_specialty' => 'Especialidad actualizada correctamente.',
-  'success_delete_specialty' => 'Especialidad eliminada correctamente.',
-  'titleError_specialty' => 'Error',
-  'error_delete_specialty' => 'Error al eliminar la especialidad.',
-  'specialty_delete_dependency' => 'No se puede eliminar la especialidad: existen especialistas relacionados.',
 
-  'specialty2' => 'Especialidades',
 
-  'add_specialty_title_button' => 'Agregar Titulos de Especialidad',
-  'specialty_title_modal_title' => 'Titulos de Especialidad',
   'name_en' => 'Nombre (EN)',
   'name_es' => 'Nombre (ES)',
   'save' => 'Guardar',
   'cancel' => 'Cancel',
   'addSpecialty_title' => 'Agregar Titulos de Especialidad',
   'editSpecialty_title' => 'Editar Titulos de Especialidad',
-  'csvFilenamePrefix_speciality_title' => 'titulos_especialidad',
   'title_view_view_title' => 'Titulos de Especialidad',
-  'add_specialty_button' => 'Agregar Especialidad',
-  'specialty_modal_title' => 'Especialidad',
   'name_en' => 'Nombre (EN)',
   'name_es' => 'Nombre (ES)',
   'save' => 'Guardar',
@@ -1375,7 +1076,6 @@ return [
   'addSpecialty' => 'Agregar Especialidad',
   'editSpecialty' => 'Editar Especialidad',
   'csvFilenamePrefix_speciality' => 'Especialidades',
-  'title_delete_dependency' => 'No se puede eliminar el título de especialidad: existen especialistas relacionados.',
 
   'add_new_title' => 'Agregar Título de Especialidad',
   'edit_title' => 'Editar Título de Especialidad',
@@ -1393,41 +1093,13 @@ return [
   'cancel' => 'Cancelar',
 
   'select_option' => 'Seleccione una opción',
-  'specialty_label' => 'Especialidad',
   'title_label' => 'Título',
   'view_title_modal_title' => 'Detalles de Titulos de Especialidad',
   // SPECIALISTS FORM
 
   // Tabs
-  'log_in_tab_specialist' => 'Iniciar Sesión',
-  'sign_up_tab_specialist' => 'Registrarse',
 
-  'login_prompt_specialist' => 'Ingresa tu correo electrónico y contraseña para acceder a tu cuenta.',
-  'email_address_label_specialist' => 'Dirección de correo electrónico',
-  'enter_email_placeholder_specialist' => 'Ingresa tu correo',
-  'forgot_password_link_specialist' => '¿Olvidaste tu contraseña?',
-  'password_label_specialist' => 'Contraseña',
-  'enter_password_placeholder_specialist' => 'Ingresa tu contraseña',
-  'login_button_text_specialist' => 'Iniciar Sesión', // NOTA: Corregido de "Sign Up" para mejor UX
 
-  'signup_prompt_specialist' => '¿No tienes una cuenta? Crea tu cuenta, toma menos de un minuto',
-  'first_name_label_specialist' => 'Nombre',
-  'enter_first_name_placeholder_specialist' => 'Ingresa tu nombre',
-  'last_name_label_specialist' => 'Apellido',
-  'enter_last_name_placeholder_specialist' => 'Ingresa tu apellido',
-  'email_address_label_specialist' => 'Dirección de correo electrónico',
-  'enter_email_placeholder_specialist' => 'Ingresa tu correo',
-  'country_label_specialist' => 'País',
-  'telephone_label_specialist' => 'Teléfono',
-  'telephone_placeholder_specialist' => 'ej. (+58) 424 917 3469',
-  'password_label_specialist' => 'Contraseña',
-  'enter_password_placeholder_specialist' => 'Ingresa tu contraseña',
-  'specialty_label_specialist' => 'Especialidad',
-  'select_specialty_option_specialist' => 'Seleccione...',
-  'title_label_specialist' => 'Título',
-  'select_title_option_specialist' => 'Seleccione...',
-  'signup_button_text_specialist' => 'Registrarse',
-  'signup_with_prompt_specialist' => 'Regístrate con',
   'country_not_found' => 'El país no existe.',
   'country_delete_dependency' => 'No se puede eliminar el país: existen registros relacionados en la tabla {table}.',
 
@@ -1533,12 +1205,6 @@ return [
   'user_updated_successfully' => 'Usuario actualizado correctamente.',
   'error_updating_user' => 'Error al actualizar usuario.',
 
-  'specialist_not_found' => 'Especialista no encontrado.',
-  'specialist_created_successfully' => 'Especialista creado exitosamente.',
-  'error_creating_specialist' => 'Error al crear el especialista.',
-  'specialist_updated_successfully' => 'Especialista actualizado correctamente.',
-  'error_updating_specialist' => 'Error al actualizar el especialista.',
-  'specialist_delete_dependency' => 'No se puede eliminar el especialista: existen preguntas de seguridad relacionadas.',
 
   'method_not_allowed' => 'Método no permitido. Use POST.',
   'method_not_allowed_put' => 'Método no permitido. Se requiere PUT.',
