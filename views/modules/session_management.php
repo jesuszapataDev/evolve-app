@@ -8,7 +8,7 @@
     ?>
 
             <div class="container-fluid">
-                
+
                 <h4 class="page-title"><?= $traducciones['session_log_view_title'] ?? 'Session Audit Log' ?></h4>
                 <div id="toolbar">
                     <button class="btn btn-add-user" id="btnSessionConfig">
@@ -27,7 +27,6 @@
                                class="table table-borderless"
                                data-toggle="table"
                                data-search="true"
-                               data-show-refresh="true"
                                data-page-list="[5, 10, 20, 50, 100]"
                                data-page-size="5"
                                data-pagination="true"
@@ -213,7 +212,6 @@
             pagination: true,
             pageSize: 5,
             pageList: [5, 10, 20, 50, 100],
-            showRefresh: true,
             showColumns: true,
             url: 'api/session-audit',
             responseHandler: res => res.data || []

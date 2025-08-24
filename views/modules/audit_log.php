@@ -29,7 +29,7 @@
 
                         
                             <table id="auditLogTable" data-toggle="table" data-toolbar="#toolbar" data-search="true"
-                            data-show-refresh="true" data-show-columns="true" data-pagination="true"
+                            data-show-columns="true" data-pagination="true"
                             data-show-pagination-switch="true" data-page-list="[10, 25, 50, 100]" data-page-size="5"
                             data-side-pagination="client"  data-locale="<?= $locale ?>"
                             class="table-borderless">
