@@ -63,6 +63,31 @@ $router->group(['prefix' => '/api'], function ($router) {
         'accion' => 'logout',
 
     ]);
+    $router->get('/session-audit', [
+    'controlador' => SessionManagementController::class,
+    'accion' => 'showAll'
+]);
+
+$router->get('/session-config', [
+    'controlador' => SessionConfigController::class,
+    'accion' => 'show'
+]);
+
+$router->post('/session-config', [
+    'controlador' => SessionConfigController::class,
+    'accion' => 'update'
+]);
+
+$router->post('/session-audit/kick/1', [
+    'controlador' => SessionManagementController::class,
+    'accion' => 'kick'
+]);
+
+$router->get('/session-audit/export/1', [
+    'controlador' => SessionManagementController::class,
+    'accion' => 'export'
+]);
+
 
     // Verificar telefono
     $router->post('/check/telephone', [
@@ -82,6 +107,10 @@ $router->group(['middleware' => AuthMiddleware::class], function ($router) use (
 
     $router->get('/home', [
         'vista' => '/modules/home',
+        'vistaData' => ['title' => $traducciones['home_title'] ?? 'home']
+    ]);
+        $router->get('/session_management', [
+        'vista' => '/modules/session_management',
         'vistaData' => ['title' => $traducciones['home_title'] ?? 'home']
     ]);
 
