@@ -32,10 +32,10 @@ class UserController
                 break;
             case 'image/png':
                 $srcImg = imagecreatefrompng($tmpPath);
-                $width  = imagesx($srcImg);
+                $width = imagesx($srcImg);
                 $height = imagesy($srcImg);
-                $bg     = imagecreatetruecolor($width, $height);
-                $white  = imagecolorallocate($bg, 255, 255, 255);
+                $bg = imagecreatetruecolor($width, $height);
+                $white = imagecolorallocate($bg, 255, 255, 255);
                 imagefill($bg, 0, 0, $white);
                 imagecopy($bg, $srcImg, 0, 0, 0, 0, $width, $height);
                 imagedestroy($srcImg);
@@ -54,7 +54,7 @@ class UserController
             throw new RuntimeException("No se pudo crear el directorio de uploads.");
         }
 
-        $filename    = "user_{$userId}.jpg";
+        $filename = "user_{$userId}.jpg";
         $destination = $uploadDir . $filename;
 
         if (!imagejpeg($srcImg, $destination, 85)) {
@@ -65,46 +65,46 @@ class UserController
         imagedestroy($srcImg);
         return "/uploads/users/{$filename}";
     }
-public function showByEmail($params)
-{
-    // Permite recibir el parámetro desde $params, POST o GET
-    $email = $params['email'] ?? $_POST['email'] ?? $_GET['email'] ?? null;
+    public function showByEmail($params)
+    {
+        // Permite recibir el parámetro desde $params, POST o GET
+        $email = $params['email'] ?? $_POST['email'] ?? $_GET['email'] ?? null;
 
-    try {
-        if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return $this->jsonResponse(false, "Email inválido o faltante.");
+        try {
+            if (!$email || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return $this->jsonResponse(false, "Email inválido o faltante.");
+            }
+
+            $user = $this->userModel->getUserByEmail($email);
+
+            return $user
+                ? $this->jsonResponse(true, '', $user)
+                : $this->jsonResponse(false, "Usuario no encontrado");
+        } catch (mysqli_sql_exception $e) {
+            return $this->errorResponse(400, "Error al obtener usuario: " . $e->getMessage());
         }
-
-        $user = $this->userModel->getUserByEmail($email);
-
-        return $user
-            ? $this->jsonResponse(true, '', $user)
-            : $this->jsonResponse(false, "Usuario no encontrado");
-    } catch (mysqli_sql_exception $e) {
-        return $this->errorResponse(400, "Error al obtener usuario: " . $e->getMessage());
     }
-}
 
-public function showByTelephone($params)
-{
-    // Permite recibir el parámetro desde $params, POST o GET
-    $telephone = $params['telephone'] ?? $_POST['telephone'] ?? $_GET['telephone'] ?? null;
+    public function showByTelephone($params)
+    {
+        // Permite recibir el parámetro desde $params, POST o GET
+        $telephone = $params['telephone'] ?? $_POST['telephone'] ?? $_GET['telephone'] ?? null;
 
-    try {
-        if (!$telephone || !is_string($telephone)) {
-            return $this->jsonResponse(false, "Teléfono inválido o faltante.");
+        try {
+            if (!$telephone || !is_string($telephone)) {
+                return $this->jsonResponse(false, "Teléfono inválido o faltante.");
+            }
+
+            // No normalizamos aquí: el modelo ya hace el REPLACE para comparar.
+            $user = $this->userModel->getUserByTelephone($telephone);
+
+            return $user
+                ? $this->jsonResponse(true, '', $user)
+                : $this->jsonResponse(false, "Usuario no encontrado");
+        } catch (mysqli_sql_exception $e) {
+            return $this->errorResponse(400, "Error al obtener usuario: " . $e->getMessage());
         }
-
-        // No normalizamos aquí: el modelo ya hace el REPLACE para comparar.
-        $user = $this->userModel->getUserByTelephone($telephone);
-
-        return $user
-            ? $this->jsonResponse(true, '', $user)
-            : $this->jsonResponse(false, "Usuario no encontrado");
-    } catch (mysqli_sql_exception $e) {
-        return $this->errorResponse(400, "Error al obtener usuario: " . $e->getMessage());
     }
-}
 
     /**
      * Actualiza el tipo de sistema (métrico/imperial) del usuario en sesión.
@@ -112,7 +112,7 @@ public function showByTelephone($params)
     public function update_system_type_session_user()
     {
         $method = $_SERVER['REQUEST_METHOD'];
-        $lang   = strtoupper($_SESSION['idioma'] ?? 'EN');
+        $lang = strtoupper($_SESSION['idioma'] ?? 'EN');
 
         if ($method === 'PUT' || ($method === 'POST' && (($_POST['_method'] ?? '') === 'PUT'))) {
             $userId = $_SESSION['user_id'] ?? null;
@@ -138,7 +138,7 @@ public function showByTelephone($params)
                 $ok = $this->userModel->updateSystemTypeByUserId($userId, $systemType);
 
                 $success = $lang === 'ES' ? "Sistema de unidades actualizado correctamente." : "System type updated successfully.";
-                $fail    = $lang === 'ES' ? "Error al actualizar el sistema de unidades."   : "Error updating system type.";
+                $fail = $lang === 'ES' ? "Error al actualizar el sistema de unidades." : "Error updating system type.";
 
                 return $this->jsonResponse(true, $ok ? $success : $fail, $ok);
             } catch (\Exception $e) {
@@ -159,9 +159,9 @@ public function showByTelephone($params)
         header('Content-Type: application/json');
 
         $response = [
-            'value'   => $value,
+            'value' => $value,
             'message' => $message,
-            'data'    => is_array($data) ? $data : ($data !== null ? [$data] : []),
+            'data' => is_array($data) ? $data : ($data !== null ? [$data] : []),
         ];
 
         echo json_encode($response);
@@ -207,10 +207,10 @@ public function showByTelephone($params)
         }
 
         try {
-            $data   = $_POST;
+            $data = $_POST;
             $result = $this->userModel->create($data);
             return $this->jsonResponse(
-                (bool)$result,
+                (bool) $result,
                 $result ? "Usuario guardado correctamente" : "Error al guardar usuario"
             );
         } catch (mysqli_sql_exception $e) {
@@ -224,7 +224,7 @@ public function showByTelephone($params)
             return $this->errorResponse(405, "Method Not Allowed. Use POST.");
         }
 
-        $data   = $_POST;
+        $data = $_POST;
         $userId = $params['id'] ?? $data['user_id'] ?? null;
 
         if (!$userId || !isset($data['status'])) {
@@ -255,7 +255,7 @@ public function showByTelephone($params)
         }
 
         try {
-            $data   = $_POST;
+            $data = $_POST;
             $result = $this->userModel->update($id, $data);
             return $this->jsonResponse(true, $result ? "Usuario actualizado correctamente" : "Error al actualizar usuario", $result);
         } catch (mysqli_sql_exception $e) {
@@ -282,8 +282,8 @@ public function showByTelephone($params)
             // Imagen de perfil (opcional)
             $imagePath = $this->handleProfileImageUpload($id);
             if ($imagePath !== null) {
-                $putData['profile_image']  = $imagePath;
-                $_SESSION['user_image']    = $imagePath; // refrescar en sesión
+                $putData['profile_image'] = $imagePath;
+                $_SESSION['user_image'] = $imagePath; // refrescar en sesión
             }
 
             $result = $this->userModel->updateProfile($id, $putData);
@@ -308,11 +308,11 @@ public function showByTelephone($params)
             return $this->errorResponse(400, "Missing ID parameter.");
         }
 
-        $lang            = strtoupper($_SESSION['idioma'] ?? 'EN');
-        $archivo_idioma  = $_SERVER['DOCUMENT_ROOT'] . "/lang/{$lang}.php";
-        $traducciones    = file_exists($archivo_idioma) ? include $archivo_idioma : [];
-        $msgSuccess      = $traducciones['user_deleted_successfully'] ?? "User deleted successfully";
-        $msgError        = $traducciones['user_delete_error'] ?? "Error deleting user";
+        $lang = strtoupper($_SESSION['idioma'] ?? 'EN');
+        $archivo_idioma = $_SERVER['DOCUMENT_ROOT'] . "/lang/{$lang}.php";
+        $traducciones = file_exists($archivo_idioma) ? include $archivo_idioma : [];
+        $msgSuccess = $traducciones['user_deleted_successfully'] ?? "User deleted successfully";
+        $msgError = $traducciones['user_delete_error'] ?? "Error deleting user";
 
         try {
             $deleted = $this->userModel->delete($id);

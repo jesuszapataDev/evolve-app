@@ -40,7 +40,7 @@ return [
   'tab_range' => 'Range',
   'tab_current' => 'Current',
   'tab_over_time' => 'Over Time',
-'failure_locked' => 'You have exceeded the allowed number of failed attempts. Please try again in a few minutes.',
+  'failure_locked' => 'You have exceeded the allowed number of failed attempts. Please try again in a few minutes.',
 
   // Tabla general
   'date' => 'Date',
@@ -50,11 +50,11 @@ return [
   'history' => 'History',
   'actions' => 'Actions',
   'action' => 'Action',
-'user_not_found' => 'User not found',
-'user_delete_dependency' => 'Cannot delete user: related records exist in table {table}',
-'user_deleted_successfully' => 'User successfully deleted',
-'user_delete_error' => 'Error deleting user',
-'missing_user_id' => 'User ID required',
+  'user_not_found' => 'User not found',
+  'user_delete_dependency' => 'Cannot delete user: related records exist in table {table}',
+  'user_deleted_successfully' => 'User successfully deleted',
+  'user_delete_error' => 'Error deleting user',
+  'missing_user_id' => 'User ID required',
   // Modal: Historial
   'history_modal_title' => 'History',
   'history_table_date' => 'Date',
@@ -1009,8 +1009,8 @@ return [
   'failure_invalid_email_format' => 'Invalid email format',
   'failure_missing_fields' => 'Required fields missing',
   'failure_unknown_failure' => 'Unknown failure',
-'failure_user_blocked2' => 'Account Blocked',
-'failure_user_blocked' => 'Your account has been blocked due to too many failed login attempts, please contact support.',
+  'failure_user_blocked2' => 'Account Blocked',
+  'failure_user_blocked' => 'Your account has been blocked due to too many failed login attempts, please contact support.',
   'session_config' => 'Session Configuration',
   'inactivity_time' => 'Inactivity Time (min)',
   'accept' => 'Accept',
@@ -1019,13 +1019,13 @@ return [
   'update_success' => 'Timeout updated successfully',
   'saving' => 'Saving...',
   'update_failed' => 'Update failed',
-  'status_active'   => 'Active',
-'status_expired'  => 'Expired',
-'status_kicked'   => 'Kicked out',
-'status_failed'   => 'Failed login',
-'status_closed'   => 'Closed',
-'status_label' => 'Status',
-'status_hint'  => 'Inactive / Active',
+  'status_active' => 'Active',
+  'status_expired' => 'Expired',
+  'status_kicked' => 'Kicked out',
+  'status_failed' => 'Failed login',
+  'status_closed' => 'Closed',
+  'status_label' => 'Status',
+  'status_hint' => 'Inactive / Active',
 
   // Audit Table Titles & Texts
   'audit_table_column_timestamp' => 'Timestamp',
@@ -1062,10 +1062,10 @@ return [
   'audit_table_column_client_city' => 'City',
   'audit_table_column_client_zipcode' => 'Zipcode',
   'audit_table_column_client_coordinates' => 'Coordinates',
-'audit_table_column_geo_ip_timestamp' => 'Geo IP Timestamp',
-'audit_table_column_geo_ip_timezone' => 'Geo IP Timezone',
-'audit_modal_field_geo_ip_timestamp' => 'Geo IP Timestamp',
-'audit_modal_field_geo_ip_timezone' => 'Geo IP Timezone',
+  'audit_table_column_geo_ip_timestamp' => 'Geo IP Timestamp',
+  'audit_table_column_geo_ip_timezone' => 'Geo IP Timezone',
+  'audit_modal_field_geo_ip_timestamp' => 'Geo IP Timestamp',
+  'audit_modal_field_geo_ip_timezone' => 'Geo IP Timezone',
 
   // Detail Modal Titles & Fields
   'audit_modal_title' => 'Audit Log Details',
@@ -1581,5 +1581,14 @@ return [
   'method_not_allowed' => 'Method Not Allowed. Use POST.',
   'method_not_allowed_put' => 'Method not allowed. PUT required.',
 
+
+  // VALIDACIONES DE FORMULARIO
+  'validation_required' => 'This field is required.',
+  'validation_email_format' => 'The email format is invalid.',
+  'validation_max_length_name' => 'The name cannot exceed 100 characters.',
+  'validation_phone_exact_length' => 'If entered, the phone must be 10 digits long.',
+  'validation_phone_min_length' => 'If entered, the phone must be at least 8 characters long.',
+  'validation_min_length' => 'The password must be at least 8 characters long.',
+  'validation_telephone_already_exits' => 'This telephone number is already registered.',
 
 ];

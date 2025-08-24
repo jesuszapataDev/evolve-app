@@ -126,11 +126,19 @@ const reglasDeValidacion = {
   },
 
   chequearDuplicidad: async (input) => {
-    const valor = obtenerValorDelCampo(input)
     const url = input.dataset.validateDuplicateUrl
     const accion = input.dataset.validateAction
     const inputName = input.name
 
+    // ✅ INICIO DE LA MEJORA
+    // Verificamos si debemos usar el valor enmascarado o el limpio.
+    const usarValorEnmascarado = input.dataset.validateMasked === 'true'
+    const valor = usarValorEnmascarado
+      ? input.value
+      : obtenerValorDelCampo(input)
+    // ✅ FIN DE LA MEJORA
+
+    // El resto de la función es casi igual...
     if (!valor || !url || !accion || !inputName)
       return { esValido: true, mensaje: null }
 
@@ -139,7 +147,6 @@ const reglasDeValidacion = {
     let recordId = null
 
     if (idSelector) {
-      // Buscamos el input que contiene el ID usando el selector proporcionado.
       idInput = document.querySelector(idSelector)
       if (idInput && idInput.value) {
         recordId = idInput.value
@@ -151,7 +158,6 @@ const reglasDeValidacion = {
       formData.append('accion', accion)
       formData.append(inputName, valor)
 
-      // Si encontramos un ID, lo añadimos también a la petición.
       if (recordId && idInput) {
         formData.append(idInput.name, recordId)
       }
@@ -163,14 +169,11 @@ const reglasDeValidacion = {
 
       if (!respuesta.ok) {
         console.error('Error en la petición de duplicidad.')
-        return { esValido: true, mensaje: null } // No bloquear al usuario por error del servidor
+        return { esValido: true, mensaje: null }
       }
 
       const data = await respuesta.json()
-
-      // El campo es válido si el estado es 'disponible'
       const esValido = data.estado === 'disponible'
-      // Usamos el mensaje de la API si existe, si no, será null
       const mensajeApi = data.mensaje || null
 
       return { esValido, mensaje: mensajeApi }
@@ -263,14 +266,24 @@ const debounce = (func, delay = 300) => {
 }
 
 const obtenerValorDelCampo = (campo) => {
-  // ✅ NUEVA LÓGICA: Si el campo tiene una instancia de IMask, usamos su valor sin máscara.
+  // 1. Prioridad #1: Buscar en tu almacenamiento global personalizado (window.countrySelectMasks)
+  // Es la forma más específica y segura para tus inputs de teléfono.
+  if (window.countrySelectMasks && window.countrySelectMasks[campo.id]) {
+    return window.countrySelectMasks[campo.id].unmaskedValue
+  }
+
+  // 2. Prioridad #2: Detección estándar de IMask.js (propiedad .imask)
+  // Para cualquier otro input con IMask que no use tu función `countrySelect`.
+  if (campo.imask) {
+    return campo.imask.unmaskedValue
+  }
+
+  // 3. Fallback: Detección de jQuery Mask Plugin (el que usa .mask())
   if (window.jQuery && $(campo).data('mask')) {
-    // Si la tiene, usamos .cleanVal() para obtener el valor sin máscara.
     return $(campo).cleanVal()
   }
 
-  // El resto de la lógica es la misma de antes.
-
+  // 4. Lógica estándar para otros campos si no se encuentra ninguna máscara.
   switch (campo.type) {
     case 'checkbox':
       return campo.checked
@@ -279,10 +292,10 @@ const obtenerValorDelCampo = (campo) => {
         `input[name="${campo.name}"]:checked`
       )
       return radioSeleccionado ? radioSeleccionado.value : ''
-    case 'select-multiple':
-      return Array.from(campo.selectedOptions).map((option) => option.value)
     case 'file':
       return campo.files
+    case 'select-multiple':
+      return Array.from(campo.selectedOptions).map((option) => option.value)
     default:
       return campo.value
   }

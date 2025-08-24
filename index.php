@@ -1,15 +1,24 @@
 <?php
 
 
-// ==================================================================
-// ARCHIVO: index.php (Punto de entrada de la aplicación)
-// ==================================================================
+if (session_status() === PHP_SESSION_NONE) {
+    session_start(); // Iniciar sesión si no está iniciada
+}
+define('APP_ROOT', __DIR__ . '/'); // Define la ruta raíz de la aplicación
 
-// PASO 1: INCLUIR EL AUTOLOADER DE COMPOSER
-// Esta es la única línea de inclusión que necesitas.
+
 require_once __DIR__ . '/vendor/autoload.php';
 
-define('APP_ROOT', __DIR__ . '/'); // Define la ruta raíz de la aplicación
+use App\Config\Language;
+
+if (isset($_GET['lang'])) {
+    $_SESSION['lang'] = $_GET['lang'];
+}
+$lang = $_SESSION['lang'] ?? 'en';
+$traducciones = Language::loadLanguage($lang);
+
+
+
 
 // PASO 2: IMPORTAR LAS CLASES QUE VAS A UTILIZAR
 // Esto hace que el código sea más legible.
@@ -22,7 +31,7 @@ use App\Middlewares\AuthMiddleware; // Asumiendo que creas esta clase en /middle
 
 // --- INICIALIZACIÓN Y DEFINICIÓN DE RUTAS ---
 
-$viewRenderer = new ViewRenderer();
+$viewRenderer = new ViewRenderer($traducciones);
 $router = new Router($viewRenderer);
 
 // Usamos ::class para referirnos a las clases. Es una mejor práctica

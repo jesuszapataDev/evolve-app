@@ -72,3 +72,20 @@
 .select2-container .select2-results__option {
   padding: 0 6px; /* Ajustar padding si es necesario */
 }
+
+/* VALIDACIONES DE FORMULARIO */
+.form-control.error,
+form-select.error,
+.form-control.error:hover,
+.form-select.error:hover {
+  border-color: #e74c3c; /* Rojo */
+}
+
+/* Estilo para el mensaje de error */
+.error-message {
+  color: #e74c3c; /* Rojo */
+  font-size: 0.9em;
+  margin-top: 5px;
+  /* El mensaje estará oculto hasta que tenga contenido */
+  min-height: 1em;
+}

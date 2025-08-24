@@ -123,10 +123,16 @@
                                                     <div data-phone-select=""></div>
                                                 </div>
                                                 <div class="col-md-6 mb-3">
-                                                    <label for="phone" class="form-label">Telephone</label>
+                                                    <label for="phone"
+                                                        class="form-label"><?= $traducciones['telephone_label'] ?? 'Telephone' ?></label>
                                                     <input type="text" id="phone" name="phone" class="form-control"
-                                                        data-rules="longitudExacta:10"
-                                                        data-message-longitud-exacta="<?= $traducciones['validation_phone_exact_length']; ?>">
+                                                        data-rules="noVaciolongitudMinima:8"
+                                                        data-message-no-vacio="<?= $traducciones['validation_required']; ?>"
+                                                        data-message-longitud-minima="<?= $traducciones['validation_phone_min_length']; ?>"
+                                                        data-validate-duplicate-url="/api/tu_controlador.php"
+                                                        data-validate-action="verificarTelefono"
+                                                        data-message-duplicado="Este teléfono ya está registrado."
+                                                        data-validate-masked="true">
                                                 </div>
                                             </div>
                                             <div class="mb-3">
@@ -158,11 +164,8 @@
     <script src="public/assets/js/app.min.js"></script>
 
     <script src="public/assets/libs/select2/js/select2.min.js"></script>
-
-    <script type="module" src="public/assets/js/helpers/validarFormulario.js"></script>
-
-
     <script type="module" src="public/assets/js/modules/login.js"></script>
+    <script type="module" src="public/assets/js/helpers/validarFormulario.js"></script>
 
 </body>
 

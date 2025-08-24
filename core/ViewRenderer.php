@@ -18,11 +18,14 @@ namespace App\Core;
 class ViewRenderer
 {
     private $basePath;
+    private $lang; // Traducciones cargadas desde el archivo de idioma
     private $defaultLayout = 'layouts/main'; // Plantilla por defecto
 
-    public function __construct(string $basePath = 'views/')
+    public function __construct(array $lang = [], string $basePath = 'views/')
     {
+
         $this->basePath = rtrim($basePath, '/\\') . DIRECTORY_SEPARATOR;
+        $this->lang = $lang;
     }
 
     /**
@@ -38,6 +41,7 @@ class ViewRenderer
         unset($data['layout']); // Evita pasar 'layout' a la vista final
 
         $viewPath = $this->basePath . str_replace('/', DIRECTORY_SEPARATOR, $view) . '.php';
+        $traducciones = $this->lang;
 
         if (!file_exists($viewPath)) {
             header("HTTP/1.0 404 Not Found");

@@ -41,7 +41,7 @@ return [
   'tab_range' => 'Rango',
   'tab_current' => 'Actual',
   'tab_over_time' => 'A lo largo del tiempo',
-'failure_locked' => 'Usted ha excedido la cantidad permitida de intentos fallidos. Inténtelo en unos minutos.',
+  'failure_locked' => 'Usted ha excedido la cantidad permitida de intentos fallidos. Inténtelo en unos minutos.',
   // Tabla general
   'date' => 'Fecha',
   'value' => 'Valor',
@@ -56,11 +56,11 @@ return [
   'history_modal_title' => 'Historial',
   'history_table_date' => 'Fecha',
   'history_table_value' => 'Valor',
-'user_not_found' => 'El usuario no fue encontrado',
-'user_delete_dependency' => 'No se puede eliminar el usuario: existen registros relacionados en la tabla {table}',
-'user_deleted_successfully' => 'Usuario eliminado correctamente',
-'user_delete_error' => 'Error al eliminar el usuario',
-'missing_user_id' => 'ID de usuario requerido',
+  'user_not_found' => 'El usuario no fue encontrado',
+  'user_delete_dependency' => 'No se puede eliminar el usuario: existen registros relacionados en la tabla {table}',
+  'user_deleted_successfully' => 'Usuario eliminado correctamente',
+  'user_delete_error' => 'Error al eliminar el usuario',
+  'missing_user_id' => 'ID de usuario requerido',
   // Perfil lipídico
   'edit_title_lipid' => 'Editar Registro de Perfil Lipídico',
   'ldl_cholesterol' => 'Colesterol LDL (mg/dL)',
@@ -526,20 +526,20 @@ return [
   'failure_user_not_found' => 'Usuario no encontrado',
   'failure_invalid_password' => 'Contraseña incorrecta',
   'failure_account_inactive' => 'Cuenta desactivada',
-'failure_too_many_attempts' => 'Exceso de intentos',
+  'failure_too_many_attempts' => 'Exceso de intentos',
   'failure_ip_blocked' => 'IP bloqueada',
   'failure_invalid_email_format' => 'Formato de correo inválido',
   'failure_missing_fields' => 'Faltan campos obligatorios',
   'failure_unknown_failure' => 'Fallo desconocido',
   'failure_user_blocked2' => 'Cuenta Bloqueada',
   'failure_user_blocked' => 'Tu cuenta ha sido bloqueada por demasiados intentos fallidos, Contacta a soporte tecnico.',
-  'status_active'   => 'Activa',
-'status_expired'  => 'Expirada',
-'status_kicked'   => 'Expulsada',
-'status_failed'   => 'Fallo de inicio',
-'status_closed'   => 'Cerrada',
-'status_label' => 'Estado',
-'status_hint'  => 'Inactivo / Activo',
+  'status_active' => 'Activa',
+  'status_expired' => 'Expirada',
+  'status_kicked' => 'Expulsada',
+  'status_failed' => 'Fallo de inicio',
+  'status_closed' => 'Cerrada',
+  'status_label' => 'Estado',
+  'status_hint' => 'Inactivo / Activo',
 
   // Títulos y Textos de la Tabla de Auditoría
   'audit_table_column_timestamp' => 'Fecha y Hora',
@@ -572,9 +572,9 @@ return [
   'audit_modal_field_client_city' => 'Ciudad',
   'audit_modal_field_client_zipcode' => 'Código postal',
   'audit_table_column_geo_ip_timestamp' => 'Fecha y hora Geo IP',
-'audit_table_column_geo_ip_timezone' => 'Zona horaria Geo IP',
-'audit_modal_field_geo_ip_timestamp' => 'Fecha y hora Geo IP',
-'audit_modal_field_geo_ip_timezone' => 'Zona horaria Geo IP',
+  'audit_table_column_geo_ip_timezone' => 'Zona horaria Geo IP',
+  'audit_modal_field_geo_ip_timestamp' => 'Fecha y hora Geo IP',
+  'audit_modal_field_geo_ip_timezone' => 'Zona horaria Geo IP',
 
 
   'audit_table_column_action_timezone' => 'Zona horaria',
@@ -626,7 +626,7 @@ return [
   'dashboard_biomarkers_all' => 'Todos',
   'dashboard_biomarkers_in_range' => 'En rango',
   'dashboard_biomarkers_out_range' => 'Fuera de rango',
-'table_column_biomarker2' => 'Biomarcadores',
+  'table_column_biomarker2' => 'Biomarcadores',
   // Tabla: Registros recientes
   'dashboard_recent_records_title' => 'Registros recientes de todos los usuarios',
   'dashboard_recent_records_date' => 'Fecha',
@@ -1354,7 +1354,7 @@ return [
   'error_delete_specialty' => 'Error al eliminar la especialidad.',
   'specialty_delete_dependency' => 'No se puede eliminar la especialidad: existen especialistas relacionados.',
 
-'specialty2' => 'Especialidades',
+  'specialty2' => 'Especialidades',
 
   'add_specialty_title_button' => 'Agregar Titulos de Especialidad',
   'specialty_title_modal_title' => 'Titulos de Especialidad',
@@ -1543,5 +1543,14 @@ return [
   'method_not_allowed' => 'Método no permitido. Use POST.',
   'method_not_allowed_put' => 'Método no permitido. Se requiere PUT.',
 
+
+  // VALIDACIONES DE FORMULARIO
+  'validation_required' => 'Este campo es obligatorio.',
+  'validation_email_format' => 'El formato del correo no es válido.',
+  'validation_max_length_name' => 'El nombre no puede superar los 100 caracteres.',
+  'validation_phone_exact_length' => 'Si se introduce, el teléfono debe tener 10 dígitos.',
+  'validation_phone_min_length' => 'Si se introduce, el teléfono debe tener al menos 8 caracteres.',
+  'validation_min_length' => 'La contraseña debe tener al menos 8 caracteres.',
+  'validation_telephone_already_exits' => 'Este teléfono ya ha sido utilizado.',
 
 ];
