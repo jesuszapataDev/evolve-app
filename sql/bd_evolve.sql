@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 24-08-2025 a las 19:10:18
+-- Tiempo de generación: 25-08-2025 a las 17:51:45
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -89,7 +89,7 @@ INSERT INTO `audit_log` (`audit_id`, `table_name`, `record_id`, `action_type`, `
 --
 
 CREATE TABLE `cities` (
-  `id` char(36) NOT NULL DEFAULT uuid(),
+  `cities_id` char(36) NOT NULL,
   `province_id` char(36) NOT NULL,
   `name` varchar(120) NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
@@ -101,7 +101,7 @@ CREATE TABLE `cities` (
 -- Volcado de datos para la tabla `cities`
 --
 
-INSERT INTO `cities` (`id`, `province_id`, `name`, `is_active`, `created_at`, `updated_at`) VALUES
+INSERT INTO `cities` (`cities_id`, `province_id`, `name`, `is_active`, `created_at`, `updated_at`) VALUES
 ('0ac618fe-810d-11f0-bd4d-41b8da1d00a8', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', 'Fort St. John', 1, '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
 ('0ac62a97-810d-11f0-bd4d-41b8da1d00a8', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', 'Taylor', 1, '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
 ('0ac62b6b-810d-11f0-bd4d-41b8da1d00a8', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', 'Charlie Lake', 1, '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
@@ -116,7 +116,7 @@ INSERT INTO `cities` (`id`, `province_id`, `name`, `is_active`, `created_at`, `u
 --
 
 CREATE TABLE `contact_emails` (
-  `id` char(36) NOT NULL DEFAULT uuid(),
+  `contact_email_id` char(36) NOT NULL,
   `entity_type` enum('customer','worker') NOT NULL,
   `entity_id` char(36) NOT NULL,
   `email` varchar(190) NOT NULL,
@@ -133,7 +133,7 @@ CREATE TABLE `contact_emails` (
 --
 
 CREATE TABLE `contact_phones` (
-  `id` char(36) NOT NULL DEFAULT uuid(),
+  `contact_phone_id` char(36) NOT NULL,
   `entity_type` enum('customer','worker') NOT NULL,
   `entity_id` char(36) NOT NULL,
   `phone_type` enum('mobile','office','fax','other') NOT NULL DEFAULT 'mobile',
@@ -432,177 +432,6 @@ INSERT INTO `countries` (`country_id`, `suffix`, `full_prefix`, `normalized_pref
 ('ff8338e5-82dc-49bb-9efc-556c0f5b2ae2', 'KH', 'KH +855', '+855', 'Cambodia', '+855 ##########', NULL, NULL, NULL, NULL, NULL, NULL),
 ('ffa605f1-ebb2-4f49-97d7-0744f03ea06e', 'BQ', 'BQ +599', '+599', 'Caribbean Netherlands', '+599 ##########', NULL, NULL, NULL, NULL, NULL, NULL);
 
---
--- Disparadores `countries`
---
-DELIMITER $$
-CREATE TRIGGER `trg_countries_delete` BEFORE DELETE ON `countries` FOR EACH ROW BEGIN
-  INSERT INTO audit_log (
-    table_name, record_id, action_type, action_by,
-    full_name, user_type, action_timestamp, action_timezone,
-    changes, full_row,
-    client_ip, client_hostname, user_agent,
-    client_os, client_browser,
-    domain_name, request_uri, server_hostname,
-    client_country, client_region, client_city,
-    client_zipcode, client_coordinates,
-    geo_ip_timestamp, geo_ip_timezone
-  ) VALUES (
-    'countries', OLD.country_id, 'DELETE_PHYSICAL', @user_id,
-    @full_name, @user_type, NOW(), @action_timezone,
-    NULL,
-    JSON_OBJECT(
-      'suffix', OLD.suffix,
-      'full_prefix', OLD.full_prefix,
-      'normalized_prefix', OLD.normalized_prefix,
-      'country_name', OLD.country_name,
-      'phone_mask', OLD.phone_mask,
-      'created_at', OLD.created_at,
-      'created_by', OLD.created_by,
-      'deleted_at', OLD.deleted_at,
-      'deleted_by', OLD.deleted_by
-    ),
-    @client_ip, @client_hostname, @user_agent,
-    @client_os, @client_browser,
-    @domain_name, @request_uri, @server_hostname,
-    @client_country, @client_region, @client_city,
-    @client_zipcode, @client_coordinates,
-    @geo_ip_timestamp, @geo_ip_timezone
-  );
-END
-$$
-DELIMITER ;
-DELIMITER $$
-CREATE TRIGGER `trg_countries_delete_logical` AFTER UPDATE ON `countries` FOR EACH ROW BEGIN
-  IF NEW.deleted_at IS NOT NULL AND OLD.deleted_at IS NULL THEN
-    INSERT INTO audit_log (
-      table_name, record_id, action_type, action_by,
-      full_name, user_type, action_timestamp, action_timezone,
-      changes, full_row,
-      client_ip, client_hostname, user_agent,
-      client_os, client_browser,
-      domain_name, request_uri, server_hostname,
-      client_country, client_region, client_city,
-      client_zipcode, client_coordinates,
-    geo_ip_timestamp, geo_ip_timezone
-    ) VALUES (
-      'countries', OLD.country_id, 'DELETE_LOGICAL', @user_id,
-      @full_name, @user_type, NOW(), @action_timezone,
-      JSON_OBJECT('deleted_at', JSON_OBJECT('old', NULL, 'new', NEW.deleted_at)),
-      JSON_OBJECT(
-        'country_id', OLD.country_id,
-        'suffix', OLD.suffix,
-        'full_prefix', OLD.full_prefix,
-        'normalized_prefix', OLD.normalized_prefix,
-        'country_name', OLD.country_name,
-        'phone_mask', OLD.phone_mask,
-        'created_at', OLD.created_at,
-        'created_by', OLD.created_by,
-        'updated_at', OLD.updated_at,
-        'updated_by', OLD.updated_by,
-        'deleted_at', NEW.deleted_at,
-        'deleted_by', NEW.deleted_by
-      ),
-      @client_ip, @client_hostname, @user_agent,
-      @client_os, @client_browser,
-      @domain_name, @request_uri, @server_hostname,
-      @client_country, @client_region, @client_city,
-      @client_zipcode, @client_coordinates,
-    @geo_ip_timestamp, @geo_ip_timezone
-    );
-  END IF;
-END
-$$
-DELIMITER ;
-DELIMITER $$
-CREATE TRIGGER `trg_countries_insert` AFTER INSERT ON `countries` FOR EACH ROW BEGIN
-  INSERT INTO audit_log (
-    table_name, record_id, action_type, action_by,
-    full_name, user_type, action_timestamp, action_timezone,
-    changes, full_row,
-    client_ip, client_hostname, user_agent,
-    client_os, client_browser,
-    domain_name, request_uri, server_hostname,
-    client_country, client_region, client_city,
-    client_zipcode, client_coordinates,
-    geo_ip_timestamp, geo_ip_timezone
-  ) VALUES (
-    'countries', NEW.country_id, 'INSERT', @user_id,
-    @full_name, @user_type, NOW(), @action_timezone,
-    NULL,
-    JSON_OBJECT(
-      'suffix', NEW.suffix,
-      'full_prefix', NEW.full_prefix,
-      'normalized_prefix', NEW.normalized_prefix,
-      'country_name', NEW.country_name,
-      'phone_mask', NEW.phone_mask,
-      'created_at', NEW.created_at,
-      'created_by', NEW.created_by
-    ),
-    @client_ip, @client_hostname, @user_agent,
-    @client_os, @client_browser,
-    @domain_name, @request_uri, @server_hostname,
-    @client_country, @client_region, @client_city,
-    @client_zipcode, @client_coordinates,
-    @geo_ip_timestamp, @geo_ip_timezone
-  );
-END
-$$
-DELIMITER ;
-DELIMITER $$
-CREATE TRIGGER `trg_countries_update` AFTER UPDATE ON `countries` FOR EACH ROW BEGIN
-  DECLARE change_data TEXT;
-  SET change_data = '{';
-
-  IF OLD.suffix <> NEW.suffix THEN
-    SET change_data = CONCAT(change_data, '"suffix":{"old":"', OLD.suffix, '","new":"', NEW.suffix, '"},');
-  END IF;
-  IF OLD.full_prefix <> NEW.full_prefix THEN
-    SET change_data = CONCAT(change_data, '"full_prefix":{"old":"', OLD.full_prefix, '","new":"', NEW.full_prefix, '"},');
-  END IF;
-  IF OLD.normalized_prefix <> NEW.normalized_prefix THEN
-    SET change_data = CONCAT(change_data, '"normalized_prefix":{"old":"', OLD.normalized_prefix, '","new":"', NEW.normalized_prefix, '"},');
-  END IF;
-  IF OLD.country_name <> NEW.country_name THEN
-    SET change_data = CONCAT(change_data, '"country_name":{"old":"', OLD.country_name, '","new":"', NEW.country_name, '"},');
-  END IF;
-  IF OLD.phone_mask <> NEW.phone_mask THEN
-    SET change_data = CONCAT(change_data, '"phone_mask":{"old":"', OLD.phone_mask, '","new":"', NEW.phone_mask, '"},');
-  END IF;
-
-  IF RIGHT(change_data, 1) = ',' THEN
-    SET change_data = LEFT(change_data, LENGTH(change_data) - 1);
-  END IF;
-
-  SET change_data = CONCAT(change_data, '}');
-
-  IF change_data <> '{}' THEN
-    INSERT INTO audit_log (
-      table_name, record_id, action_type, action_by,
-      full_name, user_type, action_timestamp, action_timezone,
-      changes, full_row,
-      client_ip, client_hostname, user_agent,
-      client_os, client_browser,
-      domain_name, request_uri, server_hostname,
-      client_country, client_region, client_city,
-      client_zipcode, client_coordinates,
-    geo_ip_timestamp, geo_ip_timezone
-    ) VALUES (
-      'countries', OLD.country_id, 'UPDATE', @user_id,
-      @full_name, @user_type, NOW(), @action_timezone,
-      change_data, NULL,
-      @client_ip, @client_hostname, @user_agent,
-      @client_os, @client_browser,
-      @domain_name, @request_uri, @server_hostname,
-      @client_country, @client_region, @client_city,
-      @client_zipcode, @client_coordinates,
-    @geo_ip_timestamp, @geo_ip_timezone
-    );
-  END IF;
-END
-$$
-DELIMITER ;
-
 -- --------------------------------------------------------
 
 --
@@ -610,7 +439,7 @@ DELIMITER ;
 --
 
 CREATE TABLE `customers` (
-  `id` char(36) NOT NULL DEFAULT uuid(),
+  `costumer_id` char(36) NOT NULL,
   `source` enum('BigSteelBox','EVOLVE') NOT NULL,
   `customer_type` enum('company','individual') NOT NULL,
   `company_name` varchar(160) DEFAULT NULL,
@@ -631,7 +460,7 @@ CREATE TABLE `customers` (
 --
 
 CREATE TABLE `inventory` (
-  `id` char(36) NOT NULL DEFAULT uuid(),
+  `inventory_id` char(36) NOT NULL,
   `container_number` char(11) NOT NULL,
   `iso_size_type_code` char(4) DEFAULT NULL,
   `length_ft` decimal(5,2) DEFAULT NULL,
@@ -661,7 +490,7 @@ CREATE TABLE `inventory` (
 -- Volcado de datos para la tabla `inventory`
 --
 
-INSERT INTO `inventory` (`id`, `container_number`, `iso_size_type_code`, `length_ft`, `width_ft`, `height_ft`, `color`, `configuration`, `container_type`, `condition`, `status`, `location_province_id`, `location_city_id`, `last_known_latitude`, `last_known_longitude`, `last_known_at`, `ownership`, `owner_label`, `offering`, `purchase_date`, `csc_valid_until`, `notes`, `created_at`, `updated_at`) VALUES
+INSERT INTO `inventory` (`inventory_id`, `container_number`, `iso_size_type_code`, `length_ft`, `width_ft`, `height_ft`, `color`, `configuration`, `container_type`, `condition`, `status`, `location_province_id`, `location_city_id`, `last_known_latitude`, `last_known_longitude`, `last_known_at`, `ownership`, `owner_label`, `offering`, `purchase_date`, `csc_valid_until`, `notes`, `created_at`, `updated_at`) VALUES
 ('0ad4a3f5-810d-11f0-bd4d-41b8da1d00a8', 'BSBU2864375', '42G1', 40.00, 8.00, 8.50, 'White', 'regular', 'standard', 'wind_water_tight', 'available', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', '0ac618fe-810d-11f0-bd4d-41b8da1d00a8', NULL, NULL, NULL, 'owned', 'BSB', 'rental', NULL, NULL, '40 ft standard GP; BSB-owned', '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
 ('0ad4a92d-810d-11f0-bd4d-41b8da1d00a8', 'BSBU2299512', '22G1', 20.00, 8.00, 8.50, 'White', 'regular', 'standard', 'wind_water_tight', 'available', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', '0ac618fe-810d-11f0-bd4d-41b8da1d00a8', NULL, NULL, NULL, 'owned', 'EVOLVE', 'rental', NULL, NULL, '20 ft standard GP; EVOLVE-owned', '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
 ('0ad4aae6-810d-11f0-bd4d-41b8da1d00a8', 'BSBU4367781', '42G1', 40.00, 8.00, 8.50, 'White', 'DBE', 'standard', 'cargo_worthy', 'maintenance', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', '0ac618fe-810d-11f0-bd4d-41b8da1d00a8', NULL, NULL, NULL, 'owned', 'EVOLVE', 'sale', NULL, NULL, '40 ft GP with double-doors both ends (DBE)', '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
@@ -688,7 +517,7 @@ CREATE TABLE `password_resets` (
 --
 
 CREATE TABLE `provinces` (
-  `id` char(36) NOT NULL DEFAULT uuid(),
+  `provinces_id` char(36) NOT NULL,
   `code` varchar(10) NOT NULL,
   `name` varchar(100) NOT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT 1,
@@ -700,37 +529,8 @@ CREATE TABLE `provinces` (
 -- Volcado de datos para la tabla `provinces`
 --
 
-INSERT INTO `provinces` (`id`, `code`, `name`, `is_active`, `created_at`, `updated_at`) VALUES
+INSERT INTO `provinces` (`provinces_id`, `code`, `name`, `is_active`, `created_at`, `updated_at`) VALUES
 ('0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', 'BC', 'British Columbia', 1, '2025-08-24 13:09:06', '2025-08-24 13:09:06');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `security_questions`
---
-
-CREATE TABLE `security_questions` (
-  `security_question_id` char(36) NOT NULL,
-  `user_id_user` char(36) DEFAULT NULL,
-  `question1` varchar(255) NOT NULL,
-  `answer1` varchar(255) NOT NULL,
-  `question2` varchar(255) NOT NULL,
-  `answer2` varchar(255) NOT NULL,
-  `created_at` datetime DEFAULT NULL,
-  `created_by` varchar(255) DEFAULT NULL,
-  `updated_at` datetime DEFAULT NULL,
-  `updated_by` varchar(255) DEFAULT NULL,
-  `deleted_at` datetime DEFAULT NULL,
-  `deleted_by` varchar(255) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `security_questions`
---
-
-INSERT INTO `security_questions` (`security_question_id`, `user_id_user`, `question1`, `answer1`, `question2`, `answer2`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-('2ee70414-5e80-4f3c-be52-ff523cc38c42', '3072b979-43a9-4640-a473-5650c4a82d54', 'Color favorito', 'Azul', 'Numero Favorito', '08', '2025-07-08 05:47:43', '3072b979-43a9-4640-a473-5650c4a82d54', '2025-07-15 13:02:51', '3072b979-43a9-4640-a473-5650c4a82d54', NULL, NULL),
-('cb02618c-d46f-49a5-b879-15d2f70fd6db', NULL, 'Color favorito', 'Azul', 'Numero Favorito', '07', '2025-07-17 06:54:37', 'fdf23cb0-86f1-4902-85e3-c20a1f481835', NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -801,7 +601,9 @@ CREATE TABLE `session_management` (
 
 INSERT INTO `session_management` (`session_id`, `user_id`, `user_name`, `user_type`, `full_name`, `login_time`, `logout_time`, `inactivity_duration`, `login_success`, `failure_reason`, `session_status`, `ip_address`, `city`, `region`, `country`, `zipcode`, `coordinates`, `hostname`, `os`, `browser`, `user_agent`, `device_id`, `device_type`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
 ('59881ffe-f84b-4b48-b8a6-a2f29199dfe6', '3072b979-43a9-4640-a473-5650c4a82d54', 'moisescelis21@gmail.com', '', 'Moises Celis', '2025-08-24 01:12:50', NULL, NULL, 1, NULL, 'active', '::1', 'Unknown', 'Unknown', 'Unknown', 'Unknown', '0.0,0.0', 'DESKTOP-92VMM39', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', NULL, NULL, '2025-08-24 08:12:50', NULL, '2025-08-24 01:12:50', NULL, NULL, NULL),
-('bbc31394-23ec-4136-b48a-699ed1afb84f', '3072b979-43a9-4640-a473-5650c4a82d54', 'moisescelis21@gmail.com', 'user', 'Moises Celis', '2025-08-24 01:15:03', NULL, NULL, 0, 'invalid_password', 'failed', '::1', 'Unknown', 'Unknown', 'Unknown', 'Unknown', '0.0,0.0', 'DESKTOP-92VMM39', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', NULL, NULL, '2025-08-24 08:15:03', NULL, '2025-08-24 01:15:03', NULL, NULL, NULL);
+('aea7fba2-2cf0-4058-b5ae-70155131daf8', '3072b979-43a9-4640-a473-5650c4a82d54', 'moisescelis21@gmail.com', 'user', 'Moises Celis', '2025-08-25 15:25:48', '2025-08-25 15:26:17', NULL, 1, NULL, 'closed', '::1', 'Unknown', 'Unknown', 'Unknown', 'Unknown', '0.0,0.0', 'DESKTOP-BRTU0R4', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'c0002a1c-88f8-4037-8422-9c95f45d4fb3', NULL, '2025-08-25 22:25:48', NULL, '2025-08-25 15:26:17', NULL, NULL, NULL),
+('bbc31394-23ec-4136-b48a-699ed1afb84f', '3072b979-43a9-4640-a473-5650c4a82d54', 'moisescelis21@gmail.com', 'user', 'Moises Celis', '2025-08-24 01:15:03', NULL, NULL, 0, 'invalid_password', 'failed', '::1', 'Unknown', 'Unknown', 'Unknown', 'Unknown', '0.0,0.0', 'DESKTOP-92VMM39', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', NULL, NULL, '2025-08-24 08:15:03', NULL, '2025-08-24 01:15:03', NULL, NULL, NULL),
+('c4d46123-a833-42ce-bc3d-db0c1dfbcdfa', '3072b979-43a9-4640-a473-5650c4a82d54', 'moisescelis21@gmail.com', 'user', 'Moises Celis', '2025-08-25 14:19:43', '2025-08-25 14:20:28', NULL, 1, NULL, 'closed', '::1', 'Unknown', 'Unknown', 'Unknown', 'Unknown', '0.0,0.0', 'DESKTOP-BRTU0R4', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'c0002a1c-88f8-4037-8422-9c95f45d4fb3', NULL, '2025-08-25 21:19:43', NULL, '2025-08-25 14:20:28', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -834,37 +636,10 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `sex`, `email`, `password`, `telephone`, `timezone`, `status`, `rol`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
 ('2ea94ca9-90b0-40b4-a119-a1dd60154828', 'Jesus', 'Zapatin', 'f', 'jesusmadafaka13@gmail.com', '$2y$12$I4WcQeXi3tV8fqvnz/xQse3qXRPd/haXv.HweGCEdgf/8mabXGmnW', '(+58) 4249541158', 'America/Los_Angeles', 1, 'administrator', '2025-06-25 09:57:08', NULL, '2025-06-25 10:40:34', '211', NULL, NULL),
-('3072b979-43a9-4640-a473-5650c4a82d54', 'Moises', 'Celis', 'm', 'moisescelis21@gmail.com', '$2y$12$jLElDEEtOPGuLZCw3lMy/u00pFkEb/MmBkuJXYODe9R.2WqN375HK', '(+1) (626)423-8692', 'America/Los_Angeles', 1, 'administrator', NULL, NULL, '2025-07-16 20:03:50', '3a3963c7-a08e-44b9-9a89-7081a04b2c42', NULL, NULL),
+('3072b979-43a9-4640-a473-5650c4a82d54', 'Moises', 'Celis', 'm', 'moisescelis21@gmail.com', '$2y$10$1ohFeO.YlcGA.kzCteW1ueOsGVed4C.yLSGS7iNifq6L1NxkFVm62', '(+1) (626)423-8692', 'America/Los_Angeles', 1, 'administrator', NULL, NULL, '2025-08-25 08:25:19', '3072b979-43a9-4640-a473-5650c4a82d54', NULL, NULL),
 ('34e023d4-5339-41bc-a6ee-ed8cfcbebb77', 'Jesús', 'Zapata', 'm', 'jesuszapata@gmail.com', '$2y$12$YNYYHZp5MR88iJCAjbCjBuxkrlHVxQmdeWFbgS96jOohTuA9d.p2W', '(+1) 6264238682', 'America/Los_Angeles', 1, 'user', NULL, NULL, NULL, NULL, NULL, NULL),
 ('acfa725e-561d-4911-afeb-0f35b7323b6d', 'Alejandro', 'S', 'm', 'marcelrojas@hotmail.es', '$2y$12$Xs91ga0pQgJk5ZrJn8flx.4ngNkBNeKZuZKBi.TOUkQUiYptwwKjq', '(+1) 6264238682', 'America/Los_Angeles', 1, 'user', NULL, NULL, NULL, NULL, NULL, NULL),
 ('d3aa1ffb-7dd6-4397-a1ae-38798890a585', 'Alejandro', 'Rojas', 'm', 'marcel85rs@gmail.com', '$2y$12$O2GVTgxEN8lm.uNNPAgyVOrOrIpWO6y0z6Q799ajpM7hx75.vLRRm', '(+1) (626)423-8682', 'America/Los_Angeles', 1, 'administrator', NULL, NULL, '2025-06-13 19:22:21', '205', NULL, NULL);
-
--- --------------------------------------------------------
-
---
--- Estructura Stand-in para la vista `v_available_by_size_type`
--- (Véase abajo para la vista actual)
---
-CREATE TABLE `v_available_by_size_type` (
-`iso_size_type_code` char(4)
-,`container_type` enum('standard','high_cube','office','reefer','other')
-,`city` varchar(120)
-,`province` varchar(10)
-,`available_units` bigint(21)
-);
-
--- --------------------------------------------------------
-
---
--- Estructura Stand-in para la vista `v_inventory_status_counts`
--- (Véase abajo para la vista actual)
---
-CREATE TABLE `v_inventory_status_counts` (
-`status` enum('available','reserved','on_rent','in_transit','maintenance','retired')
-,`city` varchar(120)
-,`province` varchar(10)
-,`units` bigint(21)
-);
 
 -- --------------------------------------------------------
 
@@ -873,7 +648,7 @@ CREATE TABLE `v_inventory_status_counts` (
 --
 
 CREATE TABLE `workers` (
-  `id` char(36) NOT NULL DEFAULT uuid(),
+  `workers_id` char(36) NOT NULL,
   `first_name` varchar(80) NOT NULL,
   `last_name` varchar(80) NOT NULL,
   `role` varchar(80) DEFAULT NULL,
@@ -896,7 +671,7 @@ CREATE TABLE `workers` (
 --
 
 CREATE TABLE `work_orders` (
-  `id` char(36) NOT NULL DEFAULT uuid(),
+  `work_order_id` char(36) NOT NULL,
   `customer_id` char(36) NOT NULL,
   `type` enum('pickup','delivery','relocation','storage_in','storage_out') NOT NULL,
   `scheduled_pickup_at` datetime DEFAULT NULL,
@@ -926,7 +701,7 @@ CREATE TABLE `work_orders` (
 --
 
 CREATE TABLE `work_order_events` (
-  `id` char(36) NOT NULL DEFAULT uuid(),
+  `work_order_events_id` char(36) NOT NULL,
   `work_order_id` char(36) NOT NULL,
   `work_order_item_id` char(36) DEFAULT NULL,
   `event_type` enum('pickup_confirmed','delivery_confirmed','storage_in','storage_out','arrival','departure','location_update') NOT NULL,
@@ -950,30 +725,12 @@ CREATE TABLE `work_order_events` (
 --
 
 CREATE TABLE `work_order_items` (
-  `id` char(36) NOT NULL DEFAULT uuid(),
+  `work_order_items_id` char(36) NOT NULL,
   `work_order_id` char(36) NOT NULL,
   `inventory_id` char(36) NOT NULL,
   `assigned_at` datetime NOT NULL DEFAULT current_timestamp(),
   `notes` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura para la vista `v_available_by_size_type`
---
-DROP TABLE IF EXISTS `v_available_by_size_type`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_available_by_size_type`  AS SELECT `i`.`iso_size_type_code` AS `iso_size_type_code`, `i`.`container_type` AS `container_type`, `c`.`name` AS `city`, `p`.`code` AS `province`, count(0) AS `available_units` FROM ((`inventory` `i` left join `cities` `c` on(`c`.`id` = `i`.`location_city_id`)) left join `provinces` `p` on(`p`.`id` = `i`.`location_province_id`)) WHERE `i`.`status` = 'available' GROUP BY `i`.`iso_size_type_code`, `i`.`container_type`, `c`.`name`, `p`.`code` ;
-
--- --------------------------------------------------------
-
---
--- Estructura para la vista `v_inventory_status_counts`
---
-DROP TABLE IF EXISTS `v_inventory_status_counts`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_inventory_status_counts`  AS SELECT `i`.`status` AS `status`, `c`.`name` AS `city`, `p`.`code` AS `province`, count(0) AS `units` FROM ((`inventory` `i` left join `cities` `c` on(`c`.`id` = `i`.`location_city_id`)) left join `provinces` `p` on(`p`.`id` = `i`.`location_province_id`)) GROUP BY `i`.`status`, `c`.`name`, `p`.`code` ;
 
 --
 -- Índices para tablas volcadas
@@ -989,14 +746,14 @@ ALTER TABLE `audit_log`
 -- Indices de la tabla `cities`
 --
 ALTER TABLE `cities`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`cities_id`),
   ADD UNIQUE KEY `uk_city` (`province_id`,`name`);
 
 --
 -- Indices de la tabla `contact_emails`
 --
 ALTER TABLE `contact_emails`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`contact_email_id`),
   ADD UNIQUE KEY `uk_email_entity` (`entity_type`,`entity_id`,`email`),
   ADD KEY `ix_email_lookup` (`email`);
 
@@ -1004,7 +761,7 @@ ALTER TABLE `contact_emails`
 -- Indices de la tabla `contact_phones`
 --
 ALTER TABLE `contact_phones`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`contact_phone_id`),
   ADD KEY `ix_phone_entity` (`entity_type`,`entity_id`),
   ADD KEY `ix_phone_lookup` (`phone_number`);
 
@@ -1018,13 +775,13 @@ ALTER TABLE `countries`
 -- Indices de la tabla `customers`
 --
 ALTER TABLE `customers`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`costumer_id`);
 
 --
 -- Indices de la tabla `inventory`
 --
 ALTER TABLE `inventory`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`inventory_id`),
   ADD UNIQUE KEY `uk_container_number` (`container_number`),
   ADD KEY `ix_inventory_status` (`status`),
   ADD KEY `ix_inventory_loc` (`location_province_id`,`location_city_id`),
@@ -1041,15 +798,8 @@ ALTER TABLE `password_resets`
 -- Indices de la tabla `provinces`
 --
 ALTER TABLE `provinces`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`provinces_id`),
   ADD UNIQUE KEY `uk_province_code` (`code`);
-
---
--- Indices de la tabla `security_questions`
---
-ALTER TABLE `security_questions`
-  ADD PRIMARY KEY (`security_question_id`),
-  ADD KEY `idx_user_id_user` (`user_id_user`);
 
 --
 -- Indices de la tabla `session_config`
@@ -1074,7 +824,7 @@ ALTER TABLE `users`
 -- Indices de la tabla `workers`
 --
 ALTER TABLE `workers`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`workers_id`),
   ADD KEY `fk_worker_province` (`province_id`),
   ADD KEY `fk_worker_city` (`city_id`);
 
@@ -1082,7 +832,7 @@ ALTER TABLE `workers`
 -- Indices de la tabla `work_orders`
 --
 ALTER TABLE `work_orders`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`work_order_id`),
   ADD KEY `fk_wo_customer` (`customer_id`),
   ADD KEY `fk_wo_worker` (`assigned_worker_id`),
   ADD KEY `fk_wo_origin_prov` (`origin_province_id`),
@@ -1094,7 +844,7 @@ ALTER TABLE `work_orders`
 -- Indices de la tabla `work_order_events`
 --
 ALTER TABLE `work_order_events`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`work_order_events_id`),
   ADD KEY `fk_woe_woi` (`work_order_item_id`),
   ADD KEY `fk_woe_worker` (`captured_by_worker_id`),
   ADD KEY `ix_woe_wo` (`work_order_id`,`event_time`),
@@ -1104,7 +854,7 @@ ALTER TABLE `work_order_events`
 -- Indices de la tabla `work_order_items`
 --
 ALTER TABLE `work_order_items`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`work_order_items_id`),
   ADD UNIQUE KEY `uk_woi_unique` (`work_order_id`,`inventory_id`),
   ADD KEY `fk_woi_inv` (`inventory_id`);
 
@@ -1122,7 +872,7 @@ ALTER TABLE `audit_log`
 -- AUTO_INCREMENT de la tabla `password_resets`
 --
 ALTER TABLE `password_resets`
-  MODIFY `password_reset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `password_reset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `session_config`
@@ -1138,47 +888,47 @@ ALTER TABLE `session_config`
 -- Filtros para la tabla `cities`
 --
 ALTER TABLE `cities`
-  ADD CONSTRAINT `fk_city_province` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`id`);
+  ADD CONSTRAINT `fk_city_province` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`provinces_id`);
 
 --
 -- Filtros para la tabla `inventory`
 --
 ALTER TABLE `inventory`
-  ADD CONSTRAINT `fk_inv_city` FOREIGN KEY (`location_city_id`) REFERENCES `cities` (`id`),
-  ADD CONSTRAINT `fk_inv_province` FOREIGN KEY (`location_province_id`) REFERENCES `provinces` (`id`);
+  ADD CONSTRAINT `fk_inv_city` FOREIGN KEY (`location_city_id`) REFERENCES `cities` (`cities_id`),
+  ADD CONSTRAINT `fk_inv_province` FOREIGN KEY (`location_province_id`) REFERENCES `provinces` (`provinces_id`);
 
 --
 -- Filtros para la tabla `workers`
 --
 ALTER TABLE `workers`
-  ADD CONSTRAINT `fk_worker_city` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`),
-  ADD CONSTRAINT `fk_worker_province` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`id`);
+  ADD CONSTRAINT `fk_worker_city` FOREIGN KEY (`city_id`) REFERENCES `cities` (`cities_id`),
+  ADD CONSTRAINT `fk_worker_province` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`provinces_id`);
 
 --
 -- Filtros para la tabla `work_orders`
 --
 ALTER TABLE `work_orders`
-  ADD CONSTRAINT `fk_wo_customer` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
-  ADD CONSTRAINT `fk_wo_dest_city` FOREIGN KEY (`dest_city_id`) REFERENCES `cities` (`id`),
-  ADD CONSTRAINT `fk_wo_dest_prov` FOREIGN KEY (`dest_province_id`) REFERENCES `provinces` (`id`),
-  ADD CONSTRAINT `fk_wo_origin_city` FOREIGN KEY (`origin_city_id`) REFERENCES `cities` (`id`),
-  ADD CONSTRAINT `fk_wo_origin_prov` FOREIGN KEY (`origin_province_id`) REFERENCES `provinces` (`id`),
-  ADD CONSTRAINT `fk_wo_worker` FOREIGN KEY (`assigned_worker_id`) REFERENCES `workers` (`id`);
+  ADD CONSTRAINT `fk_wo_customer` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`costumer_id`),
+  ADD CONSTRAINT `fk_wo_dest_city` FOREIGN KEY (`dest_city_id`) REFERENCES `cities` (`cities_id`),
+  ADD CONSTRAINT `fk_wo_dest_prov` FOREIGN KEY (`dest_province_id`) REFERENCES `provinces` (`provinces_id`),
+  ADD CONSTRAINT `fk_wo_origin_city` FOREIGN KEY (`origin_city_id`) REFERENCES `cities` (`cities_id`),
+  ADD CONSTRAINT `fk_wo_origin_prov` FOREIGN KEY (`origin_province_id`) REFERENCES `provinces` (`provinces_id`),
+  ADD CONSTRAINT `fk_wo_worker` FOREIGN KEY (`assigned_worker_id`) REFERENCES `workers` (`workers_id`);
 
 --
 -- Filtros para la tabla `work_order_events`
 --
 ALTER TABLE `work_order_events`
-  ADD CONSTRAINT `fk_woe_wo` FOREIGN KEY (`work_order_id`) REFERENCES `work_orders` (`id`),
-  ADD CONSTRAINT `fk_woe_woi` FOREIGN KEY (`work_order_item_id`) REFERENCES `work_order_items` (`id`),
-  ADD CONSTRAINT `fk_woe_worker` FOREIGN KEY (`captured_by_worker_id`) REFERENCES `workers` (`id`);
+  ADD CONSTRAINT `fk_woe_wo` FOREIGN KEY (`work_order_id`) REFERENCES `work_orders` (`work_order_id`),
+  ADD CONSTRAINT `fk_woe_woi` FOREIGN KEY (`work_order_item_id`) REFERENCES `work_order_items` (`work_order_items_id`),
+  ADD CONSTRAINT `fk_woe_worker` FOREIGN KEY (`captured_by_worker_id`) REFERENCES `workers` (`workers_id`);
 
 --
 -- Filtros para la tabla `work_order_items`
 --
 ALTER TABLE `work_order_items`
-  ADD CONSTRAINT `fk_woi_inv` FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`id`),
-  ADD CONSTRAINT `fk_woi_wo` FOREIGN KEY (`work_order_id`) REFERENCES `work_orders` (`id`);
+  ADD CONSTRAINT `fk_woi_inv` FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`inventory_id`),
+  ADD CONSTRAINT `fk_woi_wo` FOREIGN KEY (`work_order_id`) REFERENCES `work_orders` (`work_order_id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
