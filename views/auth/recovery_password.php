@@ -12,7 +12,7 @@
                 <div class="col-xl-9">
                     <div class="card">
                         <div class="card-body p-4">
-                            <a href="/" role="button">
+                            <a href="/login" role="button">
                                 <button class="btn btn-back mb-3 btn-back-translate">
                                     <i class="mdi mdi-arrow-left"></i>
                                     <span class="btn-back-text"><?= htmlspecialchars($traducciones['back_button']) ?></span>
