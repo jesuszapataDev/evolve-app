@@ -703,7 +703,7 @@ return [
   'browser' => 'Browser',
   'user_agent' => 'User Agent',
   'device_id' => 'Device ID',
-  'is_mobile' => 'Is Mobile?',
+  'is_mobile' => 'Device Type',
   'created_at' => 'Created At',
   'status_active' => 'Active',
   'status_expired' => 'Expired',

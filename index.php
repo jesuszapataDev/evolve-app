@@ -153,6 +153,10 @@ $router->group(['middleware' => SessionRedirectMiddleware::class], function ($ro
         'vista' => '/auth/login',
         'vistaData' => ['title' => $traducciones['login_title'] ?? 'Login', 'layout' => false]
     ]);
+       $router->get('/recovery_password', [
+        'vista' => '/auth/recovery_password',
+        'vistaData' => ['title' => $traducciones['login_title'] ?? 'Login', 'layout' => false]
+    ]);
 });
 
 

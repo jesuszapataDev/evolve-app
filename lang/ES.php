@@ -416,7 +416,7 @@ return [
   'browser' => 'Navegador',
   'user_agent' => 'Agente de Usuario',
   'device_id' => 'ID del Dispositivo',
-  'is_mobile' => '¿Móvil?',
+  'is_mobile' => 'Tipo de Dispositivo',
   'created_at' => 'Fecha de Registro',
   'status_active' => 'Activa',
   'status_expired' => 'Expirada',

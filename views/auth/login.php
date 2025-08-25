@@ -60,7 +60,7 @@
                                                     data-message-email="<?= $traducciones['validation_email_format']; ?>">
                                             </div>
                                             <div class="mb-2">
-                                                <a href="auth-recoverpw.html"
+                                                <a href="recovery_password"
                                                     class="text-muted font-13 float-end">Forgot your password?</a>
                                                 <label for="password" class="form-label">Password</label>
                                                 <div class="input-group input-group-merge">
