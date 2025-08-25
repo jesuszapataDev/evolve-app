@@ -133,11 +133,10 @@ document.addEventListener('DOMContentLoaded', () => {
     $table.bootstrapTable('showLoading')
     try {
       const res = await getAllAuditLogs()
-      // **CORRECCIÓN:** Mapear explícitamente el audit_id al campo 'acciones'.
-      // Este campo es el que recibe la función 'auditLogActionFormatter' como 'value'.
+      // Mapear explícitamente el audit_id al campo 'acciones'.
       const rows = res.data.map((row) => ({
         ...row,
-        acciones: row.audit_id, // <-- ESTA LÍNEA ES LA CORRECCIÓN
+        acciones: row.audit_id,
         full_name: row.full_name || 'N/A',
       }))
       $table.bootstrapTable('load', rows)
@@ -171,26 +170,84 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       const data = res.data
 
-      // Rellena los campos del modal
-      document.getElementById('detail_audit_id').textContent = data.audit_id
+      // Rellena todos los campos del modal con los datos obtenidos de la API
+      document.getElementById('detail_audit_id').textContent =
+        data.audit_id || 'N/A'
       document.getElementById('detail_action_timestamp').textContent =
         window.timestampFormatter(data.action_timestamp)
+      document.getElementById('detail_action_timezone').textContent =
+        data.action_timezone || 'N/A'
       document.getElementById('detail_action_by').textContent =
         data.action_by || 'N/A'
       document.getElementById('detail_full_name').textContent =
         data.full_name || 'N/A'
       document.getElementById('detail_table_name').textContent =
         data.table_name || 'N/A'
-      document.getElementById('detail_action_type').textContent =
-        data.action_type || 'N/A'
+      document.getElementById('detail_record_id').textContent =
+        data.record_id || 'N/A'
       document.getElementById('detail_client_ip').textContent =
         data.client_ip || 'N/A'
       document.getElementById('detail_client_country').textContent =
         data.client_country || 'N/A'
-      document.getElementById('detail_user_agent').textContent =
-        data.user_agent || 'N/A'
+      document.getElementById('detail_client_region').textContent =
+        data.client_region || 'N/A'
+      document.getElementById('detail_client_city').textContent =
+        data.client_city || 'N/A'
+      document.getElementById('detail_client_zipcode').textContent =
+        data.client_zipcode || 'N/A'
       document.getElementById('detail_client_coordinates').textContent =
         data.client_coordinates || 'N/A'
+      document.getElementById('detail_geo_ip_timestamp').textContent =
+        data.geo_ip_timestamp
+          ? window.timestampFormatter(data.geo_ip_timestamp)
+          : 'N/A'
+      document.getElementById('detail_geo_ip_timezone').textContent =
+        data.geo_ip_timezone || 'N/A'
+      document.getElementById('detail_client_hostname').textContent =
+        data.client_hostname || 'N/A'
+      document.getElementById('detail_client_os').textContent =
+        data.client_os || 'N/A'
+      document.getElementById('detail_client_browser').textContent =
+        data.client_browser || 'N/A'
+      document.getElementById('detail_domain_name').textContent =
+        data.domain_name || 'N/A'
+      document.getElementById('detail_server_hostname').textContent =
+        data.server_hostname || 'N/A'
+      document.getElementById('detail_request_uri').textContent =
+        data.request_uri || 'N/A'
+      document.getElementById('detail_user_agent').textContent =
+        data.user_agent || 'N/A'
+
+      // --- LÓGICA DE BADGES RESTAURADA ---
+      const userTypeEl = document.getElementById('detail_user_type')
+      const userType = data.user_type || 'N/A'
+      let userTypeClass = 'bg-secondary'
+      if (userType.toLowerCase() === 'admin') {
+        userTypeClass = 'bg-primary'
+      } else if (userType.toLowerCase() === 'user') {
+        userTypeClass = 'bg-info'
+      }
+      userTypeEl.innerHTML = `<span class="badge ${userTypeClass}">${userType}</span>`
+
+      const actionTypeEl = document.getElementById('detail_action_type')
+      const actionType = data.action_type || 'N/A'
+      let actionTypeClass = 'bg-dark'
+      switch (actionType.toUpperCase()) {
+        case 'CREATE':
+          actionTypeClass = 'bg-success'
+          break
+        case 'UPDATE':
+          actionTypeClass = 'bg-warning text-dark'
+          break
+        case 'DELETE':
+          actionTypeClass = 'bg-danger'
+          break
+        case 'LOGIN':
+          actionTypeClass = 'bg-info'
+          break
+      }
+      actionTypeEl.innerHTML = `<span class="badge ${actionTypeClass}">${actionType}</span>`
+      // --- FIN DE LÓGICA DE BADGES ---
 
       // Parsea y muestra las tablas de cambios y datos completos
       const changesData = data.changes ? JSON.parse(data.changes) : {}
@@ -209,7 +266,7 @@ document.addEventListener('DOMContentLoaded', () => {
       // Lógica del mapa Leaflet
       const mapContainer = document.getElementById('audit_map_container')
       if (leafletMap) {
-        leafletMap.remove() // Elimina el mapa anterior para evitar duplicados
+        leafletMap.remove()
         leafletMap = null
       }
 
@@ -224,7 +281,6 @@ document.addEventListener('DOMContentLoaded', () => {
             'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
           ).addTo(leafletMap)
           L.marker([lat, lon]).addTo(leafletMap)
-          // Importante: Redimensionar el mapa después de que el modal sea visible
           setTimeout(() => leafletMap.invalidateSize(), 200)
         } else {
           mapContainer.style.display = 'none'
@@ -244,7 +300,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // --- INICIALIZACIÓN Y MANEJO DE EVENTOS ---
 
-  // 1. Inicializa la tabla Bootstrap con JavaScript
   $table.bootstrapTable({
     locale: locale,
     toolbar: '#toolbar',
@@ -257,11 +312,9 @@ document.addEventListener('DOMContentLoaded', () => {
     sidePagination: 'client',
   })
 
-  // 2. Muestra la barra de herramientas y carga los datos iniciales
   document.getElementById('toolbar').classList.remove('d-none')
   loadAuditLogData()
 
-  // 3. Configura el botón de exportar a CSV
   document
     .getElementById('exportAuditCsvBtn')
     .addEventListener('click', async function () {
@@ -275,7 +328,6 @@ document.addEventListener('DOMContentLoaded', () => {
       })
 
       try {
-        // Asumiendo que el endpoint de exportación es este
         const response = await fetch('api/auditlog/export/1')
         const contentType = response.headers.get('Content-Type')
 
@@ -315,7 +367,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
 
-  // 4. Usa delegación de eventos para los botones de "ver detalles"
   $(document).on('click', '.view-details', function () {
     const auditId = $(this).data('id')
     if (auditId) {

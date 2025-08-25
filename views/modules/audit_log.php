@@ -5,7 +5,8 @@ $locale = $idioma === 'ES' ? 'es-ES' : 'en-US';
 if (!in_array($idioma, ['EN', 'ES'])) {
     $idioma = 'EN';
 }
-
+// Se asume que $traducciones se carga aquí desde un archivo de idioma
+// Ejemplo: $traducciones = include 'lang/' . $idioma . '.php';
 ?>
 
 <!-- Contenedor principal de la página -->
@@ -32,29 +33,21 @@ if (!in_array($idioma, ['EN', 'ES'])) {
                     <thead>
                         <tr>
                             <th data-field="audit_id" data-sortable="true" data-align="center">
-                                <?= $traducciones['audit_table_column_audit_id'] ?? 'Audit ID' ?>
-                            </th>
+                                <?= $traducciones['audit_table_column_audit_id'] ?? 'Audit ID' ?></th>
                             <th data-field="action_timestamp" data-sortable="true" data-formatter="timestampFormatter">
-                                <?= $traducciones['audit_table_column_timestamp'] ?? 'Timestamp' ?>
-                            </th>
+                                <?= $traducciones['audit_table_column_timestamp'] ?? 'Timestamp' ?></th>
                             <th data-field="table_name" data-sortable="true">
-                                <?= $traducciones['audit_table_column_table_name'] ?? 'Table' ?>
-                            </th>
+                                <?= $traducciones['audit_table_column_table_name'] ?? 'Table' ?></th>
                             <th data-field="action_type" data-sortable="true">
-                                <?= $traducciones['audit_table_column_action_type'] ?? 'Action' ?>
-                            </th>
+                                <?= $traducciones['audit_table_column_action_type'] ?? 'Action' ?></th>
                             <th data-field="action_by" data-sortable="true">
-                                <?= $traducciones['audit_table_column_action_by'] ?? 'User ID' ?>
-                            </th>
+                                <?= $traducciones['audit_table_column_action_by'] ?? 'User ID' ?></th>
                             <th data-field="full_name" data-sortable="true">
-                                <?= $traducciones['audit_table_column_full_name'] ?? 'Full Name' ?>
-                            </th>
+                                <?= $traducciones['audit_table_column_full_name'] ?? 'Full Name' ?></th>
                             <th data-field="client_ip">
-                                <?= $traducciones['audit_table_column_client_ip'] ?? 'IP Address' ?>
-                            </th>
+                                <?= $traducciones['audit_table_column_client_ip'] ?? 'IP Address' ?></th>
                             <th data-field="acciones" data-align="center" data-formatter="auditLogActionFormatter">
-                                <?= $traducciones['dashboard_recent_records_actions_user'] ?? 'Actions' ?>
-                            </th>
+                                <?= $traducciones['dashboard_recent_records_actions_user'] ?? 'Actions' ?></th>
                         </tr>
                     </thead>
                 </table>
@@ -63,19 +56,18 @@ if (!in_array($idioma, ['EN', 'ES'])) {
     </div>
 
     <!-- Modal para mostrar los detalles de un registro de auditoría -->
-    <div class="modal fade" id="auditDetailModal" tabindex="-1" aria-labelledby="auditDetailModalLabel"
+    <div class="modal fade" id="auditDetailModal" tabindex="--1" aria-labelledby="auditDetailModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header border-bottom-0">
                     <h5 class="modal-title" id="auditDetailModalLabel">
-                        <?= $traducciones['audit_modal_title'] ?? 'Audit Log Details' ?>
-                    </h5>
+                        <?= $traducciones['audit_modal_title'] ?? 'Audit Log Details' ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <dl class="row">
-                        <!-- El contenido se inyectará dinámicamente desde JavaScript -->
+                        <!-- Sección de Auditoría -->
                         <dt class="col-sm-4"><?= $traducciones['audit_modal_field_audit_id'] ?? 'Audit ID' ?></dt>
                         <dd class="col-sm-8"><span id="detail_audit_id"></span></dd>
 
@@ -83,27 +75,49 @@ if (!in_array($idioma, ['EN', 'ES'])) {
                         </dt>
                         <dd class="col-sm-8"><span id="detail_action_timestamp"></span></dd>
 
-                        <dt class="col-sm-4"><?= $traducciones['audit_modal_field_action_by'] ?? 'Action By' ?></dt>
+                        <dt class="col-sm-4"><?= $traducciones['audit_modal_field_action_timezone'] ?? 'Timezone' ?>
+                        </dt>
+                        <dd class="col-sm-8"><span id="detail_action_timezone"></span></dd>
+
+                        <!-- Sección de Usuario -->
+                        <dt class="col-sm-4">
+                            <?= $traducciones['audit_modal_field_action_by'] ?? 'Action By (User ID)' ?></dt>
                         <dd class="col-sm-8"><span id="detail_action_by"></span></dd>
 
                         <dt class="col-sm-4"><?= $traducciones['audit_modal_field_full_name'] ?? 'Full Name' ?></dt>
                         <dd class="col-sm-8"><span id="detail_full_name"></span></dd>
 
+                        <dt class="col-sm-4"><?= $traducciones['audit_modal_field_user_type'] ?? 'User Type' ?></dt>
+                        <dd class="col-sm-8"><span id="detail_user_type"></span></dd>
+
+                        <!-- Sección de Acción -->
                         <dt class="col-sm-4"><?= $traducciones['audit_modal_field_table_name'] ?? 'Table Name' ?></dt>
                         <dd class="col-sm-8"><span id="detail_table_name"></span></dd>
+
+                        <dt class="col-sm-4"><?= $traducciones['audit_modal_field_record_id'] ?? 'Record ID' ?></dt>
+                        <dd class="col-sm-8"><span id="detail_record_id"></span></dd>
 
                         <dt class="col-sm-4"><?= $traducciones['audit_modal_field_action_type'] ?? 'Action Type' ?></dt>
                         <dd class="col-sm-8"><span id="detail_action_type"></span></dd>
 
+                        <!-- Sección de Cliente y Geolocalización -->
                         <dt class="col-sm-4"><?= $traducciones['audit_modal_field_client_ip'] ?? 'Client IP' ?></dt>
                         <dd class="col-sm-8"><span id="detail_client_ip"></span></dd>
 
                         <dt class="col-sm-4"><?= $traducciones['audit_modal_field_client_country'] ?? 'Country' ?></dt>
                         <dd class="col-sm-8"><span id="detail_client_country"></span></dd>
 
+                        <dt class="col-sm-4"><?= $traducciones['audit_modal_field_client_region'] ?? 'Region' ?></dt>
+                        <dd class="col-sm-8"><span id="detail_client_region"></span></dd>
+
+                        <dt class="col-sm-4"><?= $traducciones['audit_modal_field_client_city'] ?? 'City' ?></dt>
+                        <dd class="col-sm-8"><span id="detail_client_city"></span></dd>
+
+                        <dt class="col-sm-4"><?= $traducciones['audit_modal_field_client_zipcode'] ?? 'Postcode' ?></dt>
+                        <dd class="col-sm-8"><span id="detail_client_zipcode"></span></dd>
+
                         <dt class="col-sm-4">
-                            <?= $traducciones['audit_modal_field_client_coordinates'] ?? 'Coordinates' ?>
-                        </dt>
+                            <?= $traducciones['audit_modal_field_client_coordinates'] ?? 'Coordinates' ?></dt>
                         <dd class="col-sm-8">
                             <span id="detail_client_coordinates"></span>
                             <div id="audit_map_container"
@@ -111,11 +125,44 @@ if (!in_array($idioma, ['EN', 'ES'])) {
                             </div>
                         </dd>
 
+                        <dt class="col-sm-4">
+                            <?= $traducciones['audit_modal_field_geo_ip_timestamp'] ?? 'Geo IP Timestamp' ?></dt>
+                        <dd class="col-sm-8"><span id="detail_geo_ip_timestamp"></span></dd>
+
+                        <dt class="col-sm-4">
+                            <?= $traducciones['audit_modal_field_geo_ip_timezone'] ?? 'Geo IP Timezone' ?></dt>
+                        <dd class="col-sm-8"><span id="detail_geo_ip_timezone"></span></dd>
+
+                        <!-- Sección de Información Técnica -->
+                        <dt class="col-sm-4">
+                            <?= $traducciones['audit_modal_field_client_hostname'] ?? 'Client Hostname' ?></dt>
+                        <dd class="col-sm-8"><span id="detail_client_hostname"></span></dd>
+
+                        <dt class="col-sm-4"><?= $traducciones['audit_modal_field_client_os'] ?? 'Client OS' ?></dt>
+                        <dd class="col-sm-8"><span id="detail_client_os"></span></dd>
+
+                        <dt class="col-sm-4">
+                            <?= $traducciones['audit_modal_field_client_browser'] ?? 'Client Browser' ?></dt>
+                        <dd class="col-sm-8"><span id="detail_client_browser"></span></dd>
+
                         <dt class="col-sm-4"><?= $traducciones['audit_modal_field_user_agent'] ?? 'User Agent' ?></dt>
                         <dd class="col-sm-8">
                             <pre class="mb-0 small"><code id="detail_user_agent"></code></pre>
                         </dd>
 
+                        <dt class="col-sm-4"><?= $traducciones['audit_modal_field_domain_name'] ?? 'Domain Name' ?></dt>
+                        <dd class="col-sm-8"><span id="detail_domain_name"></span></dd>
+
+                        <dt class="col-sm-4">
+                            <?= $traducciones['audit_modal_field_server_hostname'] ?? 'Server Hostname' ?></dt>
+                        <dd class="col-sm-8"><span id="detail_server_hostname"></span></dd>
+
+                        <dt class="col-sm-4"><?= $traducciones['audit_modal_field_request_uri'] ?? 'Request URI' ?></dt>
+                        <dd class="col-sm-8">
+                            <pre class="mb-0 small"><code id="detail_request_uri"></code></pre>
+                        </dd>
+
+                        <!-- Sección de Datos -->
                         <dt class="col-sm-4"><?= $traducciones['audit_modal_field_changes'] ?? 'Changes' ?></dt>
                         <dd class="col-sm-8">
                             <div id="detail_changes"></div>
@@ -151,4 +198,8 @@ if (!in_array($idioma, ['EN', 'ES'])) {
     };
 </script>
 
+<!--
+    PASO 2: Cargar el archivo JavaScript externo que gestiona la lógica.
+    Asegúrate de que la ruta sea correcta para tu proyecto.
+-->
 <script src="public/assets/js/modules/audit-log.js" type="module"></script>
