@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-08-2025 a las 20:00:21
+-- Tiempo de generación: 24-08-2025 a las 19:10:18
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -81,6 +81,69 @@ INSERT INTO `audit_log` (`audit_id`, `table_name`, `record_id`, `action_type`, `
 (18, 'empresas', '2683dd73-6339-11f0-85dd-40c2ba2ee6c6', 'UPDATE', 'acaf0d3e-6329-11f0-85dd-40c2ba2ee6c6', 'james soscue', 'administrador', '2025-08-22 06:01:07', 'America/Los_Angeles', '{\"firma_contratista\":{\"old\":\"cargas/usuarios/firmas/firma_688d5ea009919_firma-digital.png\",\"new\":\"cargas/usuarios/firmas/firma_e8548f6b809f.png\"}}', NULL, '186.82.168.208', 'dynamic-ip-18682168208.cable.net.co', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'Windows 10', 'Google Chrome', 'abse-desarrollo.siti.tech', '/sistema/modulos/empresa/ajax/empresas.ajax.php', '271F5AA', 'Colombia', 'Cauca Department', 'Popayán', '190003', '2.4402,-76.6123', '2025-08-22 08:01:07', 'America/Bogota'),
 (19, 'logos_empresa', 'logos_688285cdab1666.41492110', 'UPDATE', 'acaf0d3e-6329-11f0-85dd-40c2ba2ee6c6', 'james soscue', 'administrador', '2025-08-22 06:01:45', 'America/Los_Angeles', '{\"favicon\":{\"old\":\"cargas/aplicacion/2683dd73-6339-11f0-85dd-40c2ba2ee6c6/favicon_689fdd2082a96.svg\",\"new\":\"cargas/aplicacion/2683dd73-6339-11f0-85dd-40c2ba2ee6c6/favicon_68a86a3974850.svg\"}}', NULL, '186.82.168.208', 'dynamic-ip-18682168208.cable.net.co', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'Windows 10', 'Google Chrome', 'abse-desarrollo.siti.tech', '/sistema/modulos/logosEmpresas/ajax/logosEmpresa.ajax.php', '271F5AA', 'Colombia', 'Cauca Department', 'Popayán', '190003', '2.4402,-76.6123', '2025-08-22 08:01:45', 'America/Bogota'),
 (20, 'logos_empresa', 'logos_688285cdab1666.41492110', 'UPDATE', 'acaf0d3e-6329-11f0-85dd-40c2ba2ee6c6', 'james soscue', 'administrador', '2025-08-22 06:02:05', 'America/Los_Angeles', '{\"logo_color\":{\"old\":\"cargas/aplicacion/2683dd73-6339-11f0-85dd-40c2ba2ee6c6/logo_color_689fdd1288c4b.svg\",\"new\":\"cargas/aplicacion/2683dd73-6339-11f0-85dd-40c2ba2ee6c6/logo_color_68a86a4d469a8.svg\"}}', NULL, '186.82.168.208', 'dynamic-ip-18682168208.cable.net.co', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'Windows 10', 'Google Chrome', 'abse-desarrollo.siti.tech', '/sistema/modulos/logosEmpresas/ajax/logosEmpresa.ajax.php', '271F5AA', 'Colombia', 'Cauca Department', 'Popayán', '190003', '2.4402,-76.6123', '2025-08-22 08:02:05', 'America/Bogota');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `cities`
+--
+
+CREATE TABLE `cities` (
+  `id` char(36) NOT NULL DEFAULT uuid(),
+  `province_id` char(36) NOT NULL,
+  `name` varchar(120) NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `cities`
+--
+
+INSERT INTO `cities` (`id`, `province_id`, `name`, `is_active`, `created_at`, `updated_at`) VALUES
+('0ac618fe-810d-11f0-bd4d-41b8da1d00a8', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', 'Fort St. John', 1, '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
+('0ac62a97-810d-11f0-bd4d-41b8da1d00a8', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', 'Taylor', 1, '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
+('0ac62b6b-810d-11f0-bd4d-41b8da1d00a8', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', 'Charlie Lake', 1, '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
+('0ac62bda-810d-11f0-bd4d-41b8da1d00a8', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', 'Dawson Creek', 1, '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
+('0ac62c43-810d-11f0-bd4d-41b8da1d00a8', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', 'Chetwynd', 1, '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
+('0ac62d37-810d-11f0-bd4d-41b8da1d00a8', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', 'Hudson\'s Hope', 1, '2025-08-24 13:09:06', '2025-08-24 13:09:06');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `contact_emails`
+--
+
+CREATE TABLE `contact_emails` (
+  `id` char(36) NOT NULL DEFAULT uuid(),
+  `entity_type` enum('customer','worker') NOT NULL,
+  `entity_id` char(36) NOT NULL,
+  `email` varchar(190) NOT NULL,
+  `is_primary` tinyint(1) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `contact_phones`
+--
+
+CREATE TABLE `contact_phones` (
+  `id` char(36) NOT NULL DEFAULT uuid(),
+  `entity_type` enum('customer','worker') NOT NULL,
+  `entity_id` char(36) NOT NULL,
+  `phone_type` enum('mobile','office','fax','other') NOT NULL DEFAULT 'mobile',
+  `country_code` varchar(8) DEFAULT NULL,
+  `phone_number` varchar(50) NOT NULL,
+  `is_primary` tinyint(1) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -543,6 +606,106 @@ DELIMITER ;
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `customers`
+--
+
+CREATE TABLE `customers` (
+  `id` char(36) NOT NULL DEFAULT uuid(),
+  `source` enum('BigSteelBox','EVOLVE') NOT NULL,
+  `customer_type` enum('company','individual') NOT NULL,
+  `company_name` varchar(160) DEFAULT NULL,
+  `contact_first_name` varchar(80) DEFAULT NULL,
+  `contact_last_name` varchar(80) DEFAULT NULL,
+  `first_name` varchar(80) DEFAULT NULL,
+  `last_name` varchar(80) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `inventory`
+--
+
+CREATE TABLE `inventory` (
+  `id` char(36) NOT NULL DEFAULT uuid(),
+  `container_number` char(11) NOT NULL,
+  `iso_size_type_code` char(4) DEFAULT NULL,
+  `length_ft` decimal(5,2) DEFAULT NULL,
+  `width_ft` decimal(4,2) DEFAULT NULL,
+  `height_ft` decimal(4,2) DEFAULT NULL,
+  `color` varchar(30) DEFAULT NULL,
+  `configuration` enum('regular','DBE','45D','45D/DBE','other') DEFAULT NULL,
+  `container_type` enum('standard','high_cube','office','reefer','other') NOT NULL DEFAULT 'standard',
+  `condition` enum('new','cargo_worthy','wind_water_tight','as_is') NOT NULL DEFAULT 'wind_water_tight',
+  `status` enum('available','reserved','on_rent','in_transit','maintenance','retired') NOT NULL DEFAULT 'available',
+  `location_province_id` char(36) DEFAULT NULL,
+  `location_city_id` char(36) DEFAULT NULL,
+  `last_known_latitude` decimal(9,6) DEFAULT NULL,
+  `last_known_longitude` decimal(9,6) DEFAULT NULL,
+  `last_known_at` datetime DEFAULT NULL,
+  `ownership` enum('owned','leased') NOT NULL DEFAULT 'owned',
+  `owner_label` varchar(50) DEFAULT NULL,
+  `offering` enum('rental','sale','both') DEFAULT NULL,
+  `purchase_date` date DEFAULT NULL,
+  `csc_valid_until` date DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `inventory`
+--
+
+INSERT INTO `inventory` (`id`, `container_number`, `iso_size_type_code`, `length_ft`, `width_ft`, `height_ft`, `color`, `configuration`, `container_type`, `condition`, `status`, `location_province_id`, `location_city_id`, `last_known_latitude`, `last_known_longitude`, `last_known_at`, `ownership`, `owner_label`, `offering`, `purchase_date`, `csc_valid_until`, `notes`, `created_at`, `updated_at`) VALUES
+('0ad4a3f5-810d-11f0-bd4d-41b8da1d00a8', 'BSBU2864375', '42G1', 40.00, 8.00, 8.50, 'White', 'regular', 'standard', 'wind_water_tight', 'available', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', '0ac618fe-810d-11f0-bd4d-41b8da1d00a8', NULL, NULL, NULL, 'owned', 'BSB', 'rental', NULL, NULL, '40 ft standard GP; BSB-owned', '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
+('0ad4a92d-810d-11f0-bd4d-41b8da1d00a8', 'BSBU2299512', '22G1', 20.00, 8.00, 8.50, 'White', 'regular', 'standard', 'wind_water_tight', 'available', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', '0ac618fe-810d-11f0-bd4d-41b8da1d00a8', NULL, NULL, NULL, 'owned', 'EVOLVE', 'rental', NULL, NULL, '20 ft standard GP; EVOLVE-owned', '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
+('0ad4aae6-810d-11f0-bd4d-41b8da1d00a8', 'BSBU4367781', '42G1', 40.00, 8.00, 8.50, 'White', 'DBE', 'standard', 'cargo_worthy', 'maintenance', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', '0ac618fe-810d-11f0-bd4d-41b8da1d00a8', NULL, NULL, NULL, 'owned', 'EVOLVE', 'sale', NULL, NULL, '40 ft GP with double-doors both ends (DBE)', '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
+('0ad4ac58-810d-11f0-bd4d-41b8da1d00a8', 'BSBU6388892', '45G1', 40.00, 8.00, 9.50, 'White', '45D/DBE', 'high_cube', 'cargo_worthy', 'reserved', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', '0ac618fe-810d-11f0-bd4d-41b8da1d00a8', NULL, NULL, NULL, 'owned', 'BSB', 'rental', NULL, NULL, '40 ft High-Cube (9\'6\")', '2025-08-24 13:09:06', '2025-08-24 13:09:06'),
+('0ad4adb0-810d-11f0-bd4d-41b8da1d00a8', 'BSBU2648837', '22G1', 20.00, 8.00, 8.50, 'Beige', 'regular', 'standard', 'wind_water_tight', 'available', '0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', '0ac618fe-810d-11f0-bd4d-41b8da1d00a8', NULL, NULL, NULL, 'owned', 'BSB', 'sale', NULL, NULL, '20 ft standard GP', '2025-08-24 13:09:06', '2025-08-24 13:09:06');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `password_resets`
+--
+
+CREATE TABLE `password_resets` (
+  `password_reset_id` int(11) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `created_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `provinces`
+--
+
+CREATE TABLE `provinces` (
+  `id` char(36) NOT NULL DEFAULT uuid(),
+  `code` varchar(10) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `provinces`
+--
+
+INSERT INTO `provinces` (`id`, `code`, `name`, `is_active`, `created_at`, `updated_at`) VALUES
+('0aaf86a2-810d-11f0-bd4d-41b8da1d00a8', 'BC', 'British Columbia', 1, '2025-08-24 13:09:06', '2025-08-24 13:09:06');
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `security_questions`
 --
 
@@ -568,7 +731,6 @@ CREATE TABLE `security_questions` (
 INSERT INTO `security_questions` (`security_question_id`, `user_id_user`, `question1`, `answer1`, `question2`, `answer2`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
 ('2ee70414-5e80-4f3c-be52-ff523cc38c42', '3072b979-43a9-4640-a473-5650c4a82d54', 'Color favorito', 'Azul', 'Numero Favorito', '08', '2025-07-08 05:47:43', '3072b979-43a9-4640-a473-5650c4a82d54', '2025-07-15 13:02:51', '3072b979-43a9-4640-a473-5650c4a82d54', NULL, NULL),
 ('cb02618c-d46f-49a5-b879-15d2f70fd6db', NULL, 'Color favorito', 'Azul', 'Numero Favorito', '07', '2025-07-17 06:54:37', 'fdf23cb0-86f1-4902-85e3-c20a1f481835', NULL, NULL, NULL, NULL);
-
 
 -- --------------------------------------------------------
 
@@ -605,7 +767,7 @@ CREATE TABLE `session_management` (
   `session_id` char(36) NOT NULL DEFAULT uuid() COMMENT 'ID único de la sesión de usuario',
   `user_id` char(36) DEFAULT NULL COMMENT 'ID del usuario que inició sesión',
   `user_name` varchar(100) DEFAULT NULL COMMENT 'Nombre de usuario que inició sesión',
-  `user_type` enum('administrador','secretaria','ventas','supervisor_proyectos','facturacion') DEFAULT NULL COMMENT 'Tipo de usuario (rol)',
+  `user_type` enum('administrator','user') DEFAULT NULL COMMENT 'Tipo de usuario (rol)',
   `full_name` varchar(100) DEFAULT NULL COMMENT 'Nombre completo del usuario',
   `login_time` datetime NOT NULL DEFAULT current_timestamp(),
   `logout_time` datetime DEFAULT NULL,
@@ -638,31 +800,8 @@ CREATE TABLE `session_management` (
 --
 
 INSERT INTO `session_management` (`session_id`, `user_id`, `user_name`, `user_type`, `full_name`, `login_time`, `logout_time`, `inactivity_duration`, `login_success`, `failure_reason`, `session_status`, `ip_address`, `city`, `region`, `country`, `zipcode`, `coordinates`, `hostname`, `os`, `browser`, `user_agent`, `device_id`, `device_type`, `created_at`, `created_by`, `updated_at`, `updated_by`, `deleted_at`, `deleted_by`) VALUES
-('sess_689cc0a34ca037.97903587', '4de32685-d034-4a1f-8e66-2e48535593a4', 'moisescelis21@gmail.com', 'administrador', 'Moises Celis', '2025-08-13 16:43:46', '2025-08-13 13:43:46', NULL, 1, NULL, 'closed', '107.175.115.14', 'Marietta', 'Georgia', 'United States', '30006', '33.9521,-84.5475', '107-175-115-14-host.colocrossing.com', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', NULL, 0, '2025-08-13 13:43:15', NULL, '2025-08-13 16:43:46', NULL, NULL, NULL),
-('sess_689cc0c8c97e35.44901557', '4de32685-d034-4a1f-8e66-2e48535593a4', 'moisescelis21@gmail.com', 'administrador', 'Moises Celis', '2025-08-13 13:43:52', '2025-08-13 10:34:07', NULL, 1, NULL, 'kicked', '107.175.115.14', 'Marietta', 'Georgia', 'United States', '30006', '33.9521,-84.5475', '107-175-115-14-host.colocrossing.com', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '792ca8b3-209f-4966-a60a-a7350f514812', 0, '2025-08-13 13:43:52', NULL, '2025-08-13 17:34:07', NULL, NULL, NULL),
-('sess_689ccc8218caf6.22358379', '4de32685-d034-4a1f-8e66-2e48535593a4', 'moisescelis21@gmail.com', 'administrador', 'Moises Celis', '2025-08-13 10:33:55', '2025-08-13 10:34:15', NULL, 1, NULL, 'closed', '66.232.126.54', 'Tampa', 'Florida', 'United States', '33614', '28.0109,-82.4948', '66-232-126-54.static.hvvc.us', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'ad36480c-ab1d-43a5-8d4c-445272ad8383', 0, '2025-08-13 14:33:55', NULL, '2025-08-13 17:34:15', NULL, NULL, NULL),
-('sess_689ccc9cad25b8.69638647', '4de32685-d034-4a1f-8e66-2e48535593a4', 'moisescelis21@gmail.com', 'administrador', 'Moises Celis', '2025-08-13 10:34:20', '2025-08-13 10:51:06', '915', 1, NULL, 'expired', '66.232.126.54', 'Tampa', 'Florida', 'United States', '33614', '28.0109,-82.4948', '66-232-126-54.static.hvvc.us', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'ad36480c-ab1d-43a5-8d4c-445272ad8383', 0, '2025-08-13 14:34:20', NULL, '2025-08-13 17:51:06', NULL, NULL, NULL),
-('sess_689cd22c983f73.05874461', '4de32685-d034-4a1f-8e66-2e48535593a4', 'moisescelis21@gmail.com', 'administrador', 'Moises Celis', '2025-08-13 10:58:04', '2025-08-13 14:51:06', '957', 1, NULL, 'expired', '66.232.126.84', 'Tampa', 'Florida', 'United States', '33614', '28.0109,-82.4948', '66-232-126-84.static.hvvc.us', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'ad36480c-ab1d-43a5-8d4c-445272ad8383', 0, '2025-08-13 14:58:04', NULL, '2025-08-13 18:51:06', NULL, NULL, NULL),
-('sess_689ce2052ecbd1.62077491', '4de32685-d034-4a1f-8e66-2e48535593a4', 'moisescelis21@gmail.com', 'administrador', 'Moises Celis', '2025-08-13 15:05:41', '2025-08-13 15:23:06', '951', 1, NULL, 'expired', '190.142.206.21', 'Barquisimeto', 'Lara', 'Venezuela', 'Unknown', '10.0664,-69.3586', '190.142.206.21', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'ad36480c-ab1d-43a5-8d4c-445272ad8383', 0, '2025-08-13 19:05:41', NULL, '2025-08-13 19:23:06', NULL, NULL, NULL),
-('sess_689e7baea87414.20803662', 'acaf0d3e-6329-11f0-85dd-40c2ba2ee6c6', 'jamessoscue20@gmail.com', 'secretaria', 'james soscue', '2025-08-14 19:13:34', NULL, NULL, 1, NULL, 'active', '186.82.168.208', 'Popayán', 'Cauca Department', 'Colombia', '190003', '2.4402,-76.6123', 'dynamic-ip-18682168208.cable.net.co', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', '76673ca5-1074-4804-8d32-1860c1599c1b', 0, '2025-08-15 02:13:34', NULL, '2025-08-15 00:13:34', NULL, NULL, NULL),
-('sess_689fea42bf4001.55155478', 'acaf0d3e-6329-11f0-85dd-40c2ba2ee6c6', 'jamessoscue20@gmail.com', 'administrador', 'james soscue', '2025-08-15 21:17:38', '2025-08-15 21:42:45', NULL, 1, NULL, 'closed', '186.82.168.208', 'Popayán', 'Cauca Department', 'Colombia', '190003', '2.4402,-76.6123', 'dynamic-ip-18682168208.cable.net.co', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'd4e6077e-829d-4bc4-b76b-c05ac4620fca', 0, '2025-08-16 04:17:38', NULL, '2025-08-16 02:42:45', NULL, NULL, NULL),
-('sess_689ff02aa24cd3.02030912', NULL, 'marcelrojas@hotmail.es', '', 'UNKNOWN', '2025-08-15 21:42:50', NULL, NULL, 0, 'user_not_found', 'failed', '186.82.168.208', 'Popayán', 'Cauca Department', 'Colombia', '190003', '2.4402,-76.6123', 'dynamic-ip-18682168208.cable.net.co', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'd4e6077e-829d-4bc4-b76b-c05ac4620fca', 0, '2025-08-16 04:42:50', NULL, '2025-08-16 02:42:50', NULL, NULL, NULL),
-('sess_689ff03239b400.12998518', 'acaf0d3e-6329-11f0-85dd-40c2ba2ee6c6', 'jamessoscue20@gmail.com', 'administrador', 'james soscue', '2025-08-15 21:42:58', NULL, NULL, 1, NULL, 'active', '186.82.168.208', 'Popayán', 'Cauca Department', 'Colombia', '190003', '2.4402,-76.6123', 'dynamic-ip-18682168208.cable.net.co', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36', 'd4e6077e-829d-4bc4-b76b-c05ac4620fca', 0, '2025-08-16 04:42:58', NULL, '2025-08-16 02:42:58', NULL, NULL, NULL),
-('sess_689ff4664aef07.46109444', 'd7c2d4fa-5034-4e24-a29a-57844d90870b', 'marcel85rs@gmail.com', 'administrador', 'Marcel Rojas', '2025-08-15 22:00:54', NULL, NULL, 1, NULL, 'active', '186.82.168.208', 'Popayán', 'Cauca Department', 'Colombia', '190003', '2.4402,-76.6123', 'dynamic-ip-18682168208.cable.net.co', 'Linux', 'Google Chrome', 'Mozilla/5.0 (Linux; Android 10; K) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Mobile Safari/537.36', '94c5d6db-4632-4691-a233-5c3284f9a0e2', 1, '2025-08-16 03:00:54', NULL, '2025-08-16 03:00:54', NULL, NULL, NULL),
-('sess_689ff5aee95fd2.38251680', 'd7c2d4fa-5034-4e24-a29a-57844d90870b', 'marcel85rs@gmail.com', 'administrador', 'Marcel Rojas', '2025-08-15 20:06:23', '2025-08-15 20:13:03', NULL, 1, NULL, 'closed', '172.116.235.110', 'Corona', 'California', 'United States', '92879', '33.8789,-117.5353', 'syn-172-116-235-110.res.spectrum.com', 'Windows 10', 'Mozilla Firefox', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:142.0) Gecko/20100101 Firefox/142.0', '59c138ed-71fa-4124-a9fa-2b1aff7fc659', 0, '2025-08-16 01:06:23', NULL, '2025-08-16 03:13:03', NULL, NULL, NULL),
-('sess_68a4a7631c89e3.38029398', 'fe7df65b-821c-41ce-9b04-b420fc99f99f', 'jesusnbz22@gmail.com', 'administrador', 'Jesús Zapata', '2025-08-19 09:33:40', NULL, NULL, 0, 'invalid_password', 'failed', '::1', 'Unknown', 'Unknown', 'Unknown', 'Unknown', '0.0,0.0', 'DESKTOP-MK30BIG', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'a53767cd-07f3-4b75-9a2d-f4979dffefea', 0, '2025-08-19 16:33:40', NULL, '2025-08-19 16:33:40', NULL, NULL, NULL),
-('sess_68a4a768d4a2f3.90122434', 'fe7df65b-821c-41ce-9b04-b420fc99f99f', 'jesusnbz22@gmail.com', 'administrador', 'Jesús Zapata', '2025-08-19 09:33:45', NULL, NULL, 1, NULL, 'active', '::1', 'Unknown', 'Unknown', 'Unknown', 'Unknown', '0.0,0.0', 'DESKTOP-MK30BIG', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'a53767cd-07f3-4b75-9a2d-f4979dffefea', 0, '2025-08-19 14:33:45', NULL, '2025-08-19 16:33:45', NULL, NULL, NULL),
-('sess_68a4acd708b636.88193953', '4de32685-d034-4a1f-8e66-2e48535593a4', 'moisescelis21@gmail.com', 'administrador', 'Moises Celis', '2025-08-19 09:56:55', NULL, NULL, 1, NULL, 'active', '::1', 'Unknown', 'Unknown', 'Unknown', 'Unknown', '0.0,0.0', 'DESKTOP-BRTU0R4', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'c0002a1c-88f8-4037-8422-9c95f45d4fb3', 0, '2025-08-19 13:56:55', NULL, '2025-08-19 16:56:55', NULL, NULL, NULL),
-('sess_68a4b07253ea83.17841034', '4de32685-d034-4a1f-8e66-2e48535593a4', 'moisescelis21@gmail.com', 'administrador', 'Moises Celis', '2025-08-19 13:12:18', NULL, NULL, 1, NULL, 'active', '190.205.32.182', 'Caracas', 'Distrito Federal', 'Venezuela', 'Unknown', '10.4873,-66.8738', '190.205.32.182.estatic.cantv.net', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', NULL, 0, '2025-08-19 17:12:18', NULL, '2025-08-19 17:12:18', NULL, NULL, NULL),
-('sess_68a4eba7bc13b2.28105013', '4de32685-d034-4a1f-8e66-2e48535593a4', 'moisescelis21@gmail.com', 'administrador', 'Moises Celis', '2025-08-19 14:24:55', '2025-08-19 15:25:20', '927', 1, NULL, 'expired', '66.232.126.108', 'Tampa', 'Florida', 'United States', '33614', '28.0109,-82.4948', '66-232-126-108.static.hvvc.us', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'ad36480c-ab1d-43a5-8d4c-445272ad8383', 0, '2025-08-19 18:24:55', NULL, '2025-08-19 22:25:20', NULL, NULL, NULL),
-('sess_68a5f65eadf738.17135969', 'fe7df65b-821c-41ce-9b04-b420fc99f99f', 'jesusnbz22@gmail.com', 'administrador', 'Jesús Zapata', '2025-08-20 12:22:54', NULL, NULL, 1, NULL, 'active', '200.8.108.206', 'Ciudad Bolívar', 'Bolívar', 'Venezuela', 'Unknown', '8.1187,-63.5517', '200.8.108.206', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '42f37bab-2c97-4844-a6ea-530980366b9d', 0, '2025-08-20 17:22:54', NULL, '2025-08-20 16:22:54', NULL, NULL, NULL),
-('sess_68a61175347157.29281201', 'acaf0d3e-6329-11f0-85dd-40c2ba2ee6c6', 'jamessoscue20@gmail.com', 'administrador', 'james soscue', '2025-08-20 13:18:31', NULL, NULL, 1, NULL, 'active', '186.82.168.208', 'Popayán', 'Cauca Department', 'Colombia', '190003', '2.4402,-76.6123', 'dynamic-ip-18682168208.cable.net.co', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '76673ca5-1074-4804-8d32-1860c1599c1b', 0, '2025-08-20 20:18:31', NULL, '2025-08-20 18:18:31', NULL, NULL, NULL),
-('sess_68a77912f3ee00.87033431', 'acaf0d3e-6329-11f0-85dd-40c2ba2ee6c6', 'jamessoscue20@gmail.com', 'administrador', 'james soscue', '2025-08-21 14:52:53', NULL, NULL, 1, NULL, 'active', '186.82.168.208', 'Popayán', 'Cauca Department', 'Colombia', '190003', '2.4402,-76.6123', 'dynamic-ip-18682168208.cable.net.co', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '76673ca5-1074-4804-8d32-1860c1599c1b', 0, '2025-08-21 21:52:53', NULL, '2025-08-21 19:52:53', NULL, NULL, NULL),
-('sess_68a77accc48f45.59490591', 'd7c2d4fa-5034-4e24-a29a-57844d90870b', 'marcel85rs@gmail.com', 'administrador', 'Marcel Rojas', '2025-08-21 13:00:12', '2025-08-21 13:20:54', NULL, 1, NULL, 'closed', '172.116.235.110', 'Corona', 'California', 'United States', '92879', '33.8789,-117.5353', 'syn-172-116-235-110.res.spectrum.com', 'Windows 10', 'Mozilla Firefox', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:143.0) Gecko/20100101 Firefox/143.0', 'b973e229-53fa-4ae4-a469-f2c129cabc8b', 0, '2025-08-21 18:00:12', NULL, '2025-08-21 20:20:54', NULL, NULL, NULL),
-('sess_68a77ca24b2e74.85639842', 'fe7df65b-821c-41ce-9b04-b420fc99f99f', 'jesusnbz22@gmail.com', 'administrador', 'Jesús Zapata', '2025-08-21 16:08:02', NULL, NULL, 1, NULL, 'active', '186.167.70.34', 'Puerto Cruz', 'Anzoátegui', 'Venezuela', 'Unknown', '10.2118,-64.631', '186.167.70.34', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'f05605f6-4d6b-414a-9255-9753b5f6759e', 0, '2025-08-21 21:08:02', NULL, '2025-08-21 20:08:02', NULL, NULL, NULL),
-('sess_68a7b0b28f9eb0.06259642', '4de32685-d034-4a1f-8e66-2e48535593a4', 'moisescelis21@gmail.com', 'administrador', 'Moises Celis', '2025-08-21 16:50:10', NULL, NULL, 1, NULL, 'active', '66.232.126.121', 'Tampa', 'Florida', 'United States', '33614', '28.0109,-82.4948', '66-232-126-121.static.hvvc.us', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'ad36480c-ab1d-43a5-8d4c-445272ad8383', 0, '2025-08-21 20:50:10', NULL, '2025-08-21 23:50:10', NULL, NULL, NULL),
-('sess_68a869f0c7f583.73525117', 'acaf0d3e-6329-11f0-85dd-40c2ba2ee6c6', 'jamessoscue20@gmail.com', 'administrador', 'james soscue', '2025-08-22 08:00:35', NULL, NULL, 1, NULL, 'active', '186.82.168.208', 'Popayán', 'Cauca Department', 'Colombia', '190003', '2.4402,-76.6123', 'dynamic-ip-18682168208.cable.net.co', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '76673ca5-1074-4804-8d32-1860c1599c1b', 0, '2025-08-22 15:00:35', NULL, '2025-08-22 13:00:35', NULL, NULL, NULL),
-('sess_68a900bc341622.08728510', 'acaf0d3e-6329-11f0-85dd-40c2ba2ee6c6', 'jamessoscue20@gmail.com', 'administrador', 'james soscue', '2025-08-22 18:43:56', '2025-08-22 20:10:30', '925', 1, NULL, 'expired', '186.82.168.208', 'Popayán', 'Cauca Department', 'Colombia', '190003', '2.4402,-76.6123', 'dynamic-ip-18682168208.cable.net.co', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', '76673ca5-1074-4804-8d32-1860c1599c1b', 0, '2025-08-23 01:43:56', NULL, '2025-08-23 01:10:30', NULL, NULL, NULL);
+('59881ffe-f84b-4b48-b8a6-a2f29199dfe6', '3072b979-43a9-4640-a473-5650c4a82d54', 'moisescelis21@gmail.com', '', 'Moises Celis', '2025-08-24 01:12:50', NULL, NULL, 1, NULL, 'active', '::1', 'Unknown', 'Unknown', 'Unknown', 'Unknown', '0.0,0.0', 'DESKTOP-92VMM39', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', NULL, NULL, '2025-08-24 08:12:50', NULL, '2025-08-24 01:12:50', NULL, NULL, NULL),
+('bbc31394-23ec-4136-b48a-699ed1afb84f', '3072b979-43a9-4640-a473-5650c4a82d54', 'moisescelis21@gmail.com', 'user', 'Moises Celis', '2025-08-24 01:15:03', NULL, NULL, 0, 'invalid_password', 'failed', '::1', 'Unknown', 'Unknown', 'Unknown', 'Unknown', '0.0,0.0', 'DESKTOP-92VMM39', 'Windows 10', 'Google Chrome', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', NULL, NULL, '2025-08-24 08:15:03', NULL, '2025-08-24 01:15:03', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -700,6 +839,142 @@ INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `sex`, `email`, `pass
 ('acfa725e-561d-4911-afeb-0f35b7323b6d', 'Alejandro', 'S', 'm', 'marcelrojas@hotmail.es', '$2y$12$Xs91ga0pQgJk5ZrJn8flx.4ngNkBNeKZuZKBi.TOUkQUiYptwwKjq', '(+1) 6264238682', 'America/Los_Angeles', 1, 'user', NULL, NULL, NULL, NULL, NULL, NULL),
 ('d3aa1ffb-7dd6-4397-a1ae-38798890a585', 'Alejandro', 'Rojas', 'm', 'marcel85rs@gmail.com', '$2y$12$O2GVTgxEN8lm.uNNPAgyVOrOrIpWO6y0z6Q799ajpM7hx75.vLRRm', '(+1) (626)423-8682', 'America/Los_Angeles', 1, 'administrator', NULL, NULL, '2025-06-13 19:22:21', '205', NULL, NULL);
 
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `v_available_by_size_type`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `v_available_by_size_type` (
+`iso_size_type_code` char(4)
+,`container_type` enum('standard','high_cube','office','reefer','other')
+,`city` varchar(120)
+,`province` varchar(10)
+,`available_units` bigint(21)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura Stand-in para la vista `v_inventory_status_counts`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `v_inventory_status_counts` (
+`status` enum('available','reserved','on_rent','in_transit','maintenance','retired')
+,`city` varchar(120)
+,`province` varchar(10)
+,`units` bigint(21)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `workers`
+--
+
+CREATE TABLE `workers` (
+  `id` char(36) NOT NULL DEFAULT uuid(),
+  `first_name` varchar(80) NOT NULL,
+  `last_name` varchar(80) NOT NULL,
+  `role` varchar(80) DEFAULT NULL,
+  `status` enum('active','inactive') NOT NULL DEFAULT 'active',
+  `address_line1` varchar(160) DEFAULT NULL,
+  `address_line2` varchar(160) DEFAULT NULL,
+  `province_id` char(36) DEFAULT NULL,
+  `city_id` char(36) DEFAULT NULL,
+  `postal_code` varchar(20) DEFAULT NULL,
+  `hired_at` date DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `work_orders`
+--
+
+CREATE TABLE `work_orders` (
+  `id` char(36) NOT NULL DEFAULT uuid(),
+  `customer_id` char(36) NOT NULL,
+  `type` enum('pickup','delivery','relocation','storage_in','storage_out') NOT NULL,
+  `scheduled_pickup_at` datetime DEFAULT NULL,
+  `scheduled_delivery_at` datetime DEFAULT NULL,
+  `requested_quantity` int(11) NOT NULL DEFAULT 1,
+  `origin_address_line1` varchar(160) DEFAULT NULL,
+  `origin_address_line2` varchar(160) DEFAULT NULL,
+  `origin_province_id` char(36) DEFAULT NULL,
+  `origin_city_id` char(36) DEFAULT NULL,
+  `origin_postal_code` varchar(20) DEFAULT NULL,
+  `dest_address_line1` varchar(160) DEFAULT NULL,
+  `dest_address_line2` varchar(160) DEFAULT NULL,
+  `dest_province_id` char(36) DEFAULT NULL,
+  `dest_city_id` char(36) DEFAULT NULL,
+  `dest_postal_code` varchar(20) DEFAULT NULL,
+  `assigned_worker_id` char(36) DEFAULT NULL,
+  `status` enum('draft','scheduled','in_progress','completed','cancelled') NOT NULL DEFAULT 'draft',
+  `notes` text DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `work_order_events`
+--
+
+CREATE TABLE `work_order_events` (
+  `id` char(36) NOT NULL DEFAULT uuid(),
+  `work_order_id` char(36) NOT NULL,
+  `work_order_item_id` char(36) DEFAULT NULL,
+  `event_type` enum('pickup_confirmed','delivery_confirmed','storage_in','storage_out','arrival','departure','location_update') NOT NULL,
+  `event_time` datetime NOT NULL DEFAULT current_timestamp(),
+  `latitude` decimal(9,6) DEFAULT NULL,
+  `longitude` decimal(9,6) DEFAULT NULL,
+  `accuracy_meters` decimal(6,2) DEFAULT NULL,
+  `captured_by_worker_id` char(36) DEFAULT NULL,
+  `captured_via` enum('mobile','web','api') NOT NULL DEFAULT 'mobile',
+  `captured_ip` varchar(45) DEFAULT NULL,
+  `device_id` varchar(100) DEFAULT NULL,
+  `notes` text DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `work_order_items`
+--
+
+CREATE TABLE `work_order_items` (
+  `id` char(36) NOT NULL DEFAULT uuid(),
+  `work_order_id` char(36) NOT NULL,
+  `inventory_id` char(36) NOT NULL,
+  `assigned_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `notes` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `v_available_by_size_type`
+--
+DROP TABLE IF EXISTS `v_available_by_size_type`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_available_by_size_type`  AS SELECT `i`.`iso_size_type_code` AS `iso_size_type_code`, `i`.`container_type` AS `container_type`, `c`.`name` AS `city`, `p`.`code` AS `province`, count(0) AS `available_units` FROM ((`inventory` `i` left join `cities` `c` on(`c`.`id` = `i`.`location_city_id`)) left join `provinces` `p` on(`p`.`id` = `i`.`location_province_id`)) WHERE `i`.`status` = 'available' GROUP BY `i`.`iso_size_type_code`, `i`.`container_type`, `c`.`name`, `p`.`code` ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `v_inventory_status_counts`
+--
+DROP TABLE IF EXISTS `v_inventory_status_counts`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_inventory_status_counts`  AS SELECT `i`.`status` AS `status`, `c`.`name` AS `city`, `p`.`code` AS `province`, count(0) AS `units` FROM ((`inventory` `i` left join `cities` `c` on(`c`.`id` = `i`.`location_city_id`)) left join `provinces` `p` on(`p`.`id` = `i`.`location_province_id`)) GROUP BY `i`.`status`, `c`.`name`, `p`.`code` ;
+
 --
 -- Índices para tablas volcadas
 --
@@ -711,10 +986,63 @@ ALTER TABLE `audit_log`
   ADD PRIMARY KEY (`audit_id`);
 
 --
+-- Indices de la tabla `cities`
+--
+ALTER TABLE `cities`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uk_city` (`province_id`,`name`);
+
+--
+-- Indices de la tabla `contact_emails`
+--
+ALTER TABLE `contact_emails`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uk_email_entity` (`entity_type`,`entity_id`,`email`),
+  ADD KEY `ix_email_lookup` (`email`);
+
+--
+-- Indices de la tabla `contact_phones`
+--
+ALTER TABLE `contact_phones`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `ix_phone_entity` (`entity_type`,`entity_id`),
+  ADD KEY `ix_phone_lookup` (`phone_number`);
+
+--
 -- Indices de la tabla `countries`
 --
 ALTER TABLE `countries`
   ADD PRIMARY KEY (`country_id`);
+
+--
+-- Indices de la tabla `customers`
+--
+ALTER TABLE `customers`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `inventory`
+--
+ALTER TABLE `inventory`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uk_container_number` (`container_number`),
+  ADD KEY `ix_inventory_status` (`status`),
+  ADD KEY `ix_inventory_loc` (`location_province_id`,`location_city_id`),
+  ADD KEY `fk_inv_city` (`location_city_id`);
+
+--
+-- Indices de la tabla `password_resets`
+--
+ALTER TABLE `password_resets`
+  ADD PRIMARY KEY (`password_reset_id`),
+  ADD KEY `idx_email` (`email`);
+
+--
+-- Indices de la tabla `provinces`
+--
+ALTER TABLE `provinces`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uk_province_code` (`code`);
 
 --
 -- Indices de la tabla `security_questions`
@@ -743,6 +1071,44 @@ ALTER TABLE `users`
   ADD PRIMARY KEY (`user_id`);
 
 --
+-- Indices de la tabla `workers`
+--
+ALTER TABLE `workers`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_worker_province` (`province_id`),
+  ADD KEY `fk_worker_city` (`city_id`);
+
+--
+-- Indices de la tabla `work_orders`
+--
+ALTER TABLE `work_orders`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_wo_customer` (`customer_id`),
+  ADD KEY `fk_wo_worker` (`assigned_worker_id`),
+  ADD KEY `fk_wo_origin_prov` (`origin_province_id`),
+  ADD KEY `fk_wo_origin_city` (`origin_city_id`),
+  ADD KEY `fk_wo_dest_prov` (`dest_province_id`),
+  ADD KEY `fk_wo_dest_city` (`dest_city_id`);
+
+--
+-- Indices de la tabla `work_order_events`
+--
+ALTER TABLE `work_order_events`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_woe_woi` (`work_order_item_id`),
+  ADD KEY `fk_woe_worker` (`captured_by_worker_id`),
+  ADD KEY `ix_woe_wo` (`work_order_id`,`event_time`),
+  ADD KEY `ix_woe_geo` (`latitude`,`longitude`);
+
+--
+-- Indices de la tabla `work_order_items`
+--
+ALTER TABLE `work_order_items`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uk_woi_unique` (`work_order_id`,`inventory_id`),
+  ADD KEY `fk_woi_inv` (`inventory_id`);
+
+--
 -- AUTO_INCREMENT de las tablas volcadas
 --
 
@@ -753,10 +1119,66 @@ ALTER TABLE `audit_log`
   MODIFY `audit_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID único del registro de auditoría', AUTO_INCREMENT=21;
 
 --
+-- AUTO_INCREMENT de la tabla `password_resets`
+--
+ALTER TABLE `password_resets`
+  MODIFY `password_reset_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `session_config`
 --
 ALTER TABLE `session_config`
   MODIFY `config_id` int(11) NOT NULL AUTO_INCREMENT COMMENT 'ID único de configuración de sesión', AUTO_INCREMENT=4;
+
+--
+-- Restricciones para tablas volcadas
+--
+
+--
+-- Filtros para la tabla `cities`
+--
+ALTER TABLE `cities`
+  ADD CONSTRAINT `fk_city_province` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`id`);
+
+--
+-- Filtros para la tabla `inventory`
+--
+ALTER TABLE `inventory`
+  ADD CONSTRAINT `fk_inv_city` FOREIGN KEY (`location_city_id`) REFERENCES `cities` (`id`),
+  ADD CONSTRAINT `fk_inv_province` FOREIGN KEY (`location_province_id`) REFERENCES `provinces` (`id`);
+
+--
+-- Filtros para la tabla `workers`
+--
+ALTER TABLE `workers`
+  ADD CONSTRAINT `fk_worker_city` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`),
+  ADD CONSTRAINT `fk_worker_province` FOREIGN KEY (`province_id`) REFERENCES `provinces` (`id`);
+
+--
+-- Filtros para la tabla `work_orders`
+--
+ALTER TABLE `work_orders`
+  ADD CONSTRAINT `fk_wo_customer` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`id`),
+  ADD CONSTRAINT `fk_wo_dest_city` FOREIGN KEY (`dest_city_id`) REFERENCES `cities` (`id`),
+  ADD CONSTRAINT `fk_wo_dest_prov` FOREIGN KEY (`dest_province_id`) REFERENCES `provinces` (`id`),
+  ADD CONSTRAINT `fk_wo_origin_city` FOREIGN KEY (`origin_city_id`) REFERENCES `cities` (`id`),
+  ADD CONSTRAINT `fk_wo_origin_prov` FOREIGN KEY (`origin_province_id`) REFERENCES `provinces` (`id`),
+  ADD CONSTRAINT `fk_wo_worker` FOREIGN KEY (`assigned_worker_id`) REFERENCES `workers` (`id`);
+
+--
+-- Filtros para la tabla `work_order_events`
+--
+ALTER TABLE `work_order_events`
+  ADD CONSTRAINT `fk_woe_wo` FOREIGN KEY (`work_order_id`) REFERENCES `work_orders` (`id`),
+  ADD CONSTRAINT `fk_woe_woi` FOREIGN KEY (`work_order_item_id`) REFERENCES `work_order_items` (`id`),
+  ADD CONSTRAINT `fk_woe_worker` FOREIGN KEY (`captured_by_worker_id`) REFERENCES `workers` (`id`);
+
+--
+-- Filtros para la tabla `work_order_items`
+--
+ALTER TABLE `work_order_items`
+  ADD CONSTRAINT `fk_woi_inv` FOREIGN KEY (`inventory_id`) REFERENCES `inventory` (`id`),
+  ADD CONSTRAINT `fk_woi_wo` FOREIGN KEY (`work_order_id`) REFERENCES `work_orders` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
