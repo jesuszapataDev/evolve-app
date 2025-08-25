@@ -24,12 +24,12 @@
 
 
             <!-- Mega Menu Dropdown -->
-            
+
         </div>
 
         <ul class="topbar-menu d-flex align-items-center">
             <!-- Topbar Search Form -->
- 
+
             <!-- Fullscreen Button -->
             <li class="d-none d-md-inline-block">
                 <a class="nav-link waves-effect waves-light" href="" data-toggle="fullscreen">
@@ -48,8 +48,8 @@
 
                     <!-- item-->
                     <a href="javascript:void(0);" class="dropdown-item">
-                        <img src="public/assets/images/flags/germany.jpg" alt="user-image" class="me-1" height="12"> <span
-                            class="align-middle">German</span>
+                        <img src="public/assets/images/flags/germany.jpg" alt="user-image" class="me-1" height="12">
+                        <span class="align-middle">German</span>
                     </a>
 
                     <!-- item-->
@@ -150,8 +150,8 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
                                         <div class="notify-icon">
-                                            <img src="public/assets/images/users/avatar-2.jpg" class="img-fluid rounded-circle"
-                                                alt="" />
+                                            <img src="public/assets/images/users/avatar-2.jpg"
+                                                class="img-fluid rounded-circle" alt="" />
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 text-truncate ms-2">
@@ -195,8 +195,8 @@
                                 <div class="d-flex align-items-center">
                                     <div class="flex-shrink-0">
                                         <div class="notify-icon">
-                                            <img src="public/assets/images/users/avatar-4.jpg" class="img-fluid rounded-circle"
-                                                alt="" />
+                                            <img src="public/assets/images/users/avatar-4.jpg"
+                                                class="img-fluid rounded-circle" alt="" />
                                         </div>
                                     </div>
                                     <div class="flex-grow-1 text-truncate ms-2">
@@ -246,7 +246,7 @@
                     <div class="dropdown-divider"></div>
 
                     <!-- item-->
-                    <a href="javascript:void(0);" class="dropdown-item notify-item">
+                    <a href="api/logout" class="dropdown-item notify-item">
                         <i class="fe-log-out"></i>
                         <span>Logout</span>
                     </a>
