@@ -32,6 +32,7 @@ use App\Controllers\CountryController; // Asegúrate de que la ruta sea correcta
 use App\Controllers\AuthController;
 use App\Controllers\SessionConfigController;
 use App\Controllers\AuditLogController;
+use App\Controllers\RecoveryPasswordController;
 use App\Controllers\SessionManagementController;
 use App\Middlewares\AuthMiddleware; // Asumiendo que creas esta clase en /middleware/
 
@@ -109,6 +110,19 @@ $router->group(['prefix' => '/api'], function ($router) {
         'controlador' => AuditLogController::class,
         'accion' => 'exportCSV'
     ]);
+       $router->post('/password-recovery/verify-email', [
+        'controlador' => RecoveryPasswordController::class,
+        'accion' => 'verifyEmail'
+    ]);
+    $router->post('/password-recovery/verify-answers', [
+        'controlador' => RecoveryPasswordController::class,
+        'accion' => 'verifySecurityAnswers'
+    ]);
+    $router->post('/password-recovery/update-password', [
+        'controlador' => RecoveryPasswordController::class,
+        'accion' => 'updatePassword'
+    ]);
+
 
 
     // Verificar telefono
