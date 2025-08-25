@@ -89,3 +89,26 @@ form-select.error,
   /* El mensaje estará oculto hasta que tenga contenido */
   min-height: 1em;
 }
+
+/* LOADER  */
+/* Overlay con fondo negro semitransparente y centrado */
+#custom-loader-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999; /* Bootstrap modal z-index */
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+/* Mostrar overlay con animación */
+#custom-loader-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+}

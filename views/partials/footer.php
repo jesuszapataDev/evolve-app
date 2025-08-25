@@ -30,7 +30,10 @@
 <!-- Vendor js -->
 
 
+<script type="module" src="public/assets/js/helpers/validarFormulario.js"></script>
+<script type="module" src="public/assets/js/helpers/validacionesEspeciales.js"></script>
 
+<script src="public/assets/js/imask.js"></script>
 
 
 <!-- TOOLTIPS -->

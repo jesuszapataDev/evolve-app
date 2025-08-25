@@ -166,6 +166,10 @@ class UserService
     {
         try {
             $users = $this->userModel->getAll();
+            // ELIMINAR PROPIEDAD PASSWORD
+            foreach ($users as &$user) {
+                unset($user['password']);
+            }
             return $this->resp(true, '', $users);
         } catch (mysqli_sql_exception $e) {
             return $this->resp(false, "Error al listar usuarios: " . $e->getMessage());
@@ -176,6 +180,12 @@ class UserService
     {
         try {
             $user = $this->userModel->getById($id);
+            unset($user['password']);
+
+
+
+
+
             return $user ? $this->resp(true, '', $user) : $this->resp(false, "Usuario no encontrado");
         } catch (mysqli_sql_exception $e) {
             return $this->resp(false, "Error al obtener usuario: " . $e->getMessage());

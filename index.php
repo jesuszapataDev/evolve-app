@@ -71,6 +71,60 @@ $router->group(['prefix' => '/api'], function ($router) {
         'controlador' => AuthController::class,
         'accion' => 'logout',
     ]);
+
+    // RECUPERAR CONTRASEÑA
+
+    $router->post('/password-recovery/verify-email', [
+        'controlador' => RecoveryPasswordController::class,
+        'accion' => 'verifyEmail'
+    ]);
+    $router->post('/password-recovery/verify-answers', [
+        'controlador' => RecoveryPasswordController::class,
+        'accion' => 'verifySecurityAnswers'
+    ]);
+    $router->post('/password-recovery/update-password', [
+        'controlador' => RecoveryPasswordController::class,
+        'accion' => 'updatePassword'
+    ]);
+
+    // Verificar telefono
+    $router->post('/check/telephone', [
+        'controlador' => UserController::class,
+        'accion' => 'showByTelephone'
+    ]);
+    /**
+     * RUTA API 2: Protegida por Rol
+     * Devuelve datos sensibles. Requiere autenticación y el rol 'admin'.
+     */
+
+    // USERS
+    $router->get('/users', [
+        'controlador' => UserController::class,
+        'accion' => 'showAll'
+    ]);
+    $router->get('/users/{id}', [
+        'controlador' => UserController::class,
+        'accion' => 'showById'
+    ]);
+    $router->post('/users', [
+        'controlador' => UserController::class,
+        'accion' => 'create'
+    ]);
+    $router->put('/users/{id}', [
+        'controlador' => UserController::class,
+        'accion' => 'update'
+    ]);
+    $router->delete('/users/{id}', [
+        'controlador' => UserController::class,
+        'accion' => 'delete'
+    ]);
+});
+
+// API PROTEGIDAS POR MIDDLEWARE
+$router->group(['prefix' => '/api', 'middleware' => AuthMiddleware::class], function ($router) {
+
+    // GESTIÓN DE SESIONES
+
     $router->get('/session-audit', [
         'controlador' => SessionManagementController::class,
         'accion' => 'showAll'
@@ -98,6 +152,8 @@ $router->group(['prefix' => '/api'], function ($router) {
         'controlador' => SessionManagementController::class,
         'accion' => 'export'
     ]);
+
+    // AUDIT LOG 
     $router->get('/auditlog', [
         'controlador' => AuditLogController::class,
         'accion' => 'getAll'
@@ -110,30 +166,11 @@ $router->group(['prefix' => '/api'], function ($router) {
         'controlador' => AuditLogController::class,
         'accion' => 'exportCSV'
     ]);
-       $router->post('/password-recovery/verify-email', [
-        'controlador' => RecoveryPasswordController::class,
-        'accion' => 'verifyEmail'
-    ]);
-    $router->post('/password-recovery/verify-answers', [
-        'controlador' => RecoveryPasswordController::class,
-        'accion' => 'verifySecurityAnswers'
-    ]);
-    $router->post('/password-recovery/update-password', [
-        'controlador' => RecoveryPasswordController::class,
-        'accion' => 'updatePassword'
-    ]);
 
 
 
-    // Verificar telefono
-    $router->post('/check/telephone', [
-        'controlador' => UserController::class,
-        'accion' => 'showByTelephone'
-    ]);
-    /**
-     * RUTA API 2: Protegida por Rol
-     * Devuelve datos sensibles. Requiere autenticación y el rol 'admin'.
-     */
+
+
 });
 
 // GRUPO DE RUTAS PARA VISTAS PROTEGIDAS POR MIDDLEWARE
@@ -144,6 +181,11 @@ $router->group(['middleware' => AuthMiddleware::class], function ($router) use (
     $router->get('/home', [
         'vista' => '/modules/home',
         'vistaData' => ['title' => $traducciones['home_title'] ?? 'home']
+    ]);
+    // USERS
+    $router->get('/users', [
+        'vista' => '/modules/users_view',
+        'vistaData' => ['title' => $traducciones['users_title'] ?? 'Users']
     ]);
     $router->get('/session_management', [
         'vista' => '/modules/session_management',
@@ -167,7 +209,7 @@ $router->group(['middleware' => SessionRedirectMiddleware::class], function ($ro
         'vista' => '/auth/login',
         'vistaData' => ['title' => $traducciones['login_title'] ?? 'Login', 'layout' => false]
     ]);
-       $router->get('/recovery_password', [
+    $router->get('/recovery_password', [
         'vista' => '/auth/recovery_password',
         'vistaData' => ['title' => $traducciones['login_title'] ?? 'Login', 'layout' => false]
     ]);

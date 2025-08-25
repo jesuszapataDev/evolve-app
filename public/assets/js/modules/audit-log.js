@@ -1,18 +1,5 @@
-/**
- * audit-log-manager.js
- * Gestiona la lógica para la página de visualización de logs de auditoría.
- * - Inicializa la tabla de auditoría con datos del servidor.
- * - Maneja la visualización de detalles de un log en un modal, incluyendo un mapa.
- * - Permite la exportación de todos los datos de la tabla a un archivo CSV.
- */
+import { getAllAuditLogs, getAuditLogById } from '../apiConfig.js'
 
-// Asumiendo que tienes un archivo de configuración de API para las llamadas fetch
-import {
-  getAllAuditLogs,
-  getAuditLogById,
-} from '/evolve-app/public/assets/js/apiConfig.js'
-
-// Obtiene los datos pasados desde el archivo PHP (traducciones y locale)
 const { locale, translations } = window.pageData
 
 // --- FUNCIONES AUXILIARES PARA EL MODAL ---

@@ -217,3 +217,22 @@ export async function getAuditLogById(id) {
 export async function getAllAuditLogs() {
   return await handleRequest('/api/auditlog', 'GET')
 }
+
+// USERS
+export async function getUserById(id) {
+  return await handleRequest(`/api/users/${id}`, 'GET')
+}
+export async function getAllUsers() {
+  return await handleRequest('/api/users', 'GET')
+}
+export async function createUser(userData) {
+  return await handleRequest('/api/users', 'POST', userData)
+}
+export async function updateUser(id, userData) {
+  return await handleRequest(`/api/users/${id}`, 'PUT', userData)
+}
+export async function deleteUser(id) {
+  return await handleRequest(`/api/users/${id}`, 'DELETE')
+}
+
+getAllUsers()
