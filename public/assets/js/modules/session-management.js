@@ -1,6 +1,6 @@
 /**
  * session-audit-manager.js
- * * Gestiona la lógica para la página de auditoría de sesiones.
+ * Gestiona la lógica para la página de auditoría de sesiones.
  * - Inicializa la tabla de auditoría de sesiones.
  * - Maneja la visualización de detalles de sesión en un modal.
  * - Gestiona la configuración del tiempo de inactividad de la sesión.
@@ -12,71 +12,40 @@
 const { idioma, locale, translations } = window.pageData
 
 // --- FUNCIONES DE UTILIDAD ---
-let detailContent = document.getElementById('sessionDetailContent')
 
 /**
  * Oculta todos los modales de Bootstrap que estén actualmente abiertos y limpia el fondo.
- * Es útil para evitar la superposición de modales.
  */
 function hideAllModals() {
-  // Encuentra todos los modales abiertos
   document.querySelectorAll('.modal.show').forEach((modalEl) => {
     const modalInstance = bootstrap.Modal.getInstance(modalEl)
-    if (modalInstance) {
-      modalInstance.hide()
-    }
+    if (modalInstance) modalInstance.hide()
   })
-  // Elimina cualquier fondo de modal que haya quedado
   document.querySelectorAll('.modal-backdrop').forEach((el) => el.remove())
-
-  // Restaura el scroll del body
   document.body.classList.remove('modal-open')
   document.body.style.overflow = ''
   document.body.style.paddingRight = ''
 }
 
 /**
- * Formatea una cadena de fecha y hora (ej. 'YYYY-MM-DD HH:MM:SS') a un formato localizado.
+ * Formatea una cadena de fecha y hora a un formato localizado.
  * @param {string} dateStr - La cadena de fecha a formatear.
  * @returns {string} La fecha formateada o un guion si la entrada no es válida.
  */
 function formatDateTime(dateStr) {
   if (!dateStr) return '-'
   const date = new Date(dateStr)
-  if (isNaN(date.getTime())) return dateStr // Devuelve el original si no es una fecha válida
-
-  // Usamos Intl.DateTimeFormat para un formato más robusto y localizado
-  const options = {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: false, // Formato de 24 horas
-  }
-  try {
-    // El locale 'en-CA' da un formato YYYY-MM-DD, que es neutral y fácil de leer
-    return new Intl.DateTimeFormat('en-CA', options)
-      .format(date)
-      .replace(',', '')
-  } catch (e) {
-    // Fallback por si el Intl no funciona
-    const pad = (n) => n.toString().padStart(2, '0')
-    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
-      date.getDate()
-    )} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(
-      date.getSeconds()
-    )}`
-  }
+  if (isNaN(date.getTime())) return dateStr
+  return typeof dayjs !== 'undefined'
+    ? dayjs(dateStr).format('YYYY-MM-DD HH:mm:ss')
+    : date.toLocaleString()
 }
 
-// --- FORMATEADORES PARA LA TABLA (TABLE FORMATTERS) ---
+// --- FORMATEADORES PARA LA TABLA ---
 
 /**
  * Genera el HTML para la columna de "Acciones" en la tabla.
- * Muestra un botón para ver detalles y otro para expulsar la sesión (solo si está activa).
- * @param {*} value - El valor de la celda (no se usa aquí).
+ * @param {*} value - El valor de la celda (no se usa).
  * @param {object} row - El objeto de datos completo para la fila actual.
  * @returns {string} El HTML para los botones de acción.
  */
@@ -90,12 +59,9 @@ function detalleFormatter(value, row) {
             <button class="btn btn-view action-icon btn-sm btn-view-details" title="${viewTitle}">
                 <i class="mdi mdi-eye-outline"></i>
             </button>
-            <button 
-                class="btn btn-delete action-icon btn-sm btn-kick-session ${
-                  !isActive ? 'invisible pe-none' : ''
-                }" 
-                title="${kickTitle}" 
-                ${!isActive ? 'disabled' : ''}>
+            <button class="btn btn-delete action-icon btn-sm btn-kick-session ${
+              !isActive ? 'invisible pe-none' : ''
+            }" title="${kickTitle}" ${!isActive ? 'disabled' : ''}>
                 <i class="mdi mdi-logout"></i>
             </button>
         </div>
@@ -121,53 +87,100 @@ function mostrarDetalle(row) {
     full_name: translations.full_name || 'Full Name',
     login_time: translations.login_time || 'Login Time',
     logout_time: translations.logout_time || 'Logout Time',
+    inactivity_duration:
+      translations.inactivity_duration || 'Inactivity Duration',
+    login_success: translations.login_success || 'Login Success',
+    failure_reason: translations.failure_reason || 'Failure Reason',
     session_status: translations.session_status || 'Session Status',
     ip_address: translations.ip_address || 'IP Address',
     city: translations.city || 'City',
     region: translations.region || 'Region',
     country: translations.country || 'Country',
+    zipcode: translations.audit_modal_field_client_zipcode || 'Zipcode',
     coordinates: translations.coordinates || 'Coordinates',
     hostname: translations.hostname || 'Hostname',
     os: translations.os || 'OS',
     browser: translations.browser || 'Browser',
     user_agent: translations.user_agent || 'User Agent',
+    device_id: translations.device_id || 'Device ID',
     is_mobile: translations.is_mobile || 'Is Mobile',
+    created_at: translations.created_at || 'Created At',
   }
+
+  const camposOrdenados = [
+    'session_id',
+    'user_id',
+    'user_type',
+    'full_name',
+    'user_name',
+    'login_time',
+    'logout_time',
+    'inactivity_duration',
+    'login_success',
+    'failure_reason',
+    'session_status',
+    'ip_address',
+    'city',
+    'region',
+    'country',
+    'zipcode',
+    'coordinates',
+    'hostname',
+    'os',
+    'browser',
+    'user_agent',
+    'device_id',
+    'is_mobile',
+    'created_at',
+  ]
 
   let html = ''
-  for (const key in labels) {
-    if (Object.hasOwnProperty.call(row, key)) {
-      let value = row[key] ?? '-'
-      let displayValue = value
+  camposOrdenados.forEach((key) => {
+    const label = labels[key] || key
+    const value = row[key] ?? '-'
+    let displayValue = value
 
-      // Formateo especial para ciertos campos
-      if (['login_time', 'logout_time'].includes(key)) {
-        displayValue = formatDateTime(value)
-      } else if (key === 'session_status') {
-        const statusClass =
-          {
-            active: 'bg-info-subtle text-info',
-            expired: 'bg-danger-subtle text-danger',
-            kicked: 'bg-warning-subtle text-warning',
-          }[value] || 'bg-secondary-subtle text-muted'
-        displayValue = `<span class="badge ${statusClass}">${value}</span>`
-      } else if (key === 'is_mobile') {
-        const isMobile = value === true || value === 1 || value === '1'
-        const mobileText = isMobile
-          ? translations.is_mobile_yes || 'Yes'
-          : translations.is_mobile_no || 'No'
-        const mobileClass = isMobile
-          ? 'bg-success-subtle text-success'
-          : 'bg-primary-subtle text-primary'
-        displayValue = `<span class="badge ${mobileClass}">${mobileText}</span>`
-      }
-
-      html += `<dt class="col-sm-4">${labels[key]}</dt><dd class="col-sm-8">${displayValue}</dd>`
+    if (['login_time', 'logout_time', 'created_at'].includes(key)) {
+      displayValue = formatDateTime(value)
+    } else if (key === 'inactivity_duration' && value !== '-') {
+      const unidad = translations.seconds_unit || 'seconds'
+      displayValue = `${value} ${unidad}`
+    } else if (key === 'session_status') {
+      const val = (value || '').toLowerCase()
+      const statusLabel = translations['status_' + val] || value
+      let colorClass = 'bg-secondary-subtle text-muted'
+      if (val === 'active') colorClass = 'bg-info-subtle text-info'
+      else if (val === 'expired') colorClass = 'bg-danger-subtle text-danger'
+      else if (val === 'kicked') colorClass = 'bg-warning-subtle text-warning'
+      displayValue = `<span class="badge ${colorClass}">${statusLabel}</span>`
+    } else if (key === 'is_mobile') {
+      const isMobile = value === true || value === 1 || value === '1'
+      const mobileLabel = isMobile
+        ? translations.is_mobile_yes || 'Mobile'
+        : translations.is_mobile_no || 'Desktop'
+      const colorClass = isMobile
+        ? 'bg-success-subtle text-success'
+        : 'bg-primary-subtle text-primary'
+      displayValue = `<span class="badge ${colorClass}">${mobileLabel}</span>`
+    } else if (key === 'login_success') {
+      const isSuccess = value === true || value === 1 || value === '1'
+      const successLabel = isSuccess
+        ? translations.login_success_yes || 'Successful'
+        : translations.login_success_no || 'Failed'
+      const colorClass = isSuccess
+        ? 'bg-success-subtle text-success'
+        : 'bg-danger-subtle text-danger'
+      displayValue = `<span class="badge ${colorClass}">${successLabel}</span>`
+    } else if (key === 'failure_reason' && value !== '-') {
+      const reasonLabel = translations['failure_' + value] || value
+      displayValue = `<span class="badge bg-danger-subtle text-danger">${reasonLabel}</span>`
     }
-  }
 
-  detailContent.innerHTML = html
-  const detailModal = new bootstrap.Modal(
+    html += `<dt class="col-sm-4">${label}</dt><dd class="col-sm-8">${displayValue}</dd>`
+  })
+
+  document.getElementById('sessionDetailContent').innerHTML = html
+  const detailModal = bootstrap.Modal.getOrCreateInstance(
     document.getElementById('sessionDetailModal')
   )
   detailModal.show()
@@ -190,14 +203,10 @@ function expulsarSesion(row) {
     confirmButtonColor: '#d33',
   }).then((result) => {
     if (result.isConfirmed) {
-      fetch('api/session-audit/kick/1', {
+      fetch(`api/session-audit/kick/1`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          session_id: row.session_id,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ session_id: row.session_id }),
       })
         .then((response) => response.json())
         .then((res) => {
@@ -217,80 +226,18 @@ function expulsarSesion(row) {
           }
         })
         .catch((error) => {
-          console.error('Error kicking session:', error)
+          console.error('Error al expulsar sesión:', error)
           Swal.fire('Error', 'Internal server error. Check console.', 'error')
         })
     }
   })
 }
 
-/**
- * Configura el botón de exportación a CSV.
- */
-function configurarExportarCSV() {
-  const exportBtn = document.getElementById('btnExportCSV')
-  if (!exportBtn) return
-
-  exportBtn.addEventListener('click', async () => {
-    Swal.fire({
-      title: translations.exportLoadingTitle || 'Exporting...',
-      text: translations.exportLoadingText || 'Generating file, please wait...',
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      didOpen: () => Swal.showLoading(),
-    })
-
-    try {
-      const response = await fetch('api/session-audit/export/1')
-      const contentType = response.headers.get('Content-Type')
-
-      if (response.ok && contentType && contentType.includes('text/csv')) {
-        const blob = await response.blob()
-        const url = window.URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = `${
-          translations.csvFilenamePrefix_session_audit || 'session_audit'
-        }.csv`
-        document.body.appendChild(a)
-        a.click()
-        a.remove()
-        window.URL.revokeObjectURL(url)
-        Swal.close()
-      } else {
-        const res = await response.json()
-        Swal.fire({
-          icon: 'info',
-          title: translations.noRecordsTitle || 'No Records',
-          text:
-            res.message ||
-            translations.noRecordsText ||
-            'No data available to export.',
-        })
-      }
-    } catch (error) {
-      console.error('Export error:', error)
-      Swal.fire({
-        icon: 'error',
-        title: translations.exportErrorTitle || 'Export Error',
-        text:
-          translations.exportErrorText || 'An error occurred while exporting.',
-      })
-    }
-  })
-}
-
-// --- PUNTO DE ENTRADA: Se ejecuta cuando el DOM está completamente cargado ---
+// --- INICIALIZACIÓN ---
 
 document.addEventListener('DOMContentLoaded', () => {
-  const $table = $('#sessionAuditTable')
-
-  // Inicializa máscaras de entrada para campos numéricos
-  document.querySelectorAll('.form-control.number').forEach((input) => {
-    input.addEventListener('input', () => {
-      input.value = input.value.replace(/[^0-9]/g, '')
-    })
-  })
+  const tableId = '#sessionAuditTable'
+  const $table = $(tableId)
 
   // Inicializa la tabla Bootstrap con opciones en JavaScript
   $table.bootstrapTable({
@@ -357,7 +304,9 @@ document.addEventListener('DOMContentLoaded', () => {
     ],
   })
 
-  // Configura los listeners de eventos para los botones y formularios
+  // --- LÓGICA DE EVENTOS RESTAURADA ---
+
+  // Listener para el botón de configuración de sesión
   document
     .getElementById('btnSessionConfig')
     ?.addEventListener('click', async () => {
@@ -371,7 +320,7 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('inactivityTime').value =
           json.data?.timeout_minutes || ''
       } catch (error) {
-        console.error('Error fetching session config:', error)
+        console.error('Error al obtener configuración de sesión:', error)
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -381,6 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
       modal.show()
     })
 
+  // Listener para el envío del formulario de configuración
   document
     .getElementById('sessionConfigForm')
     ?.addEventListener('submit', async function (e) {
@@ -395,22 +345,16 @@ document.addEventListener('DOMContentLoaded', () => {
             'Please enter a valid number greater than 0.',
         })
       }
-
       Swal.fire({
         title: translations.saving || 'Saving...',
         allowOutsideClick: false,
         didOpen: () => Swal.showLoading(),
       })
-
       try {
         const response = await fetch('api/session-config', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            timeout_minutes: timeout,
-          }),
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ timeout_minutes: timeout }),
         })
         const result = await response.json()
         if (result.value) {
@@ -439,5 +383,53 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     })
 
-  configurarExportarCSV()
+  // Listener para el botón de exportar a CSV
+  document
+    .getElementById('btnExportCSV')
+    ?.addEventListener('click', async () => {
+      Swal.fire({
+        title: translations.exportLoadingTitle || 'Exporting...',
+        text:
+          translations.exportLoadingText || 'Generating file, please wait...',
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      })
+      try {
+        const response = await fetch('api/session-audit/export/1')
+        const contentType = response.headers.get('Content-Type')
+        if (response.ok && contentType && contentType.includes('text/csv')) {
+          const blob = await response.blob()
+          const url = window.URL.createObjectURL(blob)
+          const a = document.createElement('a')
+          a.href = url
+          a.download = `${
+            translations.csvFilenamePrefix_session_audit || 'session_audit'
+          }.csv`
+          document.body.appendChild(a)
+          a.click()
+          a.remove()
+          window.URL.revokeObjectURL(url)
+          Swal.close()
+        } else {
+          const res = await response.json()
+          Swal.fire({
+            icon: 'info',
+            title: translations.noRecordsTitle || 'No Records',
+            text:
+              res.message ||
+              translations.noRecordsText ||
+              'No data available to export.',
+          })
+        }
+      } catch (error) {
+        console.error('Error de exportación:', error)
+        Swal.fire({
+          icon: 'error',
+          title: translations.exportErrorTitle || 'Export Error',
+          text:
+            translations.exportErrorText ||
+            'An error occurred while exporting.',
+        })
+      }
+    })
 })
